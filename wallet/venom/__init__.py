@@ -7,24 +7,22 @@ from selenium.webdriver.common.action_chains import ActionChains
 import undetected_chromedriver as uc
 
 from app import utils
-from app.config import get_logger, PASSWORD, CODE_HOME, WIDTH, HEADLESS, EXTENSION_ID_KEPLR, \
-    EXTENSION_DIR, EXTENSION_DIR_LEAP, DRIVER_PATH, HEIGHT
+from app.config import get_logger, PASSWORD, CODE_HOME, WIDTH, HEADLESS, EXTENSION_ID, \
+    EXTENSION_DIR, DRIVER_PATH, HEIGHT
 
 logger = get_logger(__name__)
 
 # download the newest version of keplr extension from:
 # ref. https://chrome.google.com/webstore/detail/keplr/dmkamcknogkgcdfhhbddcghachkejeap
 # or from  https://github.com/chainapsis/keplr-wallet
-EXTENSION_ID = EXTENSION_ID_KEPLR or 'npdbcbhdknmoephofajnekpbocjpphdd'
-EXT_URL = f"chrome-extension://{EXTENSION_ID}/popup.html"
-CHAIN_ID = 'atlantic-2'
-CHAIN_NAME = f'Sei {CHAIN_ID}'
-FILE_NAME = f"{CODE_HOME}/account.sei.csv"
+EXT_URL = f"chrome-extension://{EXTENSION_ID}/home.html"
+POPUP_URL = f"chrome-extension://{EXTENSION_ID}/popup.html"
+FILE_NAME = f"{CODE_HOME}/account.venom1.csv"
 
 
 def launchSeleniumWebdriver() -> webdriver:
     options = uc.ChromeOptions()
-    options.add_argument(f"--load-extension={EXTENSION_DIR},{EXTENSION_DIR_LEAP}")
+    options.add_argument(f"--load-extension={EXTENSION_DIR}")
     prefs = {
         "extensions.ui.developer_mode": True,
     }
@@ -58,7 +56,7 @@ def try_finds(xpath="", by=By.XPATH):
         return []
 
 
-def walletSetup(recoveryPhrase : 'str', password : str) -> None:
+def walletSetup(recoveryPhrase: 'str', password: str) -> None:
     driver.execute_script("window.open('');")
     time.sleep(5)  # wait for the new window to open
     switch_to_window(-1)
@@ -89,14 +87,21 @@ def walletSetup(recoveryPhrase : 'str', password : str) -> None:
     time.sleep(2)
 
 
-def try_click(xpath, time_to_sleep = None, by=By.XPATH) -> None:
+def try_click(xpath, time_to_sleep=None, by=By.XPATH) -> None:
     try:
         click(xpath, time_to_sleep, by)
     except:
         pass
 
 
-def click(xpath, time_to_sleep = None, by=By.XPATH) -> None:
+def try_get_text(xpath, by=By.XPATH) -> str:
+    try:
+        return try_find(xpath, by).text
+    except:
+        return ''
+
+
+def click(xpath, time_to_sleep=None, by=By.XPATH) -> None:
     if time_to_sleep is None:
         time_to_sleep = 1
     # Click once.
@@ -118,29 +123,44 @@ def insert_text(xpath, text) -> None:
 
 
 def process_acc(idx):
-    mnemonic = ''
+    seed_phrase = addr = ''
     try:
-        click("//button[text()='Create new account']")
+        try_click("//div[contains(text(),'Create a')]", 2)
+        try_click("//input[@type='checkbox']")
+        try_click("//div[contains(text(),'Submit')]", 2)
 
-        mnemonic = driver.find_element(By.XPATH, "//*[@id='app']/div/div[3]/div/form/div[1]").text
+        list_li = try_finds("//li")
+        mnemonic = [li.text for li in list_li if li.text != '']
+        seed_phrase = ' '.join(mnemonic)
+        logger.info(f"seed phrase: {seed_phrase}")
+        try_click("//div[contains(text(),'I wrote it')]", 2)
 
-        insert_text("//input[@name='name']", f"don{idx}")
+        locate_m = try_finds("//span")
+        list_locate = [int(li.text.split('.')[0]) for li in locate_m if li.text != '']
 
-        insert_text("//input[@name='password']", PASSWORD)
-        insert_text("//input[@name='confirmPassword']", PASSWORD)
+        inputs = try_finds("//input")
+        for i, x in enumerate(list_locate):
+            inputs[i].send_keys(mnemonic[int(x)-1])
 
-        click("//button[text()='Next']")
+        time.sleep(2)
+        try_click("//div[contains(text(),'Confirm')]", 2)
 
-        # create mnemonic
-        list_mnemonic = mnemonic.split(' ')
-        for btn_test in list_mnemonic:
-            click(f"//button[text()='{btn_test}']", 0.1)
+        passes = try_finds("//input")
+        passes[0].send_keys(PASSWORD)
+        passes[1].send_keys(PASSWORD)
+        try_click("//div[contains(text(),'Create the wallet')]", 2)
 
-        click("//button[text()='Register']")
-        click("//button[text()='Done']")
-    except:
-        pass
-    return mnemonic
+        switch_to_window(0)
+        driver.get(f"{POPUP_URL}")
+        time.sleep(3)
+        try_click("//span[contains(text(),'VENOM')]", 2)
+        try_click("//div[contains(text(),'Receive')]", 4)
+
+        addr = try_get_text("//*[@id='root']/div[2]/div[2]/div[2]/div/div[3]/div[2]/div[2]/div/div[3]/div/div[1]/div[2]/div/span")
+
+    except Exception as _e:
+        logger.error(_e)
+    return seed_phrase, addr
 
 
 def get_address():
@@ -153,8 +173,6 @@ def get_address():
         driver.get(f"{EXT_URL}")
         time.sleep(2)
         click(f'//*[@id="app"]/div/div[1]/div[2]/div/div[2]/div/div[1]', 2)
-
-        click(f"//div[text()='{CHAIN_NAME}']", 2)
 
         addr = driver.find_element(By.CLASS_NAME, 'address-tooltip').text
         driver.close()
@@ -169,6 +187,7 @@ def switch_to_window(window_number):
     # Switch to another window, start from 0.
     try:
         wh = driver.window_handles
+        logger.info(f'window handles: {len(wh)}')
         driver.switch_to.window(wh[window_number])
     except:
         pass
@@ -202,40 +221,24 @@ def reject():
 def create_account(index):
     mns = pd.DataFrame(columns=["Name", "Address", "Private Key", "Seed Phrase",
                                 "Password", "Status"])
-    driver.get("https://app.seinetwork.io/faucet")
-    driver.execute_script("window.open('');")
-    time.sleep(5)
-    switch_to_window(1)
-    driver.get(f"{EXT_URL}#/register")
-    mn = process_acc(index)
     switch_to_window(0)
-    time.sleep(5)
+    seed_phrase, addr = process_acc(index)
 
-    click("//button[text()='connect wallet']", 3)
-
-    click("//p[text()='keplr']", 3)
-
-    switch_to_window(-1)
-
-    approve()
-    switch_to_window(0)
-
-    addr = get_address()
-
-    row = [f"", addr, "", mn, PASSWORD, '']
-    mns.loc[len(mns)] = row
-    utils.add_to_csv(FILE_NAME, mns.loc[i])
-
-    driver.quit()
-
-    logger.info(f"Create account success")
+    if seed_phrase:
+        row = [f"", addr, "", seed_phrase, PASSWORD, '']
+        mns.loc[len(mns)] = row
+        utils.add_to_csv(FILE_NAME, mns.loc[0])
+        logger.info(f"Create account success with address: {addr} and seed phrase: {seed_phrase}")
+    else:
+        logger.info(f"Create account fail")
 
 
 if __name__ == '__main__':
-    for i in range(0, 1):
+    for i in range(0, 300):
         driver = launchSeleniumWebdriver()
         try:
             create_account(index=i)
         except Exception as e:
             logger.info(e)
-            driver.quit()
+
+        driver.quit()

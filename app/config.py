@@ -17,20 +17,20 @@ for _dir in list_make_dir:
     os.makedirs(_dir, exist_ok=True)
 
 ACC_PATH = os.environ.get('ACC_PATH')
-ACC_SEI_PATH = os.environ.get('ACC_SEI_PATH')
+ACC_VENOM_PATH = os.environ.get('ACC_VENOM_PATH')
 try:
     ACC_PATH = os.path.join(os.path.dirname(__file__), os.pardir, os.environ.get('ACC_PATH'))
-    ACC_SEI_PATH = os.path.join(os.path.dirname(__file__), os.pardir, os.environ.get('ACC_SEI_PATH'))
+    ACC_VENOM_PATH = os.path.join(os.path.dirname(__file__), os.pardir, os.environ.get('ACC_VENOM_PATH'))
 except Exception as e:
-    print(f"{ACC_PATH=} and {ACC_SEI_PATH} Error: {e}")
+    print(f"{ACC_PATH=} and {ACC_VENOM_PATH} Error: {e}")
 
-ACC_SEI = ACC_SEI_PATH.split('/')[-1].replace('.csv', '')
+ACC_FILE_NAME = ACC_VENOM_PATH.split('/')[-1].replace('.csv', '')
 WAIT_TIME = os.environ.get('WAIT_TIME')
 PASSWORD = os.environ.get('PASSWORD')  # password default for all accounts
 
-HEADLESS = os.environ.get('HEADLESS')     # for headless mode chrome
-WIDTH    = os.environ.get('WIDTH', 1300)  # for which width of chrome
-HEIGHT   = os.environ.get('HEIGHT', 1020) # for which height of chrome
+HEADLESS = os.environ.get('HEADLESS')      # for headless mode chrome
+WIDTH    = os.environ.get('WIDTH', 1300)   # for which width of chrome
+HEIGHT   = os.environ.get('HEIGHT', 1020)  # for which height of chrome
 
 # download the newest version of keplr extension from:
 # ref. https://chrome.google.com/webstore/detail/keplr/dmkamcknogkgcdfhhbddcghachkejeap
@@ -38,9 +38,7 @@ HEIGHT   = os.environ.get('HEIGHT', 1020) # for which height of chrome
 # or get from your local machine
 # /Users/$USER/Library/Application\ Support/Google/Chrome/Default/Extensions/
 EXTENSION_DIR      = os.environ.get('EXTENSION_DIR')
-EXTENSION_ID_KEPLR = os.environ.get('EXTENSION_ID_KEPLR')
-EXTENSION_DIR_LEAP = os.environ.get('EXTENSION_DIR_LEAP')
-EXTENSION_ID_LEAP  = os.environ.get('EXTENSION_ID_LEAP')
+EXTENSION_ID       = os.environ.get('EXTENSION_ID')
 DRIVER_PATH        = os.environ.get('DRIVER_PATH')
 
 
