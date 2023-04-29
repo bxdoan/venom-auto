@@ -38,6 +38,7 @@ HEIGHT   = os.environ.get('HEIGHT', 1020)  # for which height of chrome
 # or get from your local machine
 # /Users/$USER/Library/Application\ Support/Google/Chrome/Default/Extensions/
 EXTENSION_DIR      = os.environ.get('EXTENSION_DIR')
+EXTENSION_CRX      = os.environ.get('EXTENSION_CRX')
 EXTENSION_ID       = os.environ.get('EXTENSION_ID')
 DRIVER_PATH        = os.environ.get('DRIVER_PATH')
 

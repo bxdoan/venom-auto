@@ -8,7 +8,7 @@ import undetected_chromedriver as uc
 
 from app import utils
 from app.config import get_logger, PASSWORD, CODE_HOME, WIDTH, HEADLESS, EXTENSION_ID, \
-    EXTENSION_DIR, DRIVER_PATH, HEIGHT
+    EXTENSION_DIR, DRIVER_PATH, HEIGHT, EXTENSION_CRX
 
 logger = get_logger(__name__)
 
@@ -20,9 +20,14 @@ POPUP_URL = f"chrome-extension://{EXTENSION_ID}/popup.html"
 FILE_NAME = f"{CODE_HOME}/account.venom1.csv"
 
 
-def launchSeleniumWebdriver() -> webdriver:
-    options = uc.ChromeOptions()
-    options.add_argument(f"--load-extension={EXTENSION_DIR}")
+def launchSeleniumWebdriver(use_uc=True) -> webdriver:
+    if use_uc:
+        options = uc.ChromeOptions()
+        options.add_argument(f"--load-extension={EXTENSION_DIR}")
+    else:
+        options = webdriver.ChromeOptions()
+        options.add_extension(EXTENSION_CRX)
+
     prefs = {
         "extensions.ui.developer_mode": True,
     }
@@ -34,7 +39,11 @@ def launchSeleniumWebdriver() -> webdriver:
         options.add_argument('--headless')
 
     global driver
-    driver = uc.Chrome(options=options, executable_path=DRIVER_PATH)
+    if use_uc:
+        driver = uc.Chrome(options=options, executable_path=DRIVER_PATH)
+    else:
+        driver = webdriver.Chrome(options=options, executable_path=DRIVER_PATH)
+
     driver.set_window_size(WIDTH, HEIGHT)
     logger.info(f"Extension has been loaded successfully ")
     time.sleep(5)
@@ -56,16 +65,26 @@ def try_finds(xpath="", by=By.XPATH):
         return []
 
 
-def walletSetup(recoveryPhrase: 'str', password: str) -> None:
+def install_venom():
     driver.execute_script("window.open('');")
     time.sleep(5)  # wait for the new window to open
-    switch_to_window(-1)
-    driver.get(f"{EXT_URL}")
+    switch_to_window(0)
+    driver.get(f"https://chrome.google.com/webstore/detail/venom-wallet/{EXTENSION_ID}")
     time.sleep(2)
+    try_click("//div[contains(text(),'Add to Chrome')]", 2)
     switch_to_window(-1)
+    try_click("//button[contains(text(),'Add extension')]", 2)
+    driver.close()
+    switch_to_window(0)
+
+
+def walletSetup(recoveryPhrase: 'str', password: str) -> None:
+    # driver.execute_script("window.open('');")
+    time.sleep(5)  # wait for the new window to open
+    switch_to_window(0)
+    # driver.get(f"{EXT_URL}")
     time.sleep(2)
-    click('//*[@id="app"]/div/div[3]/button[3]', 2)
-    switch_to_window(-1)
+    try_click("//div[contains(text(),'Sign in with seed phrase')]", 2)
 
     # fill in recovery seed phrase
     inputs = try_finds('//input')
@@ -74,15 +93,14 @@ def walletSetup(recoveryPhrase: 'str', password: str) -> None:
         phrase = list_of_recovery_phrase[i]
         inputs[i].send_keys(phrase)
 
+    try_click("//div[contains(text(),'Confirm')]", 2)
+
     # fill in password
-    inputs[12].send_keys("Don")
-    inputs[13].send_keys(password)
-    inputs[14].send_keys(password)
-    time.sleep(2)
-    click('//button[text()="Next"]', 2)
-
-    click('//button[text()="Done"]', 5)
-
+    inputs = try_finds('//input')
+    inputs[0].send_keys(password)
+    inputs[1].send_keys(password)
+    time.sleep(1)
+    try_click("//div[contains(text(),'Sign in the')]", 10)
     switch_to_window(0)
     time.sleep(2)
 
@@ -235,7 +253,7 @@ def create_account(index):
 
 if __name__ == '__main__':
     for i in range(0, 300):
-        driver = launchSeleniumWebdriver()
+        driver = launchSeleniumWebdriver(False)
         try:
             create_account(index=i)
         except Exception as e:
