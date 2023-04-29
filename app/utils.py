@@ -1,5 +1,9 @@
+import base64
 import csv
+import hmac
 import json
+import time
+
 import openpyxl
 import os
 import pandas as pd
@@ -152,3 +156,16 @@ def add_to_csv(file_path, add_text):
     l = len(df)
     df.loc[l] = add_text
     df_to_csv(df, file_path)
+
+
+def totp(secret: str) -> str:
+    """ Calculate TOTP using time and key """
+    key = base64.b32decode(secret, True)
+    now = int(time.time() // 30)
+    msg = now.to_bytes(8, "big")
+    digest = hmac.new(key, msg, "sha1").digest()
+    offset = digest[19] & 0xF
+    code = digest[offset : offset + 4]
+    code = int.from_bytes(code, "big") & 0x7FFFFFFF
+    code = code % 1000000
+    return "{:06d}".format(code)
