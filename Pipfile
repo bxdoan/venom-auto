@@ -6,7 +6,6 @@ name = "pypi"
 [packages]
 selenium = "*"
 undetected-chromedriver = "*"
-hcaptcha-challenger = "*"
 requests = "*"
 python-dotenv = "*"
 python-json-config = "*"
