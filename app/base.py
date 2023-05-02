@@ -92,21 +92,21 @@ class BaseAuto(object):
     def login_twitter(self, acc: dict) -> None:
         url = "https://twitter.com/i/flow/login"
         self.driver.execute_script("window.open('');")
-        time.sleep(5)  # wait for the new window to open
+        time.sleep(4)  # wait for the new window to open
         self.auto.switch_to_window(-1)
         self.driver.get(url)
-        time.sleep(5)
+        time.sleep(9)
         # fill in email
-        twemail = self.auto.try_find('//input')
-        twemail.send_keys(acc['tw_email'])
-        self.auto.click('//span[text()="Next"]', 7)
+        twemail_or_twacc = self.auto.try_find('//input')
 
         if acc['tw_fa']:
             logger.info('Login with 2FA')
+            twemail_or_twacc.send_keys(acc['tw_acc'])
+            self.auto.try_click('//span[text()="Next"]', 4)
             twpass_or_username = self.auto.try_finds('//input')
             twpass_or_username[1].send_keys(acc['tw_pass'])
-            self.auto.click('//span[text()="Log in"]', 3)
-            self.auto.click('//span[text()="Next"]', 2)
+            self.auto.try_click('//span[text()="Log in"]', 3)
+            self.auto.try_click('//span[text()="Next"]', 3)
 
             input_totp = self.auto.try_find('//input')
             input_totp.send_keys(utils.totp(acc['tw_fa']))
@@ -114,6 +114,8 @@ class BaseAuto(object):
             self.auto.try_click("//span[contains(text(), 'Skip for')]", 3)
         else:
             logger.info('Login with password')
+            twemail_or_twacc.send_keys(acc['tw_email'])
+            self.auto.click('//span[text()="Next"]', 7)
             twpass_or_username = self.auto.try_finds('//input')
             if len(twpass_or_username) == 1:
                 if "gmail" in acc['tw_email']:
@@ -130,7 +132,6 @@ class BaseAuto(object):
                 twpass_or_username[1].send_keys(acc['tw_pass'])
                 self.auto.click('//span[text()="Next"]', 3)
 
-        self.auto.switch_to_window(0)
         time.sleep(3)
         logger.info(f"Login twitter for account: {acc['tw_email']}")
 
@@ -162,7 +163,6 @@ class BaseAuto(object):
             self.auto.click('//div[text()="Log In"]', 8)
 
         time.sleep(5)
-        self.auto.switch_to_window(0)
         logger.info(f"Login discord for account: {account['dis_email']}")
 
     def swap(self, account: dict = None):

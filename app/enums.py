@@ -58,9 +58,12 @@ COLUMN_MAPPING = {
     "Password": 'password',
     "Status": 'status',
     "Balance": 'balance',
+    "TWACC": 'tw_acc',
+    "TWFA": 'tw_fa',
     "TWEMAIL": 'tw_email',
     "TWPASS": 'tw_pass',
     "DISEMAIL": 'dis_email',
     "DISPASS": 'dis_pass',
+    "DISTOKEN": 'dis_token',
     'Description': 'description',
 }

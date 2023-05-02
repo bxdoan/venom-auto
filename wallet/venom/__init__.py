@@ -15,6 +15,7 @@ logger = get_logger(__name__)
 # download the newest version of keplr extension from:
 # ref. https://chrome.google.com/webstore/detail/keplr/dmkamcknogkgcdfhhbddcghachkejeap
 # or from  https://github.com/chainapsis/keplr-wallet
+# EXT_URL = f"chrome-extension://ojggmchlghnjlapmfbnjholfjkiidbch/popup.html"
 EXT_URL = f"chrome-extension://{EXTENSION_ID}/home.html"
 POPUP_URL = f"chrome-extension://{EXTENSION_ID}/popup.html"
 FILE_NAME = f"{CODE_HOME}/account.venom1.csv"
@@ -30,6 +31,8 @@ def launchSeleniumWebdriver(use_uc=True) -> webdriver:
 
     prefs = {
         "extensions.ui.developer_mode": True,
+        "credentials_enable_service": False,
+        "profile.password_manager_enabled": False,
     }
     options.add_experimental_option("prefs", prefs)
 
@@ -79,11 +82,25 @@ def install_venom():
 
 
 def walletSetup(recoveryPhrase: 'str', password: str) -> None:
-    # driver.execute_script("window.open('');")
-    time.sleep(5)  # wait for the new window to open
+    driver.execute_script("window.open('');")
+    time.sleep(3)  # wait for the new window to open
     switch_to_window(0)
-    # driver.get(f"{EXT_URL}")
+    driver.refresh()
+    switch_to_window(2)
+    driver.get(f"chrome://extensions/?id={EXTENSION_ID}")
     time.sleep(2)
+
+    ext_ma = driver.find_element(By.CSS_SELECTOR, "extensions-manager")
+    sr1 = ext_ma.shadow_root
+    cr_view_manager = sr1.find_element(By.CSS_SELECTOR, "cr-view-manager")
+    ext_detail_view = cr_view_manager.find_element(By.CSS_SELECTOR, "extensions-detail-view")
+    sr3 = ext_detail_view.shadow_root
+    buttons = sr3.find_elements(By.CLASS_NAME, "inspectable-view")
+    buttons[1].click()
+    time.sleep(5)
+    switch_to_window(2)
+    driver.close()
+    switch_to_window(0)
     try_click("//div[contains(text(),'Sign in with seed phrase')]", 2)
 
     # fill in recovery seed phrase
@@ -105,9 +122,9 @@ def walletSetup(recoveryPhrase: 'str', password: str) -> None:
     time.sleep(2)
 
 
-def try_click(xpath, time_to_sleep=None, by=By.XPATH) -> None:
+def try_click(xpath, time_to_sleep=None, by=By.XPATH, wd=None) -> None:
     try:
-        click(xpath, time_to_sleep, by)
+        click(xpath, time_to_sleep, by, wd)
     except:
         pass
 
@@ -119,17 +136,19 @@ def try_get_text(xpath, by=By.XPATH) -> str:
         return ''
 
 
-def click(xpath, time_to_sleep=None, by=By.XPATH) -> None:
+def click(xpath, time_to_sleep=None, by=By.XPATH, wd=None) -> None:
     if time_to_sleep is None:
         time_to_sleep = 1
+    if wd is None:
+        wd = driver
     # Click once.
     # If click more times, try another method.
-    button = driver.find_element(by, xpath)
+    button = wd.find_element(by, xpath)
     try:
         logger.info(f'click on "{button.text}"')
     except:
         pass
-    clicking = ActionChains(driver).click(button)
+    clicking = ActionChains(wd).click(button)
     clicking.perform()
     time.sleep(time_to_sleep)
 
@@ -138,6 +157,36 @@ def insert_text(xpath, text) -> None:
     input_text = driver.find_element(By.XPATH, xpath)
     input_text.send_keys(text)
     time.sleep(0.5)
+
+
+def sign():
+    # driver.switch_to_window(-1)
+    inputs = try_finds("//input")
+    inputs[0].send_keys(PASSWORD)
+    driver.try_click("//div[contains(text(),'Sign')]", 10)
+
+
+def send(receiver : str, amount : str) -> None:
+    driver.execute_script("window.open('');")
+    driver.switch_to_window(-1)
+    driver.get(POPUP_URL)
+    time.sleep(4)
+    driver.try_click("//div[contains(text(),'Send')]", 4)
+    driver.switch_to_window(-1)
+    inputs = try_finds("//input")
+    inputs[0].send_keys(receiver)
+    inputs[1].send_keys(amount)
+    inputs[2].send_keys(PASSWORD)
+    driver.try_click("//div[contains(text(),'Confirm transaction')]", 4)
+    driver.switch_to_window(-1)
+    driver.close()
+
+
+def confirm():
+    driver.switch_to_window(-1)
+    inputs = try_finds("//input")
+    inputs[0].send_keys(PASSWORD)
+    driver.try_click("//div[contains(text(),'Confirm tran')]", 4)
 
 
 def process_acc(idx):
@@ -199,6 +248,11 @@ def get_address():
     except:
         pass
     return addr
+
+
+def open_window():
+    driver.execute_script("window.open('');")
+    time.sleep(3)
 
 
 def switch_to_window(window_number):
