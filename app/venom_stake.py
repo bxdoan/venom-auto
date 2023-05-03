@@ -39,14 +39,16 @@ class VenomStake(VenomAuto):
         self.auto.walletSetup(account['seed_phrase'], account['password'])
 
         # click on the Connect Wallet button
-        self.auto.switch_to_window(1)
+        self.auto.switch_to_window(0)
+        self.driver.refresh()
+        time.sleep(8)
         self.auto.try_click("//div[contains(text(),'Connect Wallet')]", 3)
         self.auto.try_click("//div[contains(text(),'Venom Chrome')]", 3)
         self.auto.switch_to_window(-1)
         self.auto.try_click("//div[contains(text(),'Connect')]", 10)
 
         # stake
-        self.auto.switch_to_window(1)
+        self.auto.switch_to_window(0)
         inputs = self.auto.try_find('//*[@id="app-wrapper"]/div[2]/div[3]/div/div/div[3]/div/div[2]/div[1]/input')
         inputs.send_keys('3')
 
@@ -54,12 +56,7 @@ class VenomStake(VenomAuto):
         stake_buttons[2].click()
         time.sleep(2)
 
-        # self.auto.switch_to_window(-1)
-        # inputs = self.auto.try_finds("//input")
-        # inputs[0].send_keys(account['password'])
-        # self.auto.try_click("//div[contains(text(),'Confirm tran')]", 10)
         self.auto.confirm()
-
         logger.info(f"Incentive success")
 
 
@@ -67,7 +64,7 @@ if __name__ == '__main__':
     # list_account = AccountLoader().parser_file()
     list_account = AccountLoader(fp=ACC_VENOM_PATH).parser_file()
     swap_params = {
-        "account": list_account[0],
+        "account": list_account[8],
     }
     params = {
         "list_add": list_account,
@@ -77,7 +74,7 @@ if __name__ == '__main__':
             use_uc=True,
             params=params
         )
-        # vn.process_all(method="stake")
-        vn.stake(**swap_params)
+        vn.process_all(method="stake")
+        # vn.stake(**swap_params)
     except Exception as e:
         logger.error(e)

@@ -75,19 +75,17 @@ def walletSetup(recoveryPhrase: 'str', password: str) -> None:
     driver.refresh()
     switch_to_window(2)
     driver.get(f"chrome://extensions/?id={EXTENSION_ID}")
-    time.sleep(2)
+    time.sleep(5)
 
     ext_ma = driver.find_element(By.CSS_SELECTOR, "extensions-manager")
-    sr1 = ext_ma.shadow_root
-    cr_view_manager = sr1.find_element(By.CSS_SELECTOR, "cr-view-manager")
-    ext_detail_view = cr_view_manager.find_element(By.CSS_SELECTOR, "extensions-detail-view")
-    sr3 = ext_detail_view.shadow_root
-    buttons = sr3.find_elements(By.CLASS_NAME, "inspectable-view")
-    buttons[1].click()
+    toolbar = ext_ma.shadow_root.find_element(By.CSS_SELECTOR, "extensions-toolbar")
+    update_button = toolbar.shadow_root.find_element(By.ID, "updateNow")
+    update_button.click()
     time.sleep(5)
-    switch_to_window(2)
-    driver.close()
-    switch_to_window(0)
+    driver.get(EXT_URL)
+    time.sleep(8)
+
+    switch_to_window(1)
     try_click("//div[contains(text(),'Sign in with seed phrase')]", 2)
 
     # fill in recovery seed phrase
@@ -150,7 +148,7 @@ def sign():
     switch_to_window(-1)
     inputs = try_finds("//input")
     inputs[0].send_keys(PASSWORD)
-    driver.try_click("//div[contains(text(),'Sign')]", 10)
+    try_click("//div[contains(text(),'Sign')]", 10)
 
 
 def send(receiver : str, amount : str) -> None:
@@ -158,13 +156,13 @@ def send(receiver : str, amount : str) -> None:
     switch_to_window(-1)
     driver.get(POPUP_URL)
     time.sleep(4)
-    driver.try_click("//div[contains(text(),'Send')]", 4)
+    try_click("//div[contains(text(),'Send')]", 4)
     switch_to_window(-1)
     inputs = try_finds("//input")
     inputs[0].send_keys(receiver)
     inputs[1].send_keys(amount)
     inputs[2].send_keys(PASSWORD)
-    driver.try_click("//div[contains(text(),'Confirm transaction')]", 4)
+    try_click("//div[contains(text(),'Confirm transaction')]", 4)
     switch_to_window(-1)
     driver.close()
 
@@ -173,7 +171,7 @@ def confirm():
     switch_to_window(-1)
     inputs = try_finds("//input")
     inputs[0].send_keys(PASSWORD)
-    driver.try_click("//div[contains(text(),'Confirm tran')]", 10)
+    try_click("//div[contains(text(),'Confirm tran')]", 10)
 
 
 def process_acc(idx):
