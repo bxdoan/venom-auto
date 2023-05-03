@@ -68,19 +68,6 @@ def try_finds(xpath="", by=By.XPATH):
         return []
 
 
-def install_venom():
-    driver.execute_script("window.open('');")
-    time.sleep(5)  # wait for the new window to open
-    switch_to_window(0)
-    driver.get(f"https://chrome.google.com/webstore/detail/venom-wallet/{EXTENSION_ID}")
-    time.sleep(2)
-    try_click("//div[contains(text(),'Add to Chrome')]", 2)
-    switch_to_window(-1)
-    try_click("//button[contains(text(),'Add extension')]", 2)
-    driver.close()
-    switch_to_window(0)
-
-
 def walletSetup(recoveryPhrase: 'str', password: str) -> None:
     driver.execute_script("window.open('');")
     time.sleep(3)  # wait for the new window to open
@@ -160,7 +147,7 @@ def insert_text(xpath, text) -> None:
 
 
 def sign():
-    # driver.switch_to_window(-1)
+    switch_to_window(-1)
     inputs = try_finds("//input")
     inputs[0].send_keys(PASSWORD)
     driver.try_click("//div[contains(text(),'Sign')]", 10)
@@ -168,25 +155,25 @@ def sign():
 
 def send(receiver : str, amount : str) -> None:
     driver.execute_script("window.open('');")
-    driver.switch_to_window(-1)
+    switch_to_window(-1)
     driver.get(POPUP_URL)
     time.sleep(4)
     driver.try_click("//div[contains(text(),'Send')]", 4)
-    driver.switch_to_window(-1)
+    switch_to_window(-1)
     inputs = try_finds("//input")
     inputs[0].send_keys(receiver)
     inputs[1].send_keys(amount)
     inputs[2].send_keys(PASSWORD)
     driver.try_click("//div[contains(text(),'Confirm transaction')]", 4)
-    driver.switch_to_window(-1)
+    switch_to_window(-1)
     driver.close()
 
 
 def confirm():
-    driver.switch_to_window(-1)
+    switch_to_window(-1)
     inputs = try_finds("//input")
     inputs[0].send_keys(PASSWORD)
-    driver.try_click("//div[contains(text(),'Confirm tran')]", 4)
+    driver.try_click("//div[contains(text(),'Confirm tran')]", 10)
 
 
 def process_acc(idx):

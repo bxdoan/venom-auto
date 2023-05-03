@@ -23,6 +23,10 @@ CONFIG = {
             "venom_foundation": "https://venom.network/tasks/venom-foundation",
             "venom_wallet": "https://venom.network/tasks/venom-wallet",
             "web3_world": "https://venom.network/tasks/web3-world",
+            "venom_stake": "https://venom.network/tasks/venom-stake",
+        },
+        "app": {
+            "venom_stake": "https://testnet.venomstake.com/",
         }
     },
 }
@@ -63,9 +67,9 @@ class Venom(VenomAuto):
         self.auto.switch_to_window(0)
 
         self.auto.switch_to_window(1)
-        self._first_task(account)
-
-        self.auto.switch_to_window(1)
+        self._venom_stake(account)
+        # self._first_task(account)
+        # self.auto.switch_to_window(1)
         # self._foundation(account)
         # self.auto.switch_to_window(1)
         # self._venom_wallet(account)
@@ -205,7 +209,7 @@ if __name__ == '__main__':
     # list_account = AccountLoader().parser_file()
     list_account = AccountLoader(fp=ACC_VENOM_PATH).parser_file()
     swap_params = {
-        "account": list_account[10],
+        "account": list_account[1],
     }
     params = {
         "list_add": list_account,
@@ -215,7 +219,7 @@ if __name__ == '__main__':
             use_uc=True,
             params=params
         )
-        vn.process_all(method="incentive")
-        # vn.incentive(**swap_params)
+        # vn.process_all(method="incentive")
+        vn.incentive(**swap_params)
     except Exception as e:
         logger.error(e)

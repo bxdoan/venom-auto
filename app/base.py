@@ -16,9 +16,9 @@ class BaseAuto(object):
     def __init__(self, **kwargs):
         self.list_account = []
         self.file_report = f"{HOME_TMP}/report_{datetime.now().strftime('%Y%m%d%H%M%S')}.csv"
+        self.use_uc = kwargs.get('use_uc', True)
         self.driver = None
         self.auto = None
-        self.use_uc = kwargs.get('use_uc', True)
         self.params = kwargs.get('params', {})
 
         self.list_account = AccountLoader(fp=ACC_VENOM_PATH).parser_file()
@@ -194,5 +194,6 @@ class VenomAuto(BaseAuto):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.use_uc = kwargs.get('use_uc', True)
         self.auto = venom
         self.driver = self.auto.launchSeleniumWebdriver(self.use_uc)
