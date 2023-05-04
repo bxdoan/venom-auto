@@ -14,6 +14,12 @@ CONFIG = {
     "mainnet": {
     },
     "test": {
+        "task": {
+            "venom_foundation": "https://venom.network/tasks/venom-foundation",
+            "venom_wallet": "https://venom.network/tasks/venom-wallet",
+            "web3_world": "https://venom.network/tasks/web3-world",
+            "venom_stake": "https://venom.network/tasks/venom-stake",
+        },
         "app": {
             "venom_stake": "https://testnet.venomstake.com/",
         }
@@ -46,6 +52,10 @@ class VenomStake(VenomAuto):
         self.auto.try_click("//div[contains(text(),'Venom Chrome')]", 3)
         self.auto.switch_to_window(-1)
         self.auto.try_click("//div[contains(text(),'Connect')]", 10)
+
+        self.auto.switch_to_window(0)
+        self.login_twitter(account)
+        self.driver.close()
 
         # stake
         self.auto.switch_to_window(0)

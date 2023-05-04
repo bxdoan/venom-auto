@@ -49,9 +49,10 @@ class Venom(VenomAuto):
         # setup metamask with seed phrase and password
         self.auto.switch_to_window(0)
         self.auto.walletSetup(account['seed_phrase'], account['password'])
+        self.driver.close()
 
         # click on the Connect Wallet button
-        self.auto.switch_to_window(1)
+        self.auto.switch_to_window(0)
         self.auto.try_click('//*[@id="root"]/div[1]/div[1]/div[2]/div[2]/span', 2)
         self.auto.try_click("//div[contains(text(),'Venom Chrome')]", 3)
         self.auto.switch_to_window(-1)
@@ -61,12 +62,11 @@ class Venom(VenomAuto):
         self.auto.switch_to_window(0)
         self.login_twitter(account)
         self.driver.close()
-        self.auto.switch_to_window(0)
-        self.login_discord(account)
-        self.driver.close()
-        self.auto.switch_to_window(0)
+        # self.auto.switch_to_window(0)
+        # self.login_discord(account)
+        # self.driver.close()
 
-        self.auto.switch_to_window(1)
+        self.auto.switch_to_window(0)
         self._venom_stake(account)
         # self._first_task(account)
         # self.auto.switch_to_window(1)
@@ -78,6 +78,22 @@ class Venom(VenomAuto):
         # self.auto.switch_to_window(1)
 
         logger.info(f"Incentive success")
+
+    def _venom_stake(self, acc: dict = None):
+        try:
+            self.driver.execute_script("window.open('');")
+            self.auto.switch_to_window(-1)
+            self.driver.get(self.config['task']['venom_stake'])
+            time.sleep(5)
+
+            self.auto.try_click("//button[contains(text(),'Check')]", 4)
+
+            self.auto.try_click("//button[contains(text(),'Mint')]", 4)
+            self.auto.confirm()
+            self.driver.close()
+        except Exception as e:
+            logger.error(e)
+            self.driver.close()
 
     def _first_task(self, acc: dict = None):
         login_tw = self.auto.try_find("//button[contains(text(),'Login with Twitter')]")
@@ -114,7 +130,6 @@ class Venom(VenomAuto):
             follow_tw.click()
             time.sleep(6)
             self.auto.switch_to_window(-1)
-            # self.auto.try_click("//span[contains(text(),'Follow')]", 4)
             self.auto.try_click("//*[@id='layers']/div[2]/div/div/div/div/div/div[2]/div[2]/div[2]/div[1]/div/span/span", 4)
             self.driver.close()
             self.auto.switch_to_window(-1)
@@ -209,7 +224,7 @@ if __name__ == '__main__':
     # list_account = AccountLoader().parser_file()
     list_account = AccountLoader(fp=ACC_VENOM_PATH).parser_file()
     swap_params = {
-        "account": list_account[1],
+        "account": list_account[0],
     }
     params = {
         "list_add": list_account,
@@ -219,7 +234,7 @@ if __name__ == '__main__':
             use_uc=True,
             params=params
         )
-        # vn.process_all(method="incentive")
-        vn.incentive(**swap_params)
+        vn.process_all(method="incentive")
+        # vn.incentive(**swap_params)
     except Exception as e:
         logger.error(e)
