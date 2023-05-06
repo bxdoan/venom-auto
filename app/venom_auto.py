@@ -109,7 +109,7 @@ class Venom(VenomAuto):
             self.auto.try_click('//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div[2]/div[2]/div[1]/div/span/span', 10)
             self.driver.close()
             self.auto.switch_to_window(0)
-            time.sleep(60)
+            time.sleep(45)
             self.auto.try_click("//button[contains(text(),'Check')]", 5)
             self.auto.try_click("//button[contains(text(),'Claim')]", 3)
             self.auto.sign()

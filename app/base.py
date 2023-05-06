@@ -110,7 +110,7 @@ class BaseAuto(object):
 
             input_totp = self.auto.try_find('//input')
             input_totp.send_keys(utils.totp(acc['tw_fa']))
-            self.auto.try_click("//span[contains(text(), 'Next')]", 3)
+            self.auto.try_click("//span[contains(text(), 'Next')]", 10)
             input_submit = self.auto.try_find("//input[@type='submit']")
             if input_submit:
                 input_submit.click()
