@@ -18,7 +18,7 @@ logger = get_logger(__name__)
 # EXT_URL = f"chrome-extension://ojggmchlghnjlapmfbnjholfjkiidbch/popup.html"
 EXT_URL = f"chrome-extension://{EXTENSION_ID}/home.html"
 POPUP_URL = f"chrome-extension://{EXTENSION_ID}/popup.html"
-FILE_NAME = f"{CODE_HOME}/account.venom1.csv"
+FILE_NAME = f"{CODE_HOME}/account.venom2.csv"
 
 
 def launchSeleniumWebdriver(use_uc=True) -> webdriver:
@@ -43,9 +43,9 @@ def launchSeleniumWebdriver(use_uc=True) -> webdriver:
 
     global driver
     if use_uc:
-        driver = uc.Chrome(options=options, executable_path=DRIVER_PATH)
+        driver = uc.Chrome(options=options)
     else:
-        driver = webdriver.Chrome(options=options, executable_path=DRIVER_PATH)
+        driver = webdriver.Chrome(options=options)
 
     driver.set_window_size(WIDTH, HEIGHT)
     logger.info(f"Extension has been loaded successfully ")
@@ -177,8 +177,19 @@ def confirm():
 def process_acc(idx):
     seed_phrase = addr = ''
     try:
+        # driver.get(f"chrome://extensions/?id={EXTENSION_ID}")
+        # time.sleep(5)
+        #
+        # ext_ma = driver.find_element(By.CSS_SELECTOR, "extensions-manager")
+        # toolbar = ext_ma.shadow_root.find_element(By.CSS_SELECTOR, "extensions-toolbar")
+        # update_button = toolbar.shadow_root.find_element(By.ID, "updateNow")
+        # update_button.click()
+        # time.sleep(5)
+        # driver.get(EXT_URL)
+        # time.sleep(8)
+
         try_click("//div[contains(text(),'Create a')]", 2)
-        try_click("//input[@type='checkbox']")
+        try_click('/html/body/div/div[1]/div/div[2]/div/div/div[2]/label/span', 2)
         try_click("//div[contains(text(),'Submit')]", 2)
 
         list_li = try_finds("//li")
@@ -291,8 +302,8 @@ def create_account(index):
 
 
 if __name__ == '__main__':
-    for i in range(0, 300):
-        driver = launchSeleniumWebdriver(False)
+    for i in range(0, 150):
+        driver = launchSeleniumWebdriver(True)
         try:
             create_account(index=i)
         except Exception as e:
