@@ -114,7 +114,7 @@ class BaseAuto(object):
             input_submit = self.auto.try_find("//input[@type='submit']")
             if input_submit:
                 input_submit.click()
-                time.sleep(8)
+                time.sleep(10)
                 self.auto.try_click("//input[@type='submit']", 8)
 
             self.auto.try_click("//span[contains(text(), 'Skip for')]", 3)

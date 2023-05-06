@@ -106,12 +106,11 @@ class Venom(VenomAuto):
             self.auto.switch_to_window(1)
             self.auto.try_click("//a[contains(text(),'Follow')]", 4)
             self.auto.switch_to_window(-1)
-            self.auto.try_click('//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div[2]/div[2]/div[1]/div/span/span', 5)
+            self.auto.try_click('//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div[2]/div[2]/div[1]/div/span/span', 10)
             self.driver.close()
             self.auto.switch_to_window(0)
-            time.sleep(2)
+            time.sleep(60)
             self.auto.try_click("//button[contains(text(),'Check')]", 5)
-            self.auto.try_click('//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div[2]/div[2]/div[1]/div/span/span', 5)
             self.auto.try_click("//button[contains(text(),'Claim')]", 3)
             self.auto.sign()
             time.sleep(5)
@@ -224,7 +223,7 @@ if __name__ == '__main__':
     # list_account = AccountLoader().parser_file()
     list_account = AccountLoader(fp=ACC_VENOM_PATH).parser_file()
     swap_params = {
-        "account": list_account[2],
+        "account": list_account[6],
     }
     params = {
         "list_add": list_account,
@@ -234,7 +233,7 @@ if __name__ == '__main__':
             use_uc=True,
             params=params
         )
-        # vn.process_all(method="incentive")
-        vn.incentive(**swap_params)
+        vn.process_all(method="incentive")
+        # vn.incentive(**swap_params)
     except Exception as e:
         logger.error(e)
