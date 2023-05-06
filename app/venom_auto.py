@@ -49,16 +49,17 @@ class Venom(VenomAuto):
         # setup metamask with seed phrase and password
         self.auto.switch_to_window(0)
         self.auto.walletSetup(account['seed_phrase'], account['password'])
-        self.driver.close()
 
         # click on the Connect Wallet button
         self.auto.switch_to_window(0)
+        self.driver.refresh()
+        time.sleep(4)
         self.auto.try_click('//*[@id="root"]/div[1]/div[1]/div[2]/div[2]/span', 2)
         self.auto.try_click("//div[contains(text(),'Venom Chrome')]", 3)
         self.auto.switch_to_window(-1)
         self.auto.try_click("//div[contains(text(),'Connect')]", 3)
 
-        # close wellcome popup
+        # login twitter and discord
         self.auto.switch_to_window(0)
         self.login_twitter(account)
         self.driver.close()
@@ -66,9 +67,10 @@ class Venom(VenomAuto):
         # self.login_discord(account)
         # self.driver.close()
 
+        # main incentive
         self.auto.switch_to_window(0)
-        self._venom_stake(account)
-        # self._first_task(account)
+        # self._venom_stake(account)
+        self._first_task(account)
         # self.auto.switch_to_window(1)
         # self._foundation(account)
         # self.auto.switch_to_window(1)
@@ -106,15 +108,13 @@ class Venom(VenomAuto):
             self.auto.switch_to_window(-1)
             self.auto.try_click('//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div[2]/div[2]/div[1]/div/span/span', 5)
             self.driver.close()
-            self.auto.switch_to_window(1)
+            self.auto.switch_to_window(0)
             time.sleep(2)
             self.auto.try_click("//button[contains(text(),'Check')]", 5)
             self.auto.try_click('//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div[2]/div[2]/div[1]/div/span/span', 5)
             self.auto.try_click("//button[contains(text(),'Claim')]", 3)
-            self.driver.switch_to.window(self.driver.window_handles[-1])
-            inputs = self.auto.try_finds("//input")
-            inputs[0].send_keys(acc['password'])
-            self.auto.try_click("//div[contains(text(),'Sign')]", 10)
+            self.auto.sign()
+            time.sleep(5)
 
     def _foundation(self, acc: dict = None):
         try:
@@ -224,7 +224,7 @@ if __name__ == '__main__':
     # list_account = AccountLoader().parser_file()
     list_account = AccountLoader(fp=ACC_VENOM_PATH).parser_file()
     swap_params = {
-        "account": list_account[0],
+        "account": list_account[2],
     }
     params = {
         "list_add": list_account,
@@ -234,7 +234,7 @@ if __name__ == '__main__':
             use_uc=True,
             params=params
         )
-        vn.process_all(method="incentive")
-        # vn.incentive(**swap_params)
+        # vn.process_all(method="incentive")
+        vn.incentive(**swap_params)
     except Exception as e:
         logger.error(e)

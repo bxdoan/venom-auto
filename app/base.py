@@ -100,7 +100,7 @@ class BaseAuto(object):
         twemail_or_twacc = self.auto.try_find('//input')
 
         if acc['tw_fa']:
-            logger.info('Login with 2FA')
+            logger.info(f"Login with 2FA {acc['tw_acc']}")
             twemail_or_twacc.send_keys(acc['tw_acc'])
             self.auto.try_click('//span[text()="Next"]', 4)
             twpass_or_username = self.auto.try_finds('//input')
@@ -111,6 +111,12 @@ class BaseAuto(object):
             input_totp = self.auto.try_find('//input')
             input_totp.send_keys(utils.totp(acc['tw_fa']))
             self.auto.try_click("//span[contains(text(), 'Next')]", 3)
+            input_submit = self.auto.try_find("//input[@type='submit']")
+            if input_submit:
+                input_submit.click()
+                time.sleep(8)
+                self.auto.try_click("//input[@type='submit']", 8)
+
             self.auto.try_click("//span[contains(text(), 'Skip for')]", 3)
         else:
             logger.info('Login with password')
