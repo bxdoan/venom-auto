@@ -81,6 +81,30 @@ class Venom(VenomAuto):
 
         logger.info(f"Incentive success")
 
+    def balance(self, account):
+        # setup metamask with seed phrase and password
+        self.auto.switch_to_window(0)
+        self.auto.walletSetup(account['seed_phrase'], account['password'])
+        self.auto.switch_to_window(0)
+        self.driver.get(venom.POPUP_URL)
+        time.sleep(2)
+        balance = self.auto.try_find('//*[@id="root"]/div/div[1]/div[2]/div[1]/div/div[1]/div/div/div[2]')
+        if balance:
+            balance = balance.text.split(".")[0]
+            logger.info(f"Balance: {balance}")
+            account['balance'] = balance
+
+        self.auto.try_click('//*[@id="root"]/div/div[1]/div[2]/div[1]/div/div[1]/div/div/div[1]/div[1]/div', 2)
+        self.auto.try_click('//*[@id="root"]/div/div[1]/div[2]/div[1]/div/div[1]/div/div/div[1]/div[1]/div/div/ul/li[2]/button', 7)
+        self.auto.switch_to_window(-1)
+        address = self.auto.try_find('//*[@id="root"]/div/main/div/div[2]/div[2]/div[2]/div/div[1]/div[2]/div[2]/div/div/div/div/div')
+        if address:
+            address = address.text
+            logger.info(f"Address: {address}")
+            account['address'] = address
+
+        logger.info(f"process account success")
+
     def _venom_stake(self, acc: dict = None):
         try:
             self.driver.execute_script("window.open('');")
@@ -92,7 +116,7 @@ class Venom(VenomAuto):
 
             self.auto.try_click("//button[contains(text(),'Mint')]", 4)
             self.auto.confirm()
-            self.driver.close()
+            time.sleep(10)
         except Exception as e:
             logger.error(e)
             self.driver.close()
@@ -175,6 +199,38 @@ class Venom(VenomAuto):
             logger.error(e)
             self.driver.close()
 
+    def daily_faucet(self, account: dict = None):
+        url = f"https://venom.network/faucet"
+        self.driver.get(url)
+        time.sleep(2)
+
+        # setup metamask with seed phrase and password
+        self.auto.switch_to_window(0)
+        self.auto.walletSetup(account['seed_phrase'], account['password'])
+
+        # click on the Connect Wallet button
+        self.auto.switch_to_window(0)
+        self.driver.refresh()
+        time.sleep(4)
+        self.auto.try_click('//*[@id="root"]/div[1]/div[1]/div[2]/div[2]/span', 2)
+        self.auto.try_click("//div[contains(text(),'Venom Chrome')]", 3)
+        self.auto.switch_to_window(-1)
+        self.auto.try_click("//div[contains(text(),'Connect')]", 3)
+
+        self.auto.switch_to_window(-1)
+        self.driver.get(url)
+        time.sleep(2)
+
+        try:
+            answer = self.params.get('answer')
+            self.auto.try_click("//a[contains(text(),'Start')]", 3)
+            self.auto.try_click(f"//span[contains(text(),'{answer}')]", 3)
+            self.auto.try_click("//button[contains(text(),'Send')]", 3)
+            self.auto.try_click("//span[contains(text(),'Claim')]", 3)
+            logger.info(f"Faucet claim successfull for {account['address']}")
+        except Exception as e:
+            logger.error(e)
+
     def _web3_world(self, acc: dict = None):
         try:
             self.auto.open_window()
@@ -223,10 +279,11 @@ if __name__ == '__main__':
     # list_account = AccountLoader().parser_file()
     list_account = AccountLoader(fp=ACC_VENOM_PATH).parser_file()
     swap_params = {
-        "account": list_account[6],
+        "account": list_account[0],
     }
     params = {
         "list_add": list_account,
+        "answer": "Yes",
     }
     try:
         vn = Venom(
@@ -235,5 +292,8 @@ if __name__ == '__main__':
         )
         vn.process_all(method="incentive")
         # vn.incentive(**swap_params)
+        # vn.process_all(method="incentive")
+        # vn.balance(**swap_params)
+        vn.daily_faucet(**swap_params)
     except Exception as e:
         logger.error(e)
