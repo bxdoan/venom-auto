@@ -128,14 +128,22 @@ class Venom(VenomAuto):
             time.sleep(4)
             self.auto.try_click("allow", time_to_sleep=10, by=By.ID)
             self.auto.switch_to_window(1)
-            self.auto.try_click("//a[contains(text(),'Follow')]", 4)
+
+        follow_btn = self.auto.try_find("//a[contains(text(),'Follow')]")
+        if follow_btn:
+            follow_btn.click()
+            time.sleep(4)
             self.auto.switch_to_window(-1)
             self.auto.try_click('//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div[2]/div[2]/div[1]/div/span/span', 10)
             self.driver.close()
             self.auto.switch_to_window(0)
-            time.sleep(45)
+            time.sleep(55)
             self.auto.try_click("//button[contains(text(),'Check')]", 5)
-            self.auto.try_click("//button[contains(text(),'Claim')]", 3)
+
+        claim_btn = self.auto.try_find("//button[contains(text(),'Claim')]")
+        if claim_btn:
+            claim_btn.click()
+            time.sleep(4)
             self.auto.sign()
             time.sleep(5)
 
@@ -294,6 +302,6 @@ if __name__ == '__main__':
         # vn.incentive(**swap_params)
         # vn.process_all(method="incentive")
         # vn.balance(**swap_params)
-        vn.daily_faucet(**swap_params)
+        # vn.daily_faucet(**swap_params)
     except Exception as e:
         logger.error(e)
