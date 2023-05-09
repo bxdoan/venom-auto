@@ -94,6 +94,9 @@ class Venom(VenomAuto):
             logger.info(f"Balance: {balance}")
             account['balance'] = balance
 
+        logger.info(f"process account success")
+
+    def _get_address(self, account):
         self.auto.try_click('//*[@id="root"]/div/div[1]/div[2]/div[1]/div/div[1]/div/div/div[1]/div[1]/div', 2)
         self.auto.try_click('//*[@id="root"]/div/div[1]/div[2]/div[1]/div/div[1]/div/div/div[1]/div[1]/div/div/ul/li[2]/button', 7)
         self.auto.switch_to_window(-1)
@@ -102,8 +105,6 @@ class Venom(VenomAuto):
             address = address.text
             logger.info(f"Address: {address}")
             account['address'] = address
-
-        logger.info(f"process account success")
 
     def _venom_stake(self, acc: dict = None):
         try:
