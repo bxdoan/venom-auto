@@ -60,17 +60,19 @@ class Venom(VenomAuto):
         self.auto.try_click("//div[contains(text(),'Connect')]", 3)
 
         # login twitter and discord
-        self.auto.switch_to_window(0)
-        self.login_twitter(account)
-        self.driver.close()
+        # self.auto.switch_to_window(0)
+        # self.login_twitter(account)
+        # self.driver.close()
         # self.auto.switch_to_window(0)
         # self.login_discord(account)
         # self.driver.close()
 
         # main incentive
         self.auto.switch_to_window(0)
-        # self._venom_stake(account)
-        self._first_task(account)
+        self._daily_faucet(account)
+        self.auto.switch_to_window(0)
+        self._venom_stake(account)
+        # self._first_task(account)
         # self.auto.switch_to_window(1)
         # self._foundation(account)
         # self.auto.switch_to_window(1)
@@ -228,6 +230,23 @@ class Venom(VenomAuto):
         self._daily_faucet()
         logger.info(f"Faucet claim successfull for {account['address']}")
 
+    def _daily_faucet(self, account: dict = None):
+        try:
+            url = f"https://venom.network/faucet"
+            self.auto.switch_to_window(-1)
+            self.driver.get(url)
+            time.sleep(5)
+            answer = self.params.get('answer')
+            self.auto.try_click("//a[contains(text(), 'Start')]", 3)
+            self.auto.try_click(f"//span[contains(text(), '{answer}')]", 3)
+            self.auto.try_click("//button[contains(text(), 'Send')]", 7)
+            self.auto.try_click("//span[contains(text(), 'Claim')]", 3)
+            self.auto.sign()
+            time.sleep(15)
+            logger.info(f"Faucet claim successfull for {account['address']}")
+        except Exception as e:
+            logger.error(e)
+
     def _web3_world(self, acc: dict = None):
         try:
             self.auto.open_window()
@@ -276,7 +295,7 @@ if __name__ == '__main__':
     # list_account = AccountLoader().parser_file()
     list_account = AccountLoader(fp=ACC_VENOM_PATH).parser_file()
     swap_params = {
-        "account": list_account[2],
+        "account": list_account[3],
     }
     params = {
         "list_add": list_account,
@@ -288,7 +307,7 @@ if __name__ == '__main__':
             params=params
         )
         # vn.process_all(method="daily_faucet")
-        # vn.incentive(**swap_params)
+        vn.incentive(**swap_params)
         # vn.process_all(method="incentive")
         # vn.balance(**swap_params)
         # vn.daily_faucet(**swap_params)
