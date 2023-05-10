@@ -228,14 +228,16 @@ class Venom(VenomAuto):
 
         self.auto.switch_to_window(-1)
         self.driver.get(url)
-        time.sleep(2)
+        time.sleep(5)
 
         try:
             answer = self.params.get('answer')
-            self.auto.try_click("//a[contains(text(),'Start')]", 3)
-            self.auto.try_click(f"//span[contains(text(),'{answer}')]", 3)
-            self.auto.try_click("//button[contains(text(),'Send')]", 3)
-            self.auto.try_click("//span[contains(text(),'Claim')]", 3)
+            self.auto.try_click("//a[contains(text(), 'Start')]", 3)
+            self.auto.try_click(f"//span[contains(text(), '{answer}')]", 3)
+            self.auto.try_click("//button[contains(text(), 'Send')]", 7)
+            self.auto.try_click("//span[contains(text(), 'Claim')]", 3)
+            self.auto.sign()
+            time.sleep(15)
             logger.info(f"Faucet claim successfull for {account['address']}")
         except Exception as e:
             logger.error(e)
@@ -288,21 +290,21 @@ if __name__ == '__main__':
     # list_account = AccountLoader().parser_file()
     list_account = AccountLoader(fp=ACC_VENOM_PATH).parser_file()
     swap_params = {
-        "account": list_account[0],
+        "account": list_account[2],
     }
     params = {
         "list_add": list_account,
-        "answer": "Yes",
+        "answer": "All of the above",
     }
     try:
         vn = Venom(
             use_uc=True,
             params=params
         )
-        vn.process_all(method="incentive")
+        # vn.process_all(method="daily_faucet")
         # vn.incentive(**swap_params)
         # vn.process_all(method="incentive")
         # vn.balance(**swap_params)
-        # vn.daily_faucet(**swap_params)
+        vn.daily_faucet(**swap_params)
     except Exception as e:
         logger.error(e)
