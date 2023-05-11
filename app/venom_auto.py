@@ -225,22 +225,8 @@ class Venom(VenomAuto):
         self.auto.try_click("//div[contains(text(),'Venom Chrome')]", 3)
         self.auto.switch_to_window(-1)
         self.auto.try_click("//div[contains(text(),'Connect')]", 3)
-
-        self.auto.switch_to_window(-1)
-        self.driver.get(url)
-        time.sleep(5)
-
-        try:
-            answer = self.params.get('answer')
-            self.auto.try_click("//a[contains(text(), 'Start')]", 3)
-            self.auto.try_click(f"//span[contains(text(), '{answer}')]", 3)
-            self.auto.try_click("//button[contains(text(), 'Send')]", 7)
-            self.auto.try_click("//span[contains(text(), 'Claim')]", 3)
-            self.auto.sign()
-            time.sleep(15)
-            logger.info(f"Faucet claim successfull for {account['address']}")
-        except Exception as e:
-            logger.error(e)
+        self._daily_faucet()
+        logger.info(f"Faucet claim successfull for {account['address']}")
 
     def _web3_world(self, acc: dict = None):
         try:

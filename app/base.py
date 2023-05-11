@@ -204,3 +204,19 @@ class VenomAuto(BaseAuto):
         self.use_uc = kwargs.get('use_uc', True)
         self.auto = venom
         self.driver = self.auto.launchSeleniumWebdriver(self.use_uc)
+
+    def _daily_faucet(self):
+        url = f"https://venom.network/faucet"
+        try:
+            self.auto.switch_to_window(-1)
+            self.driver.get(url)
+            time.sleep(5)
+            answer = self.params.get('answer')
+            self.auto.try_click("//a[contains(text(), 'Start')]", 3)
+            self.auto.try_click(f"//span[contains(text(), '{answer}')]", 3)
+            self.auto.try_click("//button[contains(text(), 'Send')]", 7)
+            self.auto.try_click("//span[contains(text(), 'Claim')]", 3)
+            self.auto.sign()
+            time.sleep(15)
+        except Exception as e:
+            logger.error(e)

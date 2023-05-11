@@ -44,18 +44,23 @@ class VenomStake(VenomAuto):
         self.auto.switch_to_window(0)
         self.auto.walletSetup(account['seed_phrase'], account['password'])
 
+        self.auto.switch_to_window(0)
+        self.driver.get("https://venom.network/faucet")
+        time.sleep(4)
+        self.auto.try_click('//*[@id="root"]/div[1]/div[1]/div[2]/div[2]/span', 2)
+        self.auto.try_click("//div[contains(text(),'Venom Chrome')]", 3)
+        self.auto.switch_to_window(-1)
+        self.auto.try_click("//div[contains(text(),'Connect')]", 3)
+        self._daily_faucet()
+
         # click on the Connect Wallet button
         self.auto.switch_to_window(0)
-        self.driver.refresh()
+        self.driver.get(self.config['app']['venom_stake'])
         time.sleep(8)
         self.auto.try_click("//div[contains(text(),'Connect Wallet')]", 3)
         self.auto.try_click("//div[contains(text(),'Venom Chrome')]", 3)
         self.auto.switch_to_window(-1)
         self.auto.try_click("//div[contains(text(),'Connect')]", 10)
-
-        self.auto.switch_to_window(0)
-        self.login_twitter(account)
-        self.driver.close()
 
         # stake
         self.auto.switch_to_window(0)
@@ -74,10 +79,11 @@ if __name__ == '__main__':
     # list_account = AccountLoader().parser_file()
     list_account = AccountLoader(fp=ACC_VENOM_PATH).parser_file()
     swap_params = {
-        "account": list_account[8],
+        "account": list_account[2],
     }
     params = {
         "list_add": list_account,
+        "answer": "All of the above",
     }
     try:
         vn = VenomStake(
