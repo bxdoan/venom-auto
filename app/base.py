@@ -65,8 +65,7 @@ class BaseAuto(object):
             real_idx = idx + index
             logger.info(f"Request for account: {real_idx} - {account['address']}")
 
-            if utils.force_int(account.get('balance')) != 50:
-            # if account.get('status') != AccountStatus.Inactive:
+            if account.get('status') != AccountStatus.Inactive:
                 # if account is active, run method
                 try:
                     kwargs.update({
