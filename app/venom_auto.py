@@ -291,6 +291,6 @@ if __name__ == '__main__':
         # vn.incentive(**swap_params)
         # vn.process_all(method="incentive")
         # vn.balance(**swap_params)
-        vn.daily_faucet(**swap_params)
+        # vn.daily_faucet(**swap_params)
     except Exception as e:
         logger.error(e)
