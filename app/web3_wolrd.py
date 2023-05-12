@@ -63,7 +63,7 @@ if __name__ == '__main__':
     # list_account = AccountLoader().parser_file()
     list_account = AccountLoader(fp=ACC_VENOM_PATH).parser_file()
     swap_params = {
-        "account": list_account[0],
+        "account": list_account[1],
     }
     params = {
         "list_add": list_account,
