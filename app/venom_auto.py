@@ -114,6 +114,9 @@ class Venom(VenomAuto):
             logger.info(f"Balance: {balance}")
             account['balance'] = balance
 
+        self._get_address(account)
+
+        self.auto.switch_to_window(0)
         self.auto.send(receiver=receiver, amount=amount)
 
         self.auto.switch_to_window(0)
@@ -129,6 +132,7 @@ class Venom(VenomAuto):
             address = address.text
             logger.info(f"Address: {address}")
             account['address'] = address
+        self.driver.close()
 
     def _venom_stake(self, acc: dict = None):
         try:
