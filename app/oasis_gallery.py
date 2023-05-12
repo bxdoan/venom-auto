@@ -13,7 +13,7 @@ CONFIG = {
     },
     "test": {
         "app": {
-            "oasis_gallery": "https://testnet.oasis.gallery/",
+            "oasis_gallery": "https://testnet.oasis.gallery",
         }
     },
 }
@@ -90,7 +90,7 @@ if __name__ == '__main__':
     # list_account = AccountLoader().parser_file()
     list_account = AccountLoader(fp=ACC_VENOM_PATH).parser_file()
     swap_params = {
-        "account": list_account[0],
+        "account": list_account[44],
     }
     params = {
         "list_add": list_account,
@@ -103,8 +103,8 @@ if __name__ == '__main__':
             use_uc=True,
             params=params
         )
-        vn.process_all(method="buy")
-        # vn.buy(**swap_params)
+        # vn.process_all(method="buy")
+        vn.buy(**swap_params)
         # vn.list(**swap_params)
     except Exception as e:
         logger.error(e)
