@@ -156,15 +156,16 @@ def send(receiver : str, amount : str) -> None:
     switch_to_window(-1)
     driver.get(POPUP_URL)
     time.sleep(4)
-    try_click("//div[contains(text(),'Send')]", 4)
+    click("//div[contains(text(),'Send')]", 4)
     switch_to_window(-1)
     inputs = try_finds("//input")
-    inputs[0].send_keys(receiver)
-    inputs[1].send_keys(amount)
-    inputs[2].send_keys(PASSWORD)
-    try_click("//div[contains(text(),'Confirm transaction')]", 4)
+    inputs[1].send_keys(receiver)
+    inputs[2].send_keys(amount)
+    inputs[3].send_keys(PASSWORD)
+    time.sleep(2)
+    click("//div[contains(text(),'Confirm transaction')]", 4)
     switch_to_window(-1)
-    driver.close()
+    try_click("//div[contains(text(),'Ok')]", 4)
 
 
 def confirm():

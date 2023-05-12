@@ -98,6 +98,28 @@ class Venom(VenomAuto):
 
         logger.info(f"process account success")
 
+    def send_wallet(self, account):
+        amount = self.params.get('amount', 1)
+        receiver = VENOM_ADDRESS
+        # setup metamask with seed phrase and password
+        self.auto.switch_to_window(0)
+        self.auto.walletSetup(account['seed_phrase'], account['password'])
+        self.auto.switch_to_window(0)
+        self.driver.get(venom.POPUP_URL)
+        time.sleep(3)
+
+        balance = self.auto.try_find('//*[@id="root"]/div/div[1]/div[2]/div[1]/div/div[1]/div/div/div[2]')
+        if balance:
+            balance = balance.text.split(".")[0]
+            logger.info(f"Balance: {balance}")
+            account['balance'] = balance
+
+        self.auto.send(receiver=receiver, amount=amount)
+
+        self.auto.switch_to_window(0)
+        time.sleep(1)
+        logger.info(f"send ${amount} VENOM to {receiver} success")
+
     def _get_address(self, account):
         self.auto.try_click('//*[@id="root"]/div/div[1]/div[2]/div[1]/div/div[1]/div/div/div[1]/div[1]/div', 2)
         self.auto.try_click('//*[@id="root"]/div/div[1]/div[2]/div[1]/div/div[1]/div/div/div[1]/div[1]/div/div/ul/li[2]/button', 7)
@@ -295,19 +317,20 @@ if __name__ == '__main__':
     # list_account = AccountLoader().parser_file()
     list_account = AccountLoader(fp=ACC_VENOM_PATH).parser_file()
     swap_params = {
-        "account": list_account[3],
+        "account": list_account[1],
     }
     params = {
         "list_add": list_account,
         "answer": "All of the above",
+        "amount": "1",
     }
     try:
         vn = Venom(
             use_uc=True,
             params=params
         )
-        # vn.process_all(method="daily_faucet")
-        vn.incentive(**swap_params)
+        vn.process_all(method="send_wallet")
+        # vn.send_wallet(**swap_params)
         # vn.process_all(method="incentive")
         # vn.balance(**swap_params)
         # vn.daily_faucet(**swap_params)
