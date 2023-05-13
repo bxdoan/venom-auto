@@ -103,8 +103,8 @@ if __name__ == '__main__':
             use_uc=True,
             params=params
         )
-        # vn.process_all(method="buy")
-        vn.buy(**swap_params)
+        vn.process_all(method="buy")
+        # vn.buy(**swap_params)
         # vn.list(**swap_params)
     except Exception as e:
         logger.error(e)

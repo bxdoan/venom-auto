@@ -76,7 +76,7 @@ if __name__ == '__main__':
             use_uc=True,
             params=params
         )
-        # vn.process_all(method="swap")
-        vn.swap(**swap_params)
+        vn.process_all(method="swap")
+        # vn.swap(**swap_params)
     except Exception as e:
         logger.error(e)
