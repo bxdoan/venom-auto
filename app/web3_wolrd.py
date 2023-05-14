@@ -55,7 +55,7 @@ class Web3World(VenomAuto):
 
         self.auto.click("//button[contains(text(),'Swap')]", 4)
         self.auto.click("//button[contains(text(),'Confirm')]", 4)
-        self.auto.confirm()
+        self.auto.confirm(account['password'])
         logger.info(f"Incentive success")
 
 

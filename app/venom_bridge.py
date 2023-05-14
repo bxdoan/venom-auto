@@ -79,7 +79,7 @@ class VenomBridge(VenomAuto):
         stake_buttons[2].click()
         time.sleep(2)
 
-        self.auto.confirm()
+        self.auto.confirm(account['password'])
         logger.info(f"Incentive success")
 
 

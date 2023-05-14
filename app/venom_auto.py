@@ -148,15 +148,12 @@ class Venom(VenomAuto):
             self.auto.try_click("//button[contains(text(),'Check')]", 4)
 
             self.auto.click("//button[contains(text(),'Mint')]", 4)
-            self.auto.confirm()
-            time.sleep(30)
+            self.auto.confirm(acc['password'])
         except Exception as e:
             logger.error(e)
 
     def _venom_pad(self, acc: dict = None):
         try:
-            self.driver.execute_script("window.open('');")
-            self.auto.switch_to_window(-1)
             self.driver.get(self.config['task']['venom_pad'])
             time.sleep(5)
             follow_tw = self.auto.try_find("//a[contains(text(),'Follow')]")
@@ -204,8 +201,7 @@ class Venom(VenomAuto):
             self.auto.try_click("//button[contains(text(),'Check')]", 4)
 
             self.auto.click("//button[contains(text(),'Mint')]", 4)
-            self.auto.confirm()
-            time.sleep(30)
+            self.auto.confirm(acc['password'])
         except Exception as e:
             logger.error(e)
 
@@ -273,8 +269,8 @@ class Venom(VenomAuto):
             )
             if fl_again_tw:
                 fl_again_tw.click()
-                time.sleep(20)
                 self.driver.close()
+                time.sleep(20)
             self.auto.switch_to_window(-1)
             self.auto.try_click("//button[contains(text(),'Check')]", 4)
 
@@ -283,8 +279,9 @@ class Venom(VenomAuto):
             tweet_tw = self.auto.try_find("//span[contains(text(),'Tweet')]")
             if tweet_tw:
                 tweet_tw.click()
-                time.sleep(20)
                 self.driver.close()
+                time.sleep(20)
+            self.auto.switch_to_window(-1)
             self.auto.try_click("//button[contains(text(),'Check')]", 7)
 
             self.auto.try_click("//button[contains(text(),'Mint')]", 4)
@@ -297,12 +294,9 @@ class Venom(VenomAuto):
             self.driver.get(self.config['task']['venom_wallet'])
             time.sleep(8)
 
-            check_sent = self.auto.try_find("//button[contains(text(),'Check')]")
-            if check_sent:
-                check_sent.click()
-                time.sleep(4)
+            self.auto.try_click("//button[contains(text(),'Check')]", 6)
 
-            self.auto.try_click("//button[contains(text(),'Mint')]", 6)
+            self.auto.click("//button[contains(text(),'Mint')]", 6)
             self.auto.confirm(acc['password'])
         except Exception as e:
             logger.error(e)
@@ -361,8 +355,8 @@ class Venom(VenomAuto):
             fl_tw = self.auto.try_find("//span[contains(text(),'Follow')]")
             if fl_tw:
                 fl_tw.click()
-                time.sleep(10)
                 self.driver.close()
+                time.sleep(10)
             self.auto.switch_to_window(0)
             self.auto.try_click("//button[contains(text(),'Check')]", 4)
 

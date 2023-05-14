@@ -215,7 +215,9 @@ def send(receiver : str, amount : str) -> None:
 def confirm(password : str = PASSWORD) -> None:
     switch_to_window(-1)
     inputs = try_finds("//input")
-    inputs[0].send_keys(password)
+    if inputs:
+        inputs[0].send_keys(password)
+        try_click("//span[contains(text(),'Remember')]", 2)
     try_click("//div[contains(text(),'Confirm tran')]", 30)
 
 
