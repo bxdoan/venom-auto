@@ -24,6 +24,7 @@ CONFIG = {
             "venom_wallet": "https://venom.network/tasks/venom-wallet",
             "web3_world": "https://venom.network/tasks/web3-world",
             "venom_stake": "https://venom.network/tasks/venom-stake",
+            "venom_pad": "https://venom.network/tasks/venom-pad",
         },
         "app": {
             "venom_stake": "https://testnet.venomstake.com/",
@@ -60,9 +61,9 @@ class Venom(VenomAuto):
         self.auto.click("//div[contains(text(),'Connect')]", 3)
 
         # login twitter and discord
-        # self.auto.switch_to_window(0)
-        # self.login_twitter(account)
-        # self.driver.close()
+        self.auto.switch_to_window(0)
+        self.login_twitter(account)
+        self.driver.close()
         # self.auto.switch_to_window(0)
         # self.login_discord(account)
         # self.driver.close()
@@ -70,15 +71,16 @@ class Venom(VenomAuto):
         # main incentive
         # self.auto.switch_to_window(0)
         # self._daily_faucet(account)
+        # self.auto.switch_to_window(0)
+        # self._venom_stake(account)
         self.auto.switch_to_window(0)
-        self._venom_stake(account)
-        # self._first_task(account)
-        # self.auto.switch_to_window(1)
-        # self._foundation(account)
-        # self.auto.switch_to_window(1)
-        # self._venom_wallet(account)
-        # self.auto.switch_to_window(1)
-        # self._web3_world(account)
+        self._venom_pad(account)
+        self.auto.switch_to_window(0)
+        self._foundation(account)
+        self.auto.switch_to_window(0)
+        self._venom_wallet(account)
+        self.auto.switch_to_window(0)
+        self._web3_world(account)
         # self.auto.switch_to_window(1)
 
         logger.info(f"Incentive success")
@@ -145,7 +147,41 @@ class Venom(VenomAuto):
 
             self.auto.try_click("//button[contains(text(),'Mint')]", 4)
             self.auto.confirm()
-            time.sleep(10)
+            time.sleep(30)
+        except Exception as e:
+            logger.error(e)
+
+    def _venom_pad(self, acc: dict = None):
+        try:
+            self.driver.execute_script("window.open('');")
+            self.auto.switch_to_window(-1)
+            self.driver.get(self.config['task']['venom_pad'])
+            time.sleep(5)
+            follow_tw = self.auto.try_find("//a[contains(text(),'Follow')]")
+            if not follow_tw:
+                self.driver.close()
+                return
+
+            follow_tw.click()
+            time.sleep(6)
+            self.auto.switch_to_window(-1)
+            self.auto.try_click("//*[@id='layers']/div[2]/div/div/div/div/div/div[2]/div[2]/div[2]/div[1]/div/span/span", 4)
+            self.driver.close()
+            self.auto.switch_to_window(-1)
+            self.auto.try_click("//button[contains(text(),'Check')]", 4)
+            self.auto.try_click("//*[@id='layers']/div[2]/div/div/div/div/div/div[2]/div[2]/div[2]/div[1]/div/span/span", 4)
+            self.driver.close()
+            self.auto.switch_to_window(-1)
+            self.auto.try_click("//button[contains(text(),'Check')]", 4)
+
+            self.auto.try_click("//a[contains(text(),'Tweet')]", 4)
+            self.auto.try_click("//span[contains(text(),'Tweet')]", 4)
+            self.driver.close()
+            self.auto.try_click("//button[contains(text(),'Check')]", 4)
+
+            self.auto.try_click("//button[contains(text(),'Mint')]", 4)
+            self.auto.confirm()
+            time.sleep(30)
         except Exception as e:
             logger.error(e)
 
@@ -208,7 +244,6 @@ class Venom(VenomAuto):
             self.driver.close()
         except Exception as e:
             logger.error(e)
-            self.driver.close()
 
     def _venom_wallet(self, acc: dict = None):
         try:
