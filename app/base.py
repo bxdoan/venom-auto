@@ -80,7 +80,7 @@ class BaseAuto(object):
                     logger.error(e)
 
                 self.driver.quit()
-                self.driver = self.auto.launchSeleniumWebdriver(self.use_uc)
+                self.driver = self.auto.launchSeleniumWebdriver()
             else:
                 logger.info(f"Account {account['address']} is inactive")
 
@@ -202,7 +202,7 @@ class VenomAuto(BaseAuto):
         super().__init__(**kwargs)
         self.use_uc = kwargs.get('use_uc', True)
         self.auto = venom
-        self.driver = self.auto.launchSeleniumWebdriver(self.use_uc)
+        self.driver = self.auto.launchSeleniumWebdriver()
 
     def _daily_faucet(self):
         url = f"https://venom.network/faucet"

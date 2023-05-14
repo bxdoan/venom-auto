@@ -1,0 +1,104 @@
+import time
+from selenium.webdriver.common.by import By
+
+from wallet import venom
+from app.account import AccountLoader
+from app.base import VenomAuto
+from app.config import get_logger, ACC_VENOM_PATH
+
+logger = get_logger(__name__)
+
+
+CONFIG = {
+    "environment": "test",
+    "mainnet": {
+    },
+    "test": {
+        "task": {
+            "venom_foundation": "https://venom.network/tasks/venom-foundation",
+            "venom_wallet": "https://venom.network/tasks/venom-wallet",
+            "web3_world": "https://venom.network/tasks/web3-world",
+            "venom_stake": "https://venom.network/tasks/venom-stake",
+        },
+        "app": {
+            "venom_bridge": "https://testnet.venombridge.com",
+        }
+    },
+}
+
+
+class VenomBridge(VenomAuto):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+        self.environment = CONFIG['environment']
+        self.config = CONFIG[self.environment]
+
+    def bridge(self, account: dict = None):
+
+        self.driver.get(f"{self.config['app']['venom_bridge']}/bridge")
+        time.sleep(2)
+
+        # setup metamask with seed phrase and password
+        self.auto.switch_to_window(0)
+        self.auto.walletSetup(account['seed_phrase'], account['password'])
+
+        self.auto.switch_to_window(0)
+        self.auto.metamaskSetup()
+
+        self.auto.switch_to_window(0)
+        self.driver.refresh()
+        time.sleep(4)
+
+        # connect venom wallet
+        self.auto.click('//*[@id="root"]/div/header/div[2]/div/div[1]/div/button/span', 2)
+        self.auto.click("//div[contains(text(),'Venom Chrome')]", 3)
+        self.auto.switch_to_window(-1)
+        self.auto.click("//div[contains(text(),'Connect')]", 3)
+
+        # connect metamask wallet
+        self.auto.click('//*[@id="root"]/div/header/div[2]/div/div[2]/div/button/span', 2)
+        self.auto.click("//div[contains(text(),'MetaMask')]", 3)
+
+
+        # click on the Connect Wallet button
+        self.auto.switch_to_window(0)
+        self.driver.get(self.config['app']['venom_stake'])
+        time.sleep(8)
+        self.auto.try_click("//div[contains(text(),'Connect Wallet')]", 3)
+        self.auto.try_click("//div[contains(text(),'Venom Chrome')]", 3)
+        self.auto.switch_to_window(-1)
+        self.auto.try_click("//div[contains(text(),'Connect')]", 10)
+
+        # stake
+        self.auto.switch_to_window(0)
+        inputs = self.auto.try_find('//*[@id="app-wrapper"]/div[2]/div[3]/div/div/div[3]/div/div[2]/div[1]/input')
+        inputs.send_keys('3')
+
+        stake_buttons = self.auto.try_finds("//div[text()='Stake']")
+        stake_buttons[2].click()
+        time.sleep(2)
+
+        self.auto.confirm()
+        logger.info(f"Incentive success")
+
+
+if __name__ == '__main__':
+    # list_account = AccountLoader().parser_file()
+    list_account = AccountLoader(fp=ACC_VENOM_PATH).parser_file()
+    swap_params = {
+        "account": list_account[2],
+    }
+    params = {
+        "list_add": list_account,
+        "answer": "All of the above",
+    }
+    try:
+        vn = VenomBridge(
+            use_uc=True,
+            params=params
+        )
+        vn.process_all(method="bridge")
+        # vn.bridge(**swap_params)
+    except Exception as e:
+        logger.error(e)

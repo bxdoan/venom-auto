@@ -82,7 +82,7 @@ class OasisGallery(VenomAuto):
         time.sleep(2)
         self.auto.click('//*[@id="__next"]/div[2]/div[2]/div/div/div[5]/button', 4)
         self.auto.confirm()
-        time.sleep(30)
+        time.sleep(45)
         logger.info(f"Incentive success")
 
 
@@ -103,7 +103,7 @@ if __name__ == '__main__':
             use_uc=True,
             params=params
         )
-        vn.process_all(method="buy")
+        vn.process_all(method="list")
         # vn.buy(**swap_params)
         # vn.list(**swap_params)
     except Exception as e:

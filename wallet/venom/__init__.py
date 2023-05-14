@@ -8,7 +8,7 @@ import undetected_chromedriver as uc
 
 from app import utils
 from app.config import get_logger, PASSWORD, CODE_HOME, WIDTH, HEADLESS, EXTENSION_ID, \
-    EXTENSION_DIR, DRIVER_PATH, HEIGHT, EXTENSION_CRX
+    EXTENSION_DIR, DRIVER_PATH, HEIGHT, EXTENSION_CRX, EXTENSION_META_DIR
 
 logger = get_logger(__name__)
 
@@ -21,14 +21,12 @@ POPUP_URL = f"chrome-extension://{EXTENSION_ID}/popup.html"
 FILE_NAME = f"{CODE_HOME}/account.venom2.csv"
 
 
-def launchSeleniumWebdriver(use_uc=True) -> webdriver:
-    if use_uc:
-        options = uc.ChromeOptions()
-        options.add_argument(f"--load-extension={EXTENSION_DIR}")
+def launchSeleniumWebdriver(with_meta=False) -> webdriver:
+    options = uc.ChromeOptions()
+    if with_meta:
+        options.add_argument(f"--load-extension={EXTENSION_DIR},{EXTENSION_META_DIR}")
     else:
-        options = webdriver.ChromeOptions()
-        options.add_extension(EXTENSION_CRX)
-
+        options.add_argument(f"--load-extension={EXTENSION_DIR}")
     prefs = {
         "extensions.ui.developer_mode": True,
         "credentials_enable_service": False,
@@ -42,10 +40,7 @@ def launchSeleniumWebdriver(use_uc=True) -> webdriver:
         options.add_argument('--headless')
 
     global driver
-    if use_uc:
-        driver = uc.Chrome(options=options)
-    else:
-        driver = webdriver.Chrome(options=options)
+    driver = uc.Chrome(options=options)
 
     driver.set_window_size(WIDTH, HEIGHT)
     logger.info(f"Extension has been loaded successfully ")
@@ -105,6 +100,55 @@ def walletSetup(recoveryPhrase: 'str', password: str) -> None:
     try_click("//div[contains(text(),'Sign in the')]", 10)
     switch_to_window(0)
     time.sleep(2)
+
+
+def metamaskSetup(recoveryPhrase : 'str', password : str) -> None:
+    driver.execute_script("window.open('');")
+    window_before = driver.window_handles
+    driver.switch_to.window(window_before[-1])
+    time.sleep(2)
+    driver.get(f"{EXT_URL}#onboarding/welcome")
+
+    time.sleep(2)
+    click('//button[text()="Import an existing wallet"]')
+
+    click('//button[text()="No thanks"]')
+
+    # fill in recovery seed phrase
+    inputs = driver.find_elements(By.XPATH, '//input')
+    list_of_recovery_phrase = recoveryPhrase.split(" ")
+    for i, x in enumerate(list_of_recovery_phrase):
+        if i == 0:
+            locate_input = i
+        else:
+            locate_input = i * 2
+        phrase = list_of_recovery_phrase[i]
+        inputs[locate_input].send_keys(phrase)
+
+    click('//button[text()="Confirm Secret Recovery Phrase"]')
+
+    # fill in password
+    inputs = driver.find_elements(By.XPATH, '//input')
+    inputs[0].send_keys(password)
+    inputs[1].send_keys(password)
+
+    click('.create-password__form__terms-label', 1, By.CSS_SELECTOR)
+
+    click('//button[text()="Import my wallet"]')
+
+    click('//button[text()="Got it!"]')
+
+    click('//button[text()="Next"]')
+
+    click('//button[text()="Done"]')
+
+    logger.info("Wallet has been imported successfully")
+
+    # Close the popup
+    click('//*[@id="popover-content"]/div/div/section/div[2]/div/button')
+    balance = get_balance()
+    logger.info(f"ETH Mainnet Balance: {balance}")
+    driver.switch_to.window(driver.window_handles[0])
 
 
 def try_click(xpath, time_to_sleep=None, by=By.XPATH, wd=None) -> None:
@@ -304,7 +348,7 @@ def create_account(index):
 
 if __name__ == '__main__':
     for i in range(0, 150):
-        driver = launchSeleniumWebdriver(True)
+        driver = launchSeleniumWebdriver()
         try:
             create_account(index=i)
         except Exception as e:
