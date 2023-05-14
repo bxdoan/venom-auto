@@ -54,10 +54,10 @@ class Venom(VenomAuto):
         self.auto.switch_to_window(0)
         self.driver.refresh()
         time.sleep(4)
-        self.auto.try_click('//*[@id="root"]/div[1]/div[1]/div[2]/div[2]/span', 2)
-        self.auto.try_click("//div[contains(text(),'Venom Chrome')]", 3)
+        self.auto.click('//*[@id="root"]/div[2]/div[1]/div[2]/div[2]/span', 2)
+        self.auto.click("//div[contains(text(),'Venom Chrome')]", 3)
         self.auto.switch_to_window(-1)
-        self.auto.try_click("//div[contains(text(),'Connect')]", 3)
+        self.auto.click("//div[contains(text(),'Connect')]", 3)
 
         # login twitter and discord
         # self.auto.switch_to_window(0)
@@ -68,8 +68,8 @@ class Venom(VenomAuto):
         # self.driver.close()
 
         # main incentive
-        self.auto.switch_to_window(0)
-        self._daily_faucet(account)
+        # self.auto.switch_to_window(0)
+        # self._daily_faucet(account)
         self.auto.switch_to_window(0)
         self._venom_stake(account)
         # self._first_task(account)
@@ -148,7 +148,6 @@ class Venom(VenomAuto):
             time.sleep(10)
         except Exception as e:
             logger.error(e)
-            self.driver.close()
 
     def _first_task(self, acc: dict = None):
         login_tw = self.auto.try_find("//button[contains(text(),'Login with Twitter')]")
@@ -333,9 +332,9 @@ if __name__ == '__main__':
             use_uc=True,
             params=params
         )
-        vn.process_all(method="send_wallet")
+        # vn.process_all(method="send_wallet")
         # vn.send_wallet(**swap_params)
-        # vn.process_all(method="incentive")
+        vn.process_all(method="incentive")
         # vn.balance(**swap_params)
         # vn.daily_faucet(**swap_params)
     except Exception as e:
