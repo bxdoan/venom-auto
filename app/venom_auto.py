@@ -71,8 +71,8 @@ class Venom(VenomAuto):
         # main incentive
         # self.auto.switch_to_window(0)
         # self._daily_faucet(account)
-        # self.auto.switch_to_window(0)
-        # self._venom_stake(account)
+        self.auto.switch_to_window(0)
+        self._venom_stake(account)
         self.auto.switch_to_window(0)
         self._venom_pad(account)
         self.auto.switch_to_window(0)
@@ -81,7 +81,8 @@ class Venom(VenomAuto):
         self._venom_wallet(account)
         self.auto.switch_to_window(0)
         self._web3_world(account)
-        # self.auto.switch_to_window(1)
+        self.auto.switch_to_window(0)
+        self._web3_world(account)
 
         logger.info(f"Incentive success")
 
@@ -348,7 +349,6 @@ class Venom(VenomAuto):
             self.driver.close()
         except Exception as e:
             logger.error(e)
-            self.driver.close()
 
 
 if __name__ == '__main__':
