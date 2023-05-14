@@ -212,11 +212,11 @@ def send(receiver : str, amount : str) -> None:
     try_click("//div[contains(text(),'Ok')]", 4)
 
 
-def confirm():
+def confirm(password : str = PASSWORD) -> None:
     switch_to_window(-1)
     inputs = try_finds("//input")
-    inputs[0].send_keys(PASSWORD)
-    try_click("//div[contains(text(),'Confirm tran')]", 10)
+    inputs[0].send_keys(password)
+    try_click("//div[contains(text(),'Confirm tran')]", 30)
 
 
 def process_acc(idx):

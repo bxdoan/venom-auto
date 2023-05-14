@@ -51,7 +51,7 @@ class OasisGallery(VenomAuto):
 
         self.auto.click("//button[contains(text(),'Confirm')]", 4)
         self.auto.confirm()
-        time.sleep(30)
+        time.sleep(20)
         logger.info(f"Incentive success")
 
     def list(self, account: dict = None):

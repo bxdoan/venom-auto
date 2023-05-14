@@ -161,25 +161,28 @@ class Venom(VenomAuto):
             time.sleep(5)
             follow_tw = self.auto.try_find("//a[contains(text(),'Follow')]")
             if not follow_tw:
+                # job done, move on
                 return
 
             follow_tw.click()
             time.sleep(6)
-            self.auto.switch_to_window(-1)
 
+            # they will popup a new window for twitter follow, go to that window
+            self.auto.switch_to_window(-1)
             tweet_tw = self.auto.try_find(
                 "//*[@id='layers']/div[2]/div/div/div/div/div/div[2]/div[2]/div[2]/div[1]/div/span/span"
             )
             if tweet_tw:
                 tweet_tw.click()
-                time.sleep(4)
+                time.sleep(25)  # must wait for venom to check twitter follow
                 self.driver.close()
             self.auto.switch_to_window(-1)
-            time.sleep(30)
             self.auto.try_click("//button[contains(text(),'Check')]", 4)
 
-            self.auto.switch_to_window(-1)
             if len(self.driver.window_handles) > 1:
+                # they may popup a new window for twitter follow again, go to that window and follow it
+                # and then close window
+                self.auto.switch_to_window(-1)
                 self.auto.try_click(
                     "//*[@id='layers']/div[2]/div/div/div/div/div/div[2]/div[2]/div[2]/div[1]/div/span/span", 4
                 )
@@ -189,14 +192,16 @@ class Venom(VenomAuto):
             self.auto.click("//button[contains(text(),'Check')]", 4)
 
             self.auto.click("//a[contains(text(),'Tweet')]", 4)
+            # they will popup new tab for tweet
             self.auto.switch_to_window(-1)
             tweet_tw = self.auto.try_find("//span[contains(text(),'Tweet')]")
             if tweet_tw:
+
                 tweet_tw.click()
-                time.sleep(4)
+                time.sleep(30)
                 self.driver.close()
             self.auto.switch_to_window(0)
-            self.auto.click("//button[contains(text(),'Check')]", 4)
+            self.auto.try_click("//button[contains(text(),'Check')]", 4)
 
             self.auto.click("//button[contains(text(),'Mint')]", 4)
             self.auto.confirm()
@@ -242,23 +247,33 @@ class Venom(VenomAuto):
 
             follow_tw.click()
             time.sleep(6)
+
             self.auto.switch_to_window(-1)
             fl_again_tw = self.auto.try_find(
                 "//*[@id='layers']/div[2]/div/div/div/div/div/div[2]/div[2]/div[2]/div[1]/div/span/span"
             )
             if fl_again_tw:
                 fl_again_tw.click()
-                time.sleep(6)
+                time.sleep(20)
                 self.driver.close()
             self.auto.switch_to_window(-1)
             self.auto.try_click("//button[contains(text(),'Check')]", 4)
+
+            if len(self.driver.window_handles) > 1:
+                # they may popup a new window for twitter follow again, go to that window and follow it
+                # and then close window
+                self.auto.switch_to_window(-1)
+                self.auto.try_click(
+                    "//*[@id='layers']/div[2]/div/div/div/div/div/div[2]/div[2]/div[2]/div[1]/div/span/span", 4
+                )
+                self.driver.close()
 
             fl_again_tw = self.auto.try_find(
                 "//*[@id='layers']/div[2]/div/div/div/div/div/div[2]/div[2]/div[2]/div[1]/div/span/span"
             )
             if fl_again_tw:
                 fl_again_tw.click()
-                time.sleep(6)
+                time.sleep(20)
                 self.driver.close()
             self.auto.switch_to_window(-1)
             self.auto.try_click("//button[contains(text(),'Check')]", 4)
@@ -268,25 +283,27 @@ class Venom(VenomAuto):
             tweet_tw = self.auto.try_find("//span[contains(text(),'Tweet')]")
             if tweet_tw:
                 tweet_tw.click()
-                time.sleep(4)
+                time.sleep(20)
                 self.driver.close()
-            self.auto.try_click("//button[contains(text(),'Check')]", 4)
+            self.auto.try_click("//button[contains(text(),'Check')]", 7)
 
             self.auto.try_click("//button[contains(text(),'Mint')]", 4)
-            self.auto.confirm()
+            self.auto.confirm(acc['password'])
         except Exception as e:
             logger.error(e)
 
     def _venom_wallet(self, acc: dict = None):
         try:
-            self.driver.execute_script("window.open('');")
-            self.auto.switch_to_window(-1)
             self.driver.get(self.config['task']['venom_wallet'])
             time.sleep(8)
 
+            check_sent = self.auto.try_find("//button[contains(text(),'Check')]")
+            if check_sent:
+                check_sent.click()
+                time.sleep(4)
+
             self.auto.try_click("//button[contains(text(),'Mint')]", 6)
-            self.auto.confirm()
-            time.sleep(30)
+            self.auto.confirm(acc['password'])
         except Exception as e:
             logger.error(e)
             self.driver.close()
@@ -330,8 +347,6 @@ class Venom(VenomAuto):
 
     def _web3_world(self, acc: dict = None):
         try:
-            self.auto.open_window()
-            self.auto.switch_to_window(-1)
             self.driver.get(self.config['task']['web3_world'])
             time.sleep(5)
 
@@ -341,24 +356,23 @@ class Venom(VenomAuto):
 
             follow_tw.click()
             time.sleep(3)
+
             self.auto.switch_to_window(-1)
             fl_tw = self.auto.try_find("//span[contains(text(),'Follow')]")
             if fl_tw:
                 fl_tw.click()
-                time.sleep(3)
+                time.sleep(10)
                 self.driver.close()
             self.auto.switch_to_window(0)
             self.auto.try_click("//button[contains(text(),'Check')]", 4)
 
             self.auto.try_click("//button[contains(text(),'Mint')]", 6)
-            self.auto.confirm()
-            time.sleep(30)
+            self.auto.confirm(acc['password'])
         except Exception as e:
             logger.error(e)
 
     def _oasis_gallery(self, acc: dict = None):
         try:
-            self.auto.open_window()
             self.auto.switch_to_window(-1)
             self.driver.get(self.config['task']['oasis_gallery'])
             time.sleep(4)
@@ -384,15 +398,14 @@ class Venom(VenomAuto):
             fl_again_tw = self.auto.try_find("//*[@id='layers']/div[2]/div/div/div/div/div/div[2]/div[2]/div[2]/div[1]/div/span/span")
             if fl_again_tw:
                 fl_again_tw.click()
-                time.sleep(6)
+                time.sleep(20)
                 self.driver.close()
             self.auto.switch_to_window(-1)
             self.auto.try_click("//button[contains(text(),'Check')]", 4)
 
             self.auto.switch_to_window(-1)
             self.auto.try_click("//button[contains(text(),'Mint')]", 6)
-            self.auto.confirm()
-            time.sleep(30)
+            self.auto.confirm(acc['password'])
         except Exception as e:
             logger.error(e)
 
