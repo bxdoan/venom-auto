@@ -73,9 +73,9 @@ class Venom(VenomAuto):
         # self.auto.switch_to_window(0)
         # self._daily_faucet(account)
         self.auto.switch_to_window(0)
-        self._venom_stake(account)
-        self.auto.switch_to_window(0)
         self._venom_pad(account)
+        self.auto.switch_to_window(0)
+        self._venom_stake(account)
         self.auto.switch_to_window(0)
         self._foundation(account)
         self.auto.switch_to_window(0)
@@ -171,8 +171,8 @@ class Venom(VenomAuto):
             )
             if tweet_tw:
                 tweet_tw.click()
-                time.sleep(25)  # must wait for venom to check twitter follow
                 self.driver.close()
+                time.sleep(25)  # must wait for venom to check twitter follow
             self.auto.switch_to_window(-1)
             self.auto.try_click("//button[contains(text(),'Check')]", 4)
 
@@ -282,7 +282,7 @@ class Venom(VenomAuto):
                 self.driver.close()
                 time.sleep(20)
             self.auto.switch_to_window(-1)
-            self.auto.try_click("//button[contains(text(),'Check')]", 7)
+            self.auto.try_click("//button[contains(text(),'Check')]", 30)
 
             self.auto.try_click("//button[contains(text(),'Mint')]", 4)
             self.auto.confirm(acc['password'])
@@ -345,11 +345,14 @@ class Venom(VenomAuto):
             time.sleep(5)
 
             follow_tw = self.auto.try_find("//button[contains(text(),'Follow')]")
-            if not follow_tw:
-                return
-
-            follow_tw.click()
-            time.sleep(3)
+            if follow_tw:
+                follow_tw.click()
+                time.sleep(3)
+            else:
+                self.auto.open_new_tab()
+                self.auto.switch_to_window(-1)
+                self.driver.get("https://twitter.com/intent/user?screen_name=w3w_exchange")
+                time.sleep(5)
 
             self.auto.switch_to_window(-1)
             fl_tw = self.auto.try_find("//span[contains(text(),'Follow')]")
