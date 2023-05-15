@@ -102,14 +102,18 @@ def walletSetup(recoveryPhrase: 'str', password: str) -> None:
     time.sleep(2)
 
 
-def metamaskSetup(recoveryPhrase : 'str', password : str) -> None:
+def open_new_tab(url, time_to_wait=5):
     driver.execute_script("window.open('');")
+    switch_to_window(-1)
+    driver.get(url)
+    time.sleep(time_to_wait)
+
+
+def metamaskSetup(recoveryPhrase : 'str', password : str) -> None:
+    driver.open_new_tab(f"{EXT_URL}#onboarding/welcome")
+    time.sleep(4)
     window_before = driver.window_handles
     driver.switch_to.window(window_before[-1])
-    time.sleep(2)
-    driver.get(f"{EXT_URL}#onboarding/welcome")
-
-    time.sleep(2)
     click('//button[text()="Import an existing wallet"]')
 
     click('//button[text()="No thanks"]')
@@ -196,10 +200,9 @@ def sign():
 
 
 def send(receiver : str, amount : str) -> None:
-    driver.execute_script("window.open('');")
-    switch_to_window(-1)
-    driver.get(POPUP_URL)
+    driver.open_new_tab(POPUP_URL)
     time.sleep(4)
+    switch_to_window(-1)
     click("//div[contains(text(),'Send')]", 4)
     switch_to_window(-1)
     inputs = try_finds("//input")
@@ -277,11 +280,9 @@ def get_address():
     addr = ''
     try:
         # get address
-        driver.execute_script("window.open('');")
-        time.sleep(2)
+        driver.open_new_tab(f"{EXT_URL}")
+        time.sleep(4)
         switch_to_window(1)
-        driver.get(f"{EXT_URL}")
-        time.sleep(2)
         click(f'//*[@id="app"]/div/div[1]/div[2]/div/div[2]/div/div[1]', 2)
 
         addr = driver.find_element(By.CLASS_NAME, 'address-tooltip').text

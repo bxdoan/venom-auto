@@ -140,8 +140,6 @@ class Venom(VenomAuto):
 
     def _venom_stake(self, acc: dict = None):
         try:
-            self.driver.execute_script("window.open('');")
-            self.auto.switch_to_window(-1)
             self.driver.get(self.config['task']['venom_stake'])
             time.sleep(5)
 
@@ -193,10 +191,9 @@ class Venom(VenomAuto):
             self.auto.switch_to_window(-1)
             tweet_tw = self.auto.try_find("//span[contains(text(),'Tweet')]")
             if tweet_tw:
-
                 tweet_tw.click()
-                time.sleep(30)
                 self.driver.close()
+                time.sleep(30)
             self.auto.switch_to_window(0)
             self.auto.try_click("//button[contains(text(),'Check')]", 4)
 
@@ -250,8 +247,8 @@ class Venom(VenomAuto):
             )
             if fl_again_tw:
                 fl_again_tw.click()
-                time.sleep(20)
                 self.driver.close()
+                time.sleep(20)
             self.auto.switch_to_window(-1)
             self.auto.try_click("//button[contains(text(),'Check')]", 4)
 
@@ -300,7 +297,6 @@ class Venom(VenomAuto):
             self.auto.confirm(acc['password'])
         except Exception as e:
             logger.error(e)
-            self.driver.close()
 
     def daily_faucet(self, account: dict = None):
         url = f"https://venom.network/faucet"
@@ -344,18 +340,16 @@ class Venom(VenomAuto):
             self.driver.get(self.config['task']['web3_world'])
             time.sleep(5)
 
-            follow_tw = self.auto.try_find("//button[contains(text(),'Follow')]")
+            follow_tw = self.auto.try_find("//a[contains(text(),'Follow')]")
             if follow_tw:
                 follow_tw.click()
                 time.sleep(3)
             else:
-                self.auto.open_new_tab()
+                self.auto.open_new_tab("https://twitter.com/intent/user?screen_name=w3w_exchange")
                 self.auto.switch_to_window(-1)
-                self.driver.get("https://twitter.com/intent/user?screen_name=w3w_exchange")
-                time.sleep(5)
 
             self.auto.switch_to_window(-1)
-            fl_tw = self.auto.try_find("//span[contains(text(),'Follow')]")
+            fl_tw = self.auto.try_find("//a[contains(text(),'Follow')]")
             if fl_tw:
                 fl_tw.click()
                 self.driver.close()
