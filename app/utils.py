@@ -3,14 +3,16 @@ import csv
 import hmac
 import json
 import time
-
+import requests
 import openpyxl
 import os
 import pandas as pd
 import random
 import string
 
-from app.config import HOME_PACKAGE, HOME_TMP
+from app.config import HOME_PACKAGE, HOME_TMP, get_logger
+
+logger = get_logger(__name__)
 
 
 def read_xlsx_file(dir_file: str, column_mapping: dict = None, sheet_name: str = None) -> list:
@@ -156,6 +158,33 @@ def add_to_csv(file_path, add_text):
     l = len(df)
     df.loc[l] = add_text
     df_to_csv(df, file_path)
+
+
+def ip():
+    try:
+        ip_address_now = requests.get('https://checkip.amazonaws.com').text.strip()
+    except Exception as _e:
+        ip_address_now = ""
+    # check file exist
+    file_path = f"{HOME_TMP}/../ip_address.txt"
+    if not os.path.exists(file_path):
+        with open(file_path, "w") as f:
+            f.write(f"{ip_address_now}|{ip_address_now}")
+    else:
+        # get last ip from file
+        with open(file_path, "r") as f:
+            line = f.read().replace("\n", "")
+            current_ip = line.split("|")[1]
+
+        # compare
+        if current_ip != ip_address_now:
+            logger.info(f"Last IP Address: {current_ip}")
+            # write to file
+            with open(file_path, "w") as f:
+                f.write(f"{current_ip}|{ip_address_now}")
+
+    logger.info(f"IP Address: {ip_address_now}")
+    return ip_address_now
 
 
 def totp(secret: str) -> str:

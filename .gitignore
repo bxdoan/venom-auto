@@ -131,6 +131,7 @@ dmypy.json
 account.csv
 account.*.csv
 !account.sample.csv
+ip_address.txt
 
 # Ignore config files except config.test.json and config.sample.json
 config.json
@@ -140,4 +141,4 @@ config.*.json
 
 .idea
 tmp/
-log/
+log/!/tmp/ip_address.txt
