@@ -8,7 +8,7 @@ import undetected_chromedriver as uc
 
 from app import utils
 from app.config import get_logger, PASSWORD, CODE_HOME, WIDTH, HEADLESS, EXTENSION_ID, \
-    EXTENSION_DIR, HEIGHT, HEKT_CAPTCHA, EXTENSION_META_DIR
+    HEIGHT, EXTENSION_META_DIR, DEFAULT_EXTENSION
 
 logger = get_logger(__name__)
 
@@ -24,16 +24,16 @@ FILE_NAME = f"{CODE_HOME}/account.venom2.csv"
 def launchSeleniumWebdriver(with_meta=False, address : str = None) -> webdriver:
     options = uc.ChromeOptions()
 
-    extensions = f"{EXTENSION_DIR},{HEKT_CAPTCHA}" if HEKT_CAPTCHA else f"{EXTENSION_DIR}"
     if with_meta:
-        extensions += f",{EXTENSION_META_DIR}"
-        options.add_argument(f"--load-extension={extensions}")
+        options.add_argument(f"--load-extension={DEFAULT_EXTENSION},{EXTENSION_META_DIR}")
     else:
-        options.add_argument(f"--load-extension={extensions}")
+        options.add_argument(f"--load-extension={DEFAULT_EXTENSION}")
 
     user_data_dir = utils.user_data_dir(address=address)
     if user_data_dir:
         options.add_argument(f"--user-data-dir={user_data_dir}")
+
+    options.add_argument("--disable-popup-blocking")
 
     prefs = {
         "extensions.ui.developer_mode": True,
