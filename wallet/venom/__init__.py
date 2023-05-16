@@ -46,6 +46,7 @@ def launchSeleniumWebdriver(with_meta=False) -> webdriver:
     logger.info(f"Extension has been loaded successfully ")
     time.sleep(5)
     driver.refresh()
+    utils.ip()
     return driver
 
 
@@ -64,23 +65,9 @@ def try_finds(xpath="", by=By.XPATH):
 
 
 def walletSetup(recoveryPhrase: 'str', password: str) -> None:
-    driver.execute_script("window.open('');")
-    time.sleep(3)  # wait for the new window to open
     switch_to_window(0)
-    driver.refresh()
-    switch_to_window(2)
-    driver.get(f"chrome://extensions/?id={EXTENSION_ID}")
-    time.sleep(5)
-
-    ext_ma = driver.find_element(By.CSS_SELECTOR, "extensions-manager")
-    toolbar = ext_ma.shadow_root.find_element(By.CSS_SELECTOR, "extensions-toolbar")
-    update_button = toolbar.shadow_root.find_element(By.ID, "updateNow")
-    update_button.click()
-    time.sleep(5)
-    driver.get(EXT_URL)
     time.sleep(8)
 
-    switch_to_window(1)
     try_click("//div[contains(text(),'Sign in with seed phrase')]", 2)
 
     # fill in recovery seed phrase
@@ -99,7 +86,7 @@ def walletSetup(recoveryPhrase: 'str', password: str) -> None:
     time.sleep(1)
     try_click("//div[contains(text(),'Sign in the')]", 10)
     switch_to_window(0)
-    time.sleep(2)
+    time.sleep(7)
 
 
 def open_new_tab(url, time_to_wait=5):

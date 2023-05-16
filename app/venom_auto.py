@@ -55,7 +55,7 @@ class Venom(VenomAuto):
         # click on the Connect Wallet button
         self.auto.switch_to_window(0)
         self.driver.refresh()
-        time.sleep(4)
+        time.sleep(7)
         self.auto.click('//*[@id="root"]/div[2]/div[1]/div[2]/div[2]/span', 2)
         self.auto.click("//div[contains(text(),'Venom Chrome')]", 3)
         self.auto.switch_to_window(-1)
@@ -184,9 +184,9 @@ class Venom(VenomAuto):
                 self.driver.close()
 
             self.auto.switch_to_window(-1)
-            self.auto.click("//button[contains(text(),'Check')]", 4)
+            self.auto.try_click("//button[contains(text(),'Check')]", 4)
 
-            self.auto.click("//a[contains(text(),'Tweet')]", 4)
+            self.auto.try_click("//a[contains(text(),'Tweet')]", 4)
             # they will popup new tab for tweet
             self.auto.switch_to_window(-1)
             tweet_tw = self.auto.try_find("//span[contains(text(),'Tweet')]")
@@ -195,7 +195,7 @@ class Venom(VenomAuto):
                 self.driver.close()
                 time.sleep(30)
             self.auto.switch_to_window(0)
-            self.auto.try_click("//button[contains(text(),'Check')]", 4)
+            self.auto.try_click("//button[contains(text(),'Check')]", 30)
 
             self.auto.click("//button[contains(text(),'Mint')]", 4)
             self.auto.confirm(acc['password'])
@@ -347,6 +347,7 @@ class Venom(VenomAuto):
             else:
                 self.auto.open_new_tab("https://twitter.com/intent/user?screen_name=w3w_exchange")
                 self.auto.switch_to_window(-1)
+                time.sleep(5)
 
             self.auto.switch_to_window(-1)
             fl_tw = self.auto.try_find("//a[contains(text(),'Follow')]")
