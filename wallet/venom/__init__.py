@@ -68,11 +68,17 @@ def walletSetup(recoveryPhrase: 'str', password: str) -> None:
     toolbar = ext_ma.shadow_root.find_element(By.CSS_SELECTOR, "extensions-toolbar")
     update_button = toolbar.shadow_root.find_element(By.ID, "updateNow")
     update_button.click()
-    time.sleep(5)
+    time.sleep(8)
     driver.get(EXT_URL)
     time.sleep(5)
-    switch_to_window(1)
 
+    if len(driver.window_handles) == 3:
+        switch_to_window(0)
+        time.sleep(2)
+        driver.close()
+        time.sleep(2)
+
+    switch_to_window(1)
     try_click("//div[contains(text(),'Sign in with seed phrase')]", 2)
 
     # fill in recovery seed phrase

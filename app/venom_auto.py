@@ -85,6 +85,8 @@ class Venom(VenomAuto):
         self._web3_world(account)
         self.auto.switch_to_window(0)
         self._oasis_gallery(account)
+        self.auto.switch_to_window(0)
+        self._bridge(account)
 
         logger.info(f"Incentive success")
 
@@ -165,15 +167,18 @@ class Venom(VenomAuto):
 
             # they will popup a new window for twitter follow, go to that window
             self.auto.switch_to_window(-1)
-            tweet_tw = self.auto.try_find(
-                "//*[@id='layers']/div[2]/div/div/div/div/div/div[2]/div[2]/div[2]/div[1]/div/span/span"
-            )
+            tweet_tw = self.auto.try_find(FOLLOW_XP)
             if tweet_tw:
                 tweet_tw.click()
                 self.driver.close()
-                time.sleep(25)  # must wait for venom to check twitter follow
+                time.sleep(5)  # must wait for venom to check twitter follow
             self.auto.switch_to_window(-1)
-            self.auto.try_click("//button[contains(text(),'Check')]", 4)
+            self.auto.try_click("//button[contains(text(),'Check')]", 20)
+
+            # wait to solve captcha
+            while len(self.driver.window_handles) == 1:
+                self.auto.try_click("//button[contains(text(),'Check')]")
+                time.sleep(20)
 
             if len(self.driver.window_handles) > 1:
                 # they may popup a new window for twitter follow again, go to that window and follow it
@@ -391,6 +396,30 @@ class Venom(VenomAuto):
             self.auto.switch_to_window(-1)
             self.auto.try_click("//button[contains(text(),'Mint')]", 6)
             self.auto.confirm(acc['password'])
+        except Exception as e:
+            logger.error(e)
+
+    def _bridge(self, acc: dict = None):
+        try:
+            self.auto.switch_to_window(-1)
+            self.driver.get(self.config['task']['oasis_gallery'])
+            time.sleep(4)
+
+            follow_tw = self.auto.try_find("//a[contains(text(),'Follow')]")
+            if not follow_tw:
+                self.driver.close()
+                return
+
+            follow_tw.click()
+            time.sleep(6)
+            self.auto.switch_to_window(-1)
+            fl_again_tw = self.auto.try_find(FOLLOW_XP)
+            if fl_again_tw:
+                fl_again_tw.click()
+                time.sleep(6)
+                self.driver.close()
+            self.auto.switch_to_window(-1)
+            self.auto.try_click("//button[contains(text(),'Check')]", 4)
         except Exception as e:
             logger.error(e)
 
