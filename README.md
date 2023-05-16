@@ -7,9 +7,10 @@ The script will automation almost task on [venom network tasks](https://venom.ne
 - [x] [Stake Venom](https://venom.network/tasks/venom-stake)
 - [x] [Venom Wallet](https://venom.network/tasks/venom-wallet)
 - [x] [Web3 World](https://venom.network/tasks/web3-world)
-- [x] [NFT Venom Pad](https://venom.network/tasks/venom-pad)
-- [x] [Oasis_Gallery](https://venom.network/tasks/oasis-gallery)
+- [x] [Venom Pad](https://venom.network/tasks/venom-pad)
+- [x] [NFT Oasis_Gallery](https://venom.network/tasks/oasis-gallery)
 - [ ] [Venom Bridge](https://venom.network/tasks/venom-bridge)
+- [ ] [Venom Pools](https://venom.network/tasks/venom-pools)
 
 ## Create wallet
 
