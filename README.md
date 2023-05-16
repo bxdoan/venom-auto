@@ -3,10 +3,18 @@
 # venom-auto
 
 Venom Network auto using selenium framework
+The script will automation almost task on [venom network tasks](https://venom.network/tasks):
+- [x] [Stake Venom](https://venom.network/tasks/venom-stake)
+- [x] [Venom Wallet](https://venom.network/tasks/venom-wallet)
+- [x] [Web3 World](https://venom.network/tasks/web3-world)
+- [x] [NFT Venom Pad](https://venom.network/tasks/venom-pad)
+- [x] [Oasis_Gallery](https://venom.network/tasks/oasis-gallery)
+- [ ] [Venom Bridge](https://venom.network/tasks/venom-bridge)
 
 ## Create wallet
 
 ```bash
+cp .env-example .env
 cp account.example.csv account.venom.csv
 python3 wallet/venom/__init__.py
 ```
@@ -14,7 +22,7 @@ python3 wallet/venom/__init__.py
 ## Run app auto
     
 ```bash
-python3 app.py
+python3 app/venom_stake.py
 ```
 
 
