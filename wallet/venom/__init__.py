@@ -8,7 +8,7 @@ import undetected_chromedriver as uc
 
 from app import utils
 from app.config import get_logger, PASSWORD, CODE_HOME, WIDTH, HEADLESS, EXTENSION_ID, \
-    EXTENSION_DIR, DRIVER_PATH, HEIGHT, EXTENSION_CRX, EXTENSION_META_DIR
+    EXTENSION_DIR, DRIVER_PATH, HEIGHT, HEKT_CAPTCHA, EXTENSION_META_DIR
 
 logger = get_logger(__name__)
 
@@ -23,10 +23,14 @@ FILE_NAME = f"{CODE_HOME}/account.venom2.csv"
 
 def launchSeleniumWebdriver(with_meta=False) -> webdriver:
     options = uc.ChromeOptions()
+
+    extensions = f"{EXTENSION_DIR},{HEKT_CAPTCHA}" if HEKT_CAPTCHA else f"{EXTENSION_DIR}"
     if with_meta:
-        options.add_argument(f"--load-extension={EXTENSION_DIR},{EXTENSION_META_DIR}")
+        extensions += f",{EXTENSION_META_DIR}"
+        options.add_argument(f"--load-extension={extensions}")
     else:
-        options.add_argument(f"--load-extension={EXTENSION_DIR}")
+        options.add_argument(f"--load-extension={extensions}")
+
     prefs = {
         "extensions.ui.developer_mode": True,
         "credentials_enable_service": False,
@@ -50,38 +54,24 @@ def launchSeleniumWebdriver(with_meta=False) -> webdriver:
     return driver
 
 
-def try_find(xpath="", by=By.XPATH):
-    try:
-        return driver.find_element(by, xpath)
-    except Exception as _e:
-        return None
-
-
-def try_finds(xpath="", by=By.XPATH):
-    try:
-        return driver.find_elements(by, xpath)
-    except Exception as _e:
-        return []
-
-
 def walletSetup(recoveryPhrase: 'str', password: str) -> None:
-    switch_to_window(0)
-    time.sleep(8)
-    # driver.execute_script("window.open('');")
-    # time.sleep(3)  # wait for the new window to open
     # switch_to_window(0)
-    # driver.refresh()
-    # switch_to_window(2)
-    # driver.get(f"chrome://extensions/?id={EXTENSION_ID}")
-    # time.sleep(5)
-    # ext_ma = driver.find_element(By.CSS_SELECTOR, "extensions-manager")
-    # toolbar = ext_ma.shadow_root.find_element(By.CSS_SELECTOR, "extensions-toolbar")
-    # update_button = toolbar.shadow_root.find_element(By.ID, "updateNow")
-    # update_button.click()
-    # time.sleep(5)
-    # driver.get(EXT_URL)
     # time.sleep(8)
-    # switch_to_window(1)
+    driver.execute_script("window.open('');")
+    time.sleep(3)  # wait for the new window to open
+    switch_to_window(0)
+    driver.refresh()
+    switch_to_window(2)
+    driver.get(f"chrome://extensions/?id={EXTENSION_ID}")
+    time.sleep(5)
+    ext_ma = driver.find_element(By.CSS_SELECTOR, "extensions-manager")
+    toolbar = ext_ma.shadow_root.find_element(By.CSS_SELECTOR, "extensions-toolbar")
+    update_button = toolbar.shadow_root.find_element(By.ID, "updateNow")
+    update_button.click()
+    time.sleep(5)
+    driver.get(EXT_URL)
+    time.sleep(5)
+    switch_to_window(1)
 
     try_click("//div[contains(text(),'Sign in with seed phrase')]", 2)
 
@@ -102,6 +92,20 @@ def walletSetup(recoveryPhrase: 'str', password: str) -> None:
     try_click("//div[contains(text(),'Sign in the')]", 10)
     switch_to_window(0)
     time.sleep(7)
+
+
+def try_find(xpath="", by=By.XPATH):
+    try:
+        return driver.find_element(by, xpath)
+    except Exception as _e:
+        return None
+
+
+def try_finds(xpath="", by=By.XPATH):
+    try:
+        return driver.find_elements(by, xpath)
+    except Exception as _e:
+        return []
 
 
 def open_new_tab(url, time_to_wait=5):

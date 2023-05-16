@@ -41,6 +41,9 @@ EXTENSION_DIR      = os.environ.get('EXTENSION_DIR')
 EXTENSION_CRX      = os.environ.get('EXTENSION_CRX')
 EXTENSION_ID       = os.environ.get('EXTENSION_ID')
 DRIVER_PATH        = os.environ.get('DRIVER_PATH')
+
+HEKT_CAPTCHA       = os.environ.get('HEKT_CAPTCHA')
+
 EXTENSION_META_DIR = os.environ.get('EXTENSION_META_DIR')
 EXTENSION_META_ID  = os.environ.get('EXTENSION_META_ID')
 
