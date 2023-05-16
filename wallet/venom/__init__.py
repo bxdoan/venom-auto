@@ -67,6 +67,21 @@ def try_finds(xpath="", by=By.XPATH):
 def walletSetup(recoveryPhrase: 'str', password: str) -> None:
     switch_to_window(0)
     time.sleep(8)
+    # driver.execute_script("window.open('');")
+    # time.sleep(3)  # wait for the new window to open
+    # switch_to_window(0)
+    # driver.refresh()
+    # switch_to_window(2)
+    # driver.get(f"chrome://extensions/?id={EXTENSION_ID}")
+    # time.sleep(5)
+    # ext_ma = driver.find_element(By.CSS_SELECTOR, "extensions-manager")
+    # toolbar = ext_ma.shadow_root.find_element(By.CSS_SELECTOR, "extensions-toolbar")
+    # update_button = toolbar.shadow_root.find_element(By.ID, "updateNow")
+    # update_button.click()
+    # time.sleep(5)
+    # driver.get(EXT_URL)
+    # time.sleep(8)
+    # switch_to_window(1)
 
     try_click("//div[contains(text(),'Sign in with seed phrase')]", 2)
 
@@ -137,8 +152,6 @@ def metamaskSetup(recoveryPhrase : 'str', password : str) -> None:
 
     # Close the popup
     click('//*[@id="popover-content"]/div/div/section/div[2]/div/button')
-    balance = get_balance()
-    logger.info(f"ETH Mainnet Balance: {balance}")
     driver.switch_to.window(driver.window_handles[0])
 
 

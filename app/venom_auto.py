@@ -350,11 +350,13 @@ class Venom(VenomAuto):
                 time.sleep(5)
 
             self.auto.switch_to_window(-1)
-            fl_tw = self.auto.try_find("//a[contains(text(),'Follow')]")
+            fl_tw = self.auto.try_find(
+                "//*[@id='layers']/div[2]/div/div/div/div/div/div[2]/div[2]/div[2]/div[1]/div/span/span"
+            )
             if fl_tw:
                 fl_tw.click()
                 self.driver.close()
-                time.sleep(10)
+                time.sleep(20)
             self.auto.switch_to_window(0)
             self.auto.try_click("//button[contains(text(),'Check')]", 4)
 
