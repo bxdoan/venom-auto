@@ -210,9 +210,8 @@ def sign():
 
 
 def send(receiver : str, amount : str) -> None:
-    driver.open_new_tab(POPUP_URL)
-    time.sleep(4)
-    switch_to_window(-1)
+    open_new_tab(POPUP_URL)
+
     click("//div[contains(text(),'Send')]", 4)
     switch_to_window(-1)
     inputs = try_finds("//input")
