@@ -33,6 +33,7 @@ CONFIG = {
     },
 }
 VENOM_ADDRESS = "0:077873f1453fa67b0f1ce77f1e806675acd19c4694b9738be61fd406618f2f7a"
+FOLLOW_XP = "//*[@id='layers']/div[2]/div/div/div/div/div/div[2]/div[2]/div[2]/div[1]/div/span/span"
 
 
 class Venom(VenomAuto):
@@ -178,9 +179,7 @@ class Venom(VenomAuto):
                 # they may popup a new window for twitter follow again, go to that window and follow it
                 # and then close window
                 self.auto.switch_to_window(-1)
-                self.auto.try_click(
-                    "//*[@id='layers']/div[2]/div/div/div/div/div/div[2]/div[2]/div[2]/div[1]/div/span/span", 4
-                )
+                self.auto.try_click(FOLLOW_XP, 4)
                 self.driver.close()
 
             self.auto.switch_to_window(-1)
@@ -242,9 +241,7 @@ class Venom(VenomAuto):
             time.sleep(6)
 
             self.auto.switch_to_window(-1)
-            fl_again_tw = self.auto.try_find(
-                "//*[@id='layers']/div[2]/div/div/div/div/div/div[2]/div[2]/div[2]/div[1]/div/span/span"
-            )
+            fl_again_tw = self.auto.try_find(FOLLOW_XP)
             if fl_again_tw:
                 fl_again_tw.click()
                 self.driver.close()
@@ -261,9 +258,7 @@ class Venom(VenomAuto):
                 )
                 self.driver.close()
 
-            fl_again_tw = self.auto.try_find(
-                "//*[@id='layers']/div[2]/div/div/div/div/div/div[2]/div[2]/div[2]/div[1]/div/span/span"
-            )
+            fl_again_tw = self.auto.try_find(FOLLOW_XP)
             if fl_again_tw:
                 fl_again_tw.click()
                 self.driver.close()
@@ -350,13 +345,11 @@ class Venom(VenomAuto):
                 time.sleep(5)
 
             self.auto.switch_to_window(-1)
-            fl_tw = self.auto.try_find(
-                "//*[@id='layers']/div[2]/div/div/div/div/div/div[2]/div[2]/div[2]/div[1]/div/span/span"
-            )
+            fl_tw = self.auto.try_find(FOLLOW_XP)
             if fl_tw:
                 fl_tw.click()
                 self.driver.close()
-                time.sleep(20)
+                time.sleep(10)
             self.auto.switch_to_window(0)
             self.auto.try_click("//button[contains(text(),'Check')]", 4)
 
@@ -379,9 +372,7 @@ class Venom(VenomAuto):
             follow_tw.click()
             time.sleep(6)
             self.auto.switch_to_window(-1)
-            fl_again_tw = self.auto.try_find(
-                "//*[@id='layers']/div[2]/div/div/div/div/div/div[2]/div[2]/div[2]/div[1]/div/span/span"
-            )
+            fl_again_tw = self.auto.try_find(FOLLOW_XP)
             if fl_again_tw:
                 fl_again_tw.click()
                 time.sleep(6)
@@ -389,7 +380,7 @@ class Venom(VenomAuto):
             self.auto.switch_to_window(-1)
             self.auto.try_click("//button[contains(text(),'Check')]", 4)
 
-            fl_again_tw = self.auto.try_find("//*[@id='layers']/div[2]/div/div/div/div/div/div[2]/div[2]/div[2]/div[1]/div/span/span")
+            fl_again_tw = self.auto.try_find(FOLLOW_XP)
             if fl_again_tw:
                 fl_again_tw.click()
                 time.sleep(20)
