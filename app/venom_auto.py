@@ -17,7 +17,6 @@ CONFIG = {
         "twitter": {
             "venom_network": "https://twitter.com/Venom_network_",
             "venom_foundation": "https://twitter.com/VenomFoundation",
-            "create_post": "https://twitter.com/intent/tweet?text=Just%20claimed%20my%20first%20faucet%20tokens%20and%20am%20ready%20to%20use%20them%20on%20the%20%23VenomTestnet!%20Get%20them%20yourself%20on%20https%3A%2F%2Fvenom.network",
         },
         "task": {
             "venom_foundation": "https://venom.network/tasks/venom-foundation",
