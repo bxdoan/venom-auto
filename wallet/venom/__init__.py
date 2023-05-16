@@ -8,7 +8,7 @@ import undetected_chromedriver as uc
 
 from app import utils
 from app.config import get_logger, PASSWORD, CODE_HOME, WIDTH, HEADLESS, EXTENSION_ID, \
-    EXTENSION_DIR, DRIVER_PATH, HEIGHT, HEKT_CAPTCHA, EXTENSION_META_DIR
+    EXTENSION_DIR, HEIGHT, HEKT_CAPTCHA, EXTENSION_META_DIR
 
 logger = get_logger(__name__)
 
@@ -222,7 +222,7 @@ def send(receiver : str, amount : str) -> None:
     inputs[1].send_keys(receiver)
     inputs[2].send_keys(amount)
     inputs[3].send_keys(PASSWORD)
-    time.sleep(2)
+    time.sleep(5)
     click("//div[contains(text(),'Confirm transaction')]", 4)
     switch_to_window(-1)
     try_click("//div[contains(text(),'Ok')]", 4)
