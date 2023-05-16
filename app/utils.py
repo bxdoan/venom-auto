@@ -10,7 +10,7 @@ import pandas as pd
 import random
 import string
 
-from app.config import HOME_PACKAGE, HOME_TMP, get_logger
+from app.config import HOME_PACKAGE, HOME_TMP, get_logger, USER_DATA_DIR, ALL_USER_DATA_DIR
 
 logger = get_logger(__name__)
 
@@ -185,6 +185,28 @@ def ip():
 
     logger.info(f"IP Address: {ip_address_now}")
     return ip_address_now
+
+
+def cook_address(address: str) -> str:
+    """ Return cooked address """
+    address = address.lower().strip().replace("0x", "").replace("0:", "")
+    return address
+
+
+def user_data_dir(address: str = None) -> str or None:
+    """ Return user data dir """
+    if address is None and USER_DATA_DIR is None:
+        return None
+
+    address = cook_address(address)  # cook address
+    # specific user data dir if set
+    # create user data dir if not exist by using address of wallet
+    udd = USER_DATA_DIR if USER_DATA_DIR else os.path.join(ALL_USER_DATA_DIR, address)
+
+    if not os.path.exists(udd):
+        os.makedirs(udd)
+
+    return udd
 
 
 def totp(secret: str) -> str:

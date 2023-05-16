@@ -61,7 +61,11 @@ class BaseAuto(object):
             # continue from index in existing file report
             list_account = self.list_account[index:]
 
+        create_driver = True
         for idx, account in enumerate(list_account):
+            if create_driver:
+                self.driver = self.auto.launchSeleniumWebdriver(address=account['address'])
+
             real_idx = idx + index
             logger.info(f"Request for account: {real_idx} - {account['address']}")
 
@@ -80,9 +84,10 @@ class BaseAuto(object):
                     logger.error(e)
 
                 self.driver.quit()
-                self.driver = self.auto.launchSeleniumWebdriver()
+                create_driver = True
             else:
                 logger.info(f"Account {account['address']} is inactive")
+                create_driver = False
 
             self.save_report(account)
 
@@ -202,7 +207,6 @@ class VenomAuto(BaseAuto):
         super().__init__(**kwargs)
         self.use_uc = kwargs.get('use_uc', True)
         self.auto = venom
-        self.driver = self.auto.launchSeleniumWebdriver()
 
     def _daily_faucet(self):
         url = f"https://venom.network/faucet"

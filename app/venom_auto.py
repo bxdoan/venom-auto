@@ -292,7 +292,7 @@ class Venom(VenomAuto):
 
             check_button = self.auto.try_find("//button[contains(text(),'Check')]")
             if check_button:
-                self.auto.send(receiver=VENOM_ADDRESS, amount=1)
+                self.auto.send(receiver=VENOM_ADDRESS, amount='1')
 
             time.sleep(4)
             self.auto.switch_to_window(0)

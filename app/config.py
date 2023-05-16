@@ -47,6 +47,9 @@ HEKT_CAPTCHA       = os.environ.get('HEKT_CAPTCHA')
 EXTENSION_META_DIR = os.environ.get('EXTENSION_META_DIR')
 EXTENSION_META_ID  = os.environ.get('EXTENSION_META_ID')
 
+USER_DATA_DIR      = os.environ.get('USER_DATA_DIR')
+ALL_USER_DATA_DIR  = os.environ.get('ALL_USER_DATA_DIR')  # for all user data dir
+
 
 def get_logger(name):
     log = logging.getLogger(name)

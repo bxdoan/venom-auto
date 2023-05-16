@@ -21,7 +21,7 @@ POPUP_URL = f"chrome-extension://{EXTENSION_ID}/popup.html"
 FILE_NAME = f"{CODE_HOME}/account.venom2.csv"
 
 
-def launchSeleniumWebdriver(with_meta=False) -> webdriver:
+def launchSeleniumWebdriver(with_meta=False, address : str = None) -> webdriver:
     options = uc.ChromeOptions()
 
     extensions = f"{EXTENSION_DIR},{HEKT_CAPTCHA}" if HEKT_CAPTCHA else f"{EXTENSION_DIR}"
@@ -30,6 +30,10 @@ def launchSeleniumWebdriver(with_meta=False) -> webdriver:
         options.add_argument(f"--load-extension={extensions}")
     else:
         options.add_argument(f"--load-extension={extensions}")
+
+    user_data_dir = utils.user_data_dir(address=address)
+    if user_data_dir:
+        options.add_argument(f"--user-data-dir={user_data_dir}")
 
     prefs = {
         "extensions.ui.developer_mode": True,
