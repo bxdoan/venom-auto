@@ -12,6 +12,15 @@ The script will automation almost task on [venom network tasks](https://venom.ne
 - [ ] [Venom Bridge](https://venom.network/tasks/venom-bridge)
 - [ ] [Venom Pools](https://venom.network/tasks/venom-pools)
 
+## Install package
+```sh
+pip3 install -r requirements.txt
+```
+or using pipenv
+```sh
+pipenv sync
+```
+
 ## Create wallet
 
 ```bash

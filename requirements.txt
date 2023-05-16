@@ -1,0 +1,7 @@
+selenium
+undetected-chromedriver
+requests
+python-dotenv
+python-json-config
+openpyxl
+pandas
