@@ -221,7 +221,9 @@ def send(receiver : str, amount : str) -> None:
     inputs = try_finds("//input")
     inputs[1].send_keys(receiver)
     inputs[2].send_keys(amount)
-    inputs[3].send_keys(PASSWORD)
+    if len(inputs) == 4:
+        # if have password field
+        inputs[3].send_keys(PASSWORD)
     time.sleep(5)
     click("//div[contains(text(),'Confirm transaction')]", 4)
     switch_to_window(-1)

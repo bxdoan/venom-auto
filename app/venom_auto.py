@@ -293,10 +293,12 @@ class Venom(VenomAuto):
             check_button = self.auto.try_find("//button[contains(text(),'Check')]")
             if check_button:
                 self.auto.send(receiver=VENOM_ADDRESS, amount='1')
+                self.auto.switch_to_window(-1)
+                self.driver.close()
 
             time.sleep(4)
             self.auto.switch_to_window(0)
-            self.auto.try_click("//button[contains(text(),'Check')]", 4)
+            self.auto.try_click("//button[contains(text(),'Check')]", 10)
             self.auto.click("//button[contains(text(),'Mint')]", 6)
             self.auto.confirm(acc['password'])
         except Exception as e:
