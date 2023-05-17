@@ -12,6 +12,7 @@ python-json-config = "*"
 pytest = "*"
 openpyxl = "*"
 pandas = "*"
+macwifi = "*"
 
 [requires]
 python_version = "3.10"

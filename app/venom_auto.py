@@ -52,7 +52,6 @@ class Venom(VenomAuto):
         # setup metamask with seed phrase and password
         self.auto.switch_to_window(0)
         self.auto.walletSetup(account['seed_phrase'], account['password'])
-
         # click on the Connect Wallet button
         self.auto.switch_to_window(0)
         self.driver.refresh()
@@ -61,7 +60,6 @@ class Venom(VenomAuto):
         self.auto.click("//div[contains(text(),'Venom Chrome')]", 3)
         self.auto.switch_to_window(-1)
         self.auto.click("//div[contains(text(),'Connect')]", 3)
-
         # login twitter and discord
         self.auto.switch_to_window(0)
         self.login_twitter(account)
