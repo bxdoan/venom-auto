@@ -25,6 +25,7 @@ CONFIG = {
             "venom_stake": "https://venom.network/tasks/venom-stake",
             "venom_pad": "https://venom.network/tasks/venom-pad",
             "oasis_gallery": "https://venom.network/tasks/oasis-gallery",
+            "venom_bridge": "https://venom.network/tasks/venom-bridge",
         },
         "app": {
             "venom_stake": "https://testnet.venomstake.com/",
@@ -408,7 +409,7 @@ class Venom(VenomAuto):
     def _bridge(self, acc: dict = None):
         try:
             self.auto.switch_to_window(-1)
-            self.driver.get(self.config['task']['oasis_gallery'])
+            self.driver.get(self.config['task']['venom_bridge'])
             time.sleep(4)
 
             follow_tw = self.auto.try_find("//a[contains(text(),'Follow')]")
