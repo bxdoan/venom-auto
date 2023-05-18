@@ -182,15 +182,17 @@ class Venom(VenomAuto):
                 # they may popup a new window for twitter follow again, go to that window and follow it
                 # and then close window
                 self.auto.switch_to_window(-1)
+                time.sleep(8)
                 self.auto.try_click(FOLLOW_XP, 4)
                 self.driver.close()
 
             self.auto.switch_to_window(-1)
-            self.auto.try_click("//button[contains(text(),'Check')]", 4)
+            self.auto.try_click("//button[contains(text(),'Check')]", 30)
 
-            self.auto.try_click("//a[contains(text(),'Tweet')]", 4)
+            self.auto.try_click("//a[contains(text(),'Tweet')]", 6)
             # they will popup new tab for tweet
             self.auto.switch_to_window(-1)
+            self.auto.try_click("//span[contains(text(),'Maybe later')]", 4)
             tweet_tw = self.auto.try_find("//span[contains(text(),'Tweet')]")
             if tweet_tw:
                 tweet_tw.click()
@@ -244,6 +246,7 @@ class Venom(VenomAuto):
             time.sleep(6)
 
             self.auto.switch_to_window(-1)
+            self.auto.try_click("//span[contains(text(),'Maybe later')]", 4)
             fl_again_tw = self.auto.try_find(FOLLOW_XP)
             if fl_again_tw:
                 fl_again_tw.click()

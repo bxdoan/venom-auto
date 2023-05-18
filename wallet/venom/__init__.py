@@ -314,37 +314,31 @@ def open_window():
     time.sleep(3)
 
 
-def switch_to_window(window_number):
+def switch_to_window(window_number : int = 0) -> None:
     # Switch to another window, start from 0.
+    wh = driver.window_handles
     try:
-        wh = driver.window_handles
-        logger.info(f'window handles: {len(wh)}')
         driver.switch_to.window(wh[window_number])
     except:
         pass
-    logger.info(f'switched to window numer: {str(window_number)}')
+    logger.info(f'window handles: {len(wh)} and switch {str(window_number)}')
 
 
-def approve(gas=GasPrice.Average):
+def approve(gas : str = GasPrice.Average) -> None:
     time.sleep(3)
     switch_to_window(-1)
-    if gas in GasPrice.all():
-        try:
-            click(f"//div[text()='{gas}']")
-        except Exception as _e:
-            pass
 
-    try:
-        click("//button[text()='Approve']", 5)
-    except Exception as _e:
-        pass
+    if gas in GasPrice.all():
+        try_click(f"//div[text()='{gas}']")
+
+    try_click("//button[contains(text(),'Approve')]", 5)
 
 
 def reject():
+    time.sleep(4)
     try:
-        time.sleep(4)
         switch_to_window(-1)
-        click("//button[text()='Reject']", 5)
+        click("//button[contains(text(),'Reject')]", 5)
     except:
         pass
 

@@ -58,6 +58,11 @@ for ex in [HEKT_CAPTCHA, DISCORD_LOGIN]:
     if ex:
         DEFAULT_EXTENSION += f",{ex}"
 
+NETWORK_PASSWORD = os.environ.get('NETWORK_PASSWORD')
+NETWORK_NAME1    = os.environ.get('NETWORK_NAME1')
+NETWORK_NAME2    = os.environ.get('NETWORK_NAME2')
+LIST_NETWORK     = [NETWORK_NAME1, NETWORK_NAME2]
+
 
 def get_logger(name):
     log = logging.getLogger(name)
