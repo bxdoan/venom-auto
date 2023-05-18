@@ -9,8 +9,10 @@ import os
 import pandas as pd
 import random
 import string
+import macwifi
 
-from app.config import HOME_PACKAGE, HOME_TMP, get_logger, USER_DATA_DIR, ALL_USER_DATA_DIR
+from app.config import HOME_PACKAGE, HOME_TMP, get_logger, USER_DATA_DIR, ALL_USER_DATA_DIR, NETWORK_PASSWORD, \
+    LIST_NETWORK
 
 logger = get_logger(__name__)
 
@@ -120,26 +122,6 @@ def find_latest_row_index_log(file_report) -> tuple:
     return index, row
 
 
-def refresh_ipadress():
-    # Define the range of the IP address to choose from
-    ip_range = ["192.168.1.", "10.0.0."]
-
-    # Choose a random IP address
-    new_ip = ip_range[random.randint(0, len(ip_range) - 1)] + str(random.randint(1, 254))
-
-    # Define the subnet mask
-    subnet_mask = "255.255.255.0"
-
-    # Get the name of the current active network interface
-    interface_name = os.popen(
-        "networksetup -listallhardwareports | awk '/Wi-Fi|AirPort/{getline; print $2}'").read().strip()
-
-    # Change the IP address and subnet mask using the networksetup command
-    cmd = "sudo networksetup -setmanual \"" + interface_name + "\" " + new_ip + " " + subnet_mask
-    print(cmd)
-    os.system(cmd)
-
-
 def df_to_csv(df, file_path):
     # Save dataframe as csv.
     df.to_csv(file_path, index=False)
@@ -220,3 +202,28 @@ def totp(secret: str) -> str:
     code = int.from_bytes(code, "big") & 0x7FFFFFFF
     code = code % 1000000
     return "{:06d}".format(code)
+
+
+def change_network():
+    pass
+
+
+def refresh_ipadress():
+    pass
+
+
+def change_network1():
+    """ Change network """
+    refresh_ipadress()
+    macwifi.connect(ssid=get_network(), password=NETWORK_PASSWORD)
+
+
+def get_network(exclude_network: str = None) -> str:
+    """ Get network """
+    if exclude_network is None:
+        exclude_network = macwifi.get_ssid()
+
+    list_network = LIST_NETWORK
+    list_network.remove(exclude_network)
+    network = list_network[0]
+    return network

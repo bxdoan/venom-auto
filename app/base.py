@@ -83,6 +83,7 @@ class BaseAuto(object):
                 except Exception as e:
                     logger.error(e)
 
+                self.change_network()
                 self.driver.quit()
                 create_driver = True
             else:
@@ -93,6 +94,10 @@ class BaseAuto(object):
 
         logger.info(f'Request Success for account len: {len(list_account)}')
         logger.info(f"file report: {self.file_report}")
+
+    def change_network(self):
+        utils.change_network()
+        time.sleep(15)
 
     def login_twitter(self, acc: dict) -> None:
         url = "https://twitter.com/i/flow/login"
