@@ -85,6 +85,8 @@ class Venom(VenomAuto):
         self._oasis_gallery(account)
         self.auto.switch_to_window(0)
         self._bridge(account)
+        self.auto.switch_to_window(0)
+        self._daily_faucet(account)
 
         logger.info(f"Incentive success")
 

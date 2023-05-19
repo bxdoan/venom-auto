@@ -97,7 +97,7 @@ class BaseAuto(object):
 
     def change_network(self):
         utils.change_network()
-        time.sleep(15)
+        time.sleep(5)
 
     def login_twitter(self, acc: dict) -> None:
         url = "https://twitter.com/i/flow/login"
