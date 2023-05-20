@@ -210,6 +210,7 @@ def sign():
     switch_to_window(-1)
     inputs = try_finds("//input")
     inputs[0].send_keys(PASSWORD)
+    switch_to_window(-1)
     try_click("//div[contains(text(),'Sign')]", 12)
 
 
