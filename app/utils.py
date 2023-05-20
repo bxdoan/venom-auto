@@ -144,8 +144,12 @@ def add_to_csv(file_path, add_text):
 
 
 def ip():
+    return requests.get('https://checkip.amazonaws.com').text.strip()
+
+
+def get_ip():
     try:
-        ip_address_now = requests.get('https://checkip.amazonaws.com').text.strip()
+        ip_address_now = ip()
     except Exception as _e:
         ip_address_now = ""
     # check file exist
@@ -217,6 +221,7 @@ def change_network1():
     """ Change network """
     Dongle().reboot()
     macwifi.connect(ssid=get_network(), password=NETWORK_PASSWORD)
+    logger.info(f"IP Address: {ip()}")
 
 
 def get_network(exclude_network: str = None) -> str:
