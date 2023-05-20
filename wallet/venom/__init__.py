@@ -209,7 +209,8 @@ def insert_text(xpath, text) -> None:
 def sign():
     switch_to_window(-1)
     inputs = try_finds("//input")
-    inputs[0].send_keys(PASSWORD)
+    if len(inputs) > 0:
+        inputs[0].send_keys(PASSWORD)
     switch_to_window(-1)
     try_click("//button[@type='submit']", 12)
 

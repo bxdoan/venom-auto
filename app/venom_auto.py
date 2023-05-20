@@ -450,10 +450,6 @@ if __name__ == '__main__':
             use_uc=True,
             params=params
         )
-        # vn.process_all(method="send_wallet")
-        # vn.send_wallet(**swap_params)
         vn.process_all(method="incentive")
-        # vn.balance(**swap_params)
-        # vn.daily_faucet(**swap_params)
     except Exception as e:
         logger.error(e)
