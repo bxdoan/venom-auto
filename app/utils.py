@@ -10,6 +10,7 @@ import pandas as pd
 import random
 import string
 import macwifi
+from dongle_tle_api import Dongle
 
 from app.config import HOME_PACKAGE, HOME_TMP, get_logger, USER_DATA_DIR, ALL_USER_DATA_DIR, NETWORK_PASSWORD, \
     LIST_NETWORK
@@ -214,7 +215,7 @@ def refresh_ipadress():
 
 def change_network1():
     """ Change network """
-    refresh_ipadress()
+    Dongle().reboot()
     macwifi.connect(ssid=get_network(), password=NETWORK_PASSWORD)
 
 
