@@ -82,11 +82,11 @@ class Venom(VenomAuto):
         self.auto.switch_to_window(0)
         self._web3_world(account)
         self.auto.switch_to_window(0)
-        self._oasis_gallery(account)
-        self.auto.switch_to_window(0)
         self._bridge(account)
         self.auto.switch_to_window(0)
         self._daily_faucet(account)
+        self.auto.switch_to_window(0)
+        self._oasis_gallery(account)
 
         logger.info(f"Incentive success")
 
@@ -375,9 +375,8 @@ class Venom(VenomAuto):
 
     def _oasis_gallery(self, acc: dict = None):
         try:
-            self.auto.switch_to_window(-1)
             self.driver.get(self.config['task']['oasis_gallery'])
-            time.sleep(4)
+            time.sleep(7)
 
             follow_tw = self.auto.try_find("//a[contains(text(),'Follow')]")
             if not follow_tw:

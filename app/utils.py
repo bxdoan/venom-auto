@@ -220,7 +220,7 @@ def change_network():
     change_to_network = get_network()
     logger.info(f"Change from {macwifi.get_ssid()} to {change_to_network}")
     macwifi.connect(ssid=change_to_network, password=NETWORK_PASSWORD)
-    time.sleep(3)
+    time.sleep(10)
     logger.info(f"IP Address: {ip()}")
 
 
