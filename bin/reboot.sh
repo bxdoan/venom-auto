@@ -3,6 +3,15 @@ s=$BASH_SOURCE ; s=$(dirname "$s") ; s=$(cd "$s" && pwd) ; SCRIPT_HOME="$s"  # g
 HOME_REPO="$SCRIPT_HOME/.."
 HOME_SCRIPT="$HOME_REPO/app/scripts"
 
+STARTTIME=$(date +%s)
+function print_exe_time() {
+    STARTTIME=${1}
+    ENDTIME=$(date +%s)
+    EXE_TIME=$((${ENDTIME} - ${STARTTIME}))
+    printf "
+It takes ${GR}%s${EC} seconds to complete this script...\n" " ${EXE_TIME}"
+}
+
 if [[ -f "$HOME/.pyenv/shims/pipenv" ]]; then
   pipenv="$HOME/.pyenv/shims/pipenv"
 elif [[ -f "$HOME/.local/bin/pipenv" ]]; then
@@ -21,3 +30,4 @@ else
   PYTHONPATH=`pwd` $pipenv run python3 "$HOME_SCRIPT/reboot.py" "$@"
 fi
 
+print_exe_time "${STARTTIME}"

@@ -5,7 +5,7 @@ from datetime import datetime
 from wallet import venom
 from app import utils
 from app.account import AccountLoader
-from app.config import ACC_VENOM_PATH, HOME_TMP, ACC_FILE_NAME, CODE_HOME, get_logger
+from app.config import ACC_VENOM_PATH, HOME_TMP, ACC_FILE_NAME, CODE_HOME, get_logger, CHANGE_NETWORK
 from app.enums import COLUMN_MAPPING, AccountStatus
 
 logger = get_logger(__name__)
@@ -83,7 +83,7 @@ class BaseAuto(object):
                 except Exception as e:
                     logger.error(e)
 
-                self.change_network()
+                self.change_proxy()
                 self.driver.quit()
                 create_driver = True
             else:
@@ -95,9 +95,9 @@ class BaseAuto(object):
         logger.info(f'Request Success for account len: {len(list_account)}')
         logger.info(f"file report: {self.file_report}")
 
-    def change_network(self):
-        utils.change_network()
-        time.sleep(5)
+    def change_proxy(self):
+        if utils.force2bool(CHANGE_NETWORK):
+            utils.change_network()
 
     def login_twitter(self, acc: dict) -> None:
         url = "https://twitter.com/i/flow/login"

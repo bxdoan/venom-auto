@@ -211,8 +211,12 @@ def totp(secret: str) -> str:
 
 def change_network():
     """ Change network """
+    logger.info(f"IP Address: {ip()}")
     Dongle().reboot()
-    macwifi.connect(ssid=get_network(), password=NETWORK_PASSWORD)
+    change_to_network = get_network()
+    logger.info(f"Change from {macwifi.get_ssid()} to {change_to_network}")
+    macwifi.connect(ssid=change_to_network, password=NETWORK_PASSWORD)
+    time.sleep(3)
     logger.info(f"IP Address: {ip()}")
 
 
