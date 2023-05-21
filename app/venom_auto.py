@@ -442,7 +442,7 @@ if __name__ == '__main__':
     }
     params = {
         "list_add": list_account,
-        "answer": "All of the above",
+        "answer": "Yes",
         "amount": "1",
     }
     try:

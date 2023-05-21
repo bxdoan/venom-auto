@@ -62,10 +62,11 @@ def walletSetup(recoveryPhrase: 'str', password: str) -> None:
     # switch_to_window(0)
     # time.sleep(8)
     driver.execute_script("window.open('');")
-    time.sleep(3)  # wait for the new window to open
+    time.sleep(5)  # wait for the new window to open
     switch_to_window(0)
-    driver.refresh()
-    switch_to_window(2)
+    time.sleep(3)
+    if len(driver.window_handles) > 1:
+        switch_to_window(-1)
     driver.get(f"chrome://extensions/?id={EXTENSION_ID}")
     time.sleep(5)
     ext_ma = driver.find_element(By.CSS_SELECTOR, "extensions-manager")
@@ -73,16 +74,22 @@ def walletSetup(recoveryPhrase: 'str', password: str) -> None:
     update_button = toolbar.shadow_root.find_element(By.ID, "updateNow")
     update_button.click()
     time.sleep(8)
-    driver.get(EXT_URL)
-    time.sleep(5)
 
     if len(driver.window_handles) == 3:
         switch_to_window(0)
         time.sleep(2)
         driver.close()
         time.sleep(2)
+    elif len(driver.window_handles) == 1:
+        driver.execute_script("window.open('');")
+        time.sleep(3)
+        switch_to_window(-1)
 
-    switch_to_window(1)
+    driver.get(EXT_URL)
+    time.sleep(5)
+
+    if len(driver.window_handles) == 1:
+        switch_to_window(0)
     try_click("//div[contains(text(),'Sign in with seed phrase')]", 2)
 
     # fill in recovery seed phrase
