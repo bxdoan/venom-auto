@@ -144,7 +144,11 @@ def add_to_csv(file_path, add_text):
 
 
 def ip():
-    return requests.get('https://checkip.amazonaws.com').text.strip()
+    try:
+        ip = requests.get('https://checkip.amazonaws.com').text.strip()
+    except Exception as _e:
+        ip = ""
+    return ip
 
 
 def get_ip():
