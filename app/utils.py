@@ -11,7 +11,6 @@ import random
 import string
 import macwifi
 from dongle_lte_api import Dongle
-
 from app.config import HOME_PACKAGE, HOME_TMP, get_logger, USER_DATA_DIR, ALL_USER_DATA_DIR, NETWORK_PASSWORD, \
     LIST_NETWORK
 
@@ -215,13 +214,16 @@ def totp(secret: str) -> str:
 
 def change_network():
     """ Change network """
-    logger.info(f"IP Address: {ip()}")
-    Dongle().reboot()
-    change_to_network = get_network()
-    logger.info(f"Change from {macwifi.get_ssid()} to {change_to_network}")
-    macwifi.connect(ssid=change_to_network, password=NETWORK_PASSWORD)
-    time.sleep(10)
-    logger.info(f"IP Address: {ip()}")
+    try:
+        logger.info(f"IP Address: {ip()}")
+        Dongle().reboot()
+        change_to_network = get_network()
+        logger.info(f"Change from {macwifi.get_ssid()} to {change_to_network}")
+        macwifi.connect(ssid=change_to_network, password=NETWORK_PASSWORD)
+        time.sleep(5)
+        logger.info(f"IP Address: {ip()}")
+    except Exception as e:
+        logger.error(f"Error change network: {e}")
 
 
 def get_network(exclude_network: str = None) -> str:

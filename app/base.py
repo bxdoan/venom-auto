@@ -83,7 +83,7 @@ class BaseAuto(object):
                 except Exception as e:
                     logger.error(e)
 
-                self.change_proxy()
+                self._change_proxy()
                 self.driver.quit()
                 create_driver = True
             else:
@@ -95,7 +95,7 @@ class BaseAuto(object):
         logger.info(f'Request Success for account len: {len(list_account)}')
         logger.info(f"file report: {self.file_report}")
 
-    def change_proxy(self):
+    def _change_proxy(self):
         if utils.force2bool(CHANGE_NETWORK):
             utils.change_network()
 

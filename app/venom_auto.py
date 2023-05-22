@@ -88,6 +88,10 @@ class Venom(VenomAuto):
         self.auto.switch_to_window(0)
         self._oasis_gallery(account)
 
+        self.auto.switch_to_window(0)
+        self.driver.get(url)
+        time.sleep(2)
+
         logger.info(f"Incentive success")
 
     def balance(self, account):

@@ -20,7 +20,7 @@ or using pipenv
 ```sh
 pipenv sync
 ```
-
+    
 ## Create wallet
 
 ```bash
