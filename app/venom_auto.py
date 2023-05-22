@@ -280,6 +280,7 @@ class Venom(VenomAuto):
 
             self.auto.try_click("//a[contains(text(),'Tweet')]", 4)
             self.auto.switch_to_window(-1)
+            self.auto.try_click("//span[contains(text(),'Maybe later')]", 4)
             tweet_tw = self.auto.try_find("//span[contains(text(),'Tweet')]")
             if tweet_tw:
                 tweet_tw.click()
@@ -380,16 +381,16 @@ class Venom(VenomAuto):
     def _oasis_gallery(self, acc: dict = None):
         try:
             self.driver.get(self.config['task']['oasis_gallery'])
-            time.sleep(7)
+            time.sleep(10)
 
             follow_tw = self.auto.try_find("//a[contains(text(),'Follow')]")
             if not follow_tw:
-                self.driver.close()
                 return
 
             follow_tw.click()
             time.sleep(6)
             self.auto.switch_to_window(-1)
+            self.auto.try_click("//span[contains(text(),'Maybe later')]", 4)
             fl_again_tw = self.auto.try_find(FOLLOW_XP)
             if fl_again_tw:
                 fl_again_tw.click()
@@ -420,7 +421,6 @@ class Venom(VenomAuto):
 
             follow_tw = self.auto.try_find("//a[contains(text(),'Follow')]")
             if not follow_tw:
-                self.driver.close()
                 return
 
             follow_tw.click()
@@ -445,7 +445,7 @@ if __name__ == '__main__':
     }
     params = {
         "list_add": list_account,
-        "answer": "Yes",
+        "answer": "All of the above",
         "amount": "1",
     }
     try:
