@@ -308,13 +308,12 @@ class Venom(VenomAuto):
                 time.sleep(20)
             self.auto.switch_to_window(-1)
 
-            check = self.auto.try_find("//button[contains(text(),'Check')]")
-            while check:
-                check.click()
-                time.sleep(10)
-                check = self.auto.try_find("//button[contains(text(),'Check')]")
+            mint_button = self.auto.try_find("//button[contains(text(),'Mint')]")
+            while not mint_button:
+                self.auto.try_click("//button[contains(text(),'Check')]", 4)
+                mint_button = self.auto.try_find("//button[contains(text(),'Mint')]")
 
-            self.auto.try_click("//button[contains(text(),'Mint')]", 4)
+            mint_button.click()
             self.auto.confirm(acc['password'])
         except Exception as e:
             logger.error(e)
