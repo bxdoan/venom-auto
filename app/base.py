@@ -34,6 +34,7 @@ class BaseAuto(object):
             format_data.append(value)
 
         utils.add_to_csv(self.file_report, format_data)
+        logger.info(f"Save report: {format_data}")
 
     def prepare_file_report(self):
         file_log_latest = utils.file_latest_in_path()

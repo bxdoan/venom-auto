@@ -353,12 +353,12 @@ class Venom(VenomAuto):
     def _web3_world(self, acc: dict = None):
         try:
             self.driver.get(self.config['task']['web3_world'])
-            time.sleep(5)
+            time.sleep(8)
 
             follow_tw = self.auto.try_find("//a[contains(text(),'Follow')]")
             if follow_tw:
                 follow_tw.click()
-                time.sleep(3)
+                time.sleep(5)
             else:
                 self.auto.open_new_tab("https://twitter.com/intent/user?screen_name=w3w_exchange")
                 self.auto.switch_to_window(-1)
@@ -373,7 +373,13 @@ class Venom(VenomAuto):
             self.auto.switch_to_window(0)
             self.auto.try_click("//button[contains(text(),'Check')]", 4)
 
-            self.auto.try_click("//button[contains(text(),'Mint')]", 6)
+            mint_button = self.auto.try_find("//button[contains(text(),'Mint')]")
+            while not mint_button:
+                self.auto.try_click("//button[contains(text(),'Check')]", 4)
+                mint_button = self.auto.try_find("//button[contains(text(),'Mint')]")
+
+            mint_button.click()
+            time.sleep(6)
             self.auto.confirm(acc['password'])
         except Exception as e:
             logger.error(e)
@@ -438,14 +444,13 @@ class Venom(VenomAuto):
 
 
 if __name__ == '__main__':
-    # list_account = AccountLoader().parser_file()
     list_account = AccountLoader(fp=ACC_VENOM_PATH).parser_file()
     swap_params = {
         "account": list_account[1],
     }
     params = {
         "list_add": list_account,
-        "answer": "All of the above",
+        "answer": "Use Venomscan",
         "amount": "1",
     }
     try:
