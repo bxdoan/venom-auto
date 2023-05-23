@@ -151,10 +151,7 @@ def ip():
 
 
 def get_ip():
-    try:
-        ip_address_now = ip()
-    except Exception as _e:
-        ip_address_now = ""
+    ip_address_now = ip()
     # check file exist
     file_path = f"{HOME_TMP}/../ip_address.txt"
     if not os.path.exists(file_path):
