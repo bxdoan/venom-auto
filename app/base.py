@@ -65,7 +65,7 @@ class BaseAuto(object):
         create_driver = True
         for idx, account in enumerate(list_account):
             if create_driver:
-                self.driver = self.auto.launchSeleniumWebdriver(address=account['address'])
+                self._try_start_driver(account)
 
             real_idx = idx + index
             logger.info(f"Request for account: {real_idx} - {account['address']}")
@@ -95,6 +95,16 @@ class BaseAuto(object):
 
         logger.info(f'Request Success for account len: {len(list_account)}')
         logger.info(f"file report: {self.file_report}")
+
+    def _try_start_driver(self, account):
+        while True:
+            try:
+                self.driver = self.auto.launchSeleniumWebdriver(address=account['address'])
+                if self.driver:
+                    break
+            except Exception as e:
+                logger.error(f"An error occurred: {e}, retrying in 10 seconds.")
+                time.sleep(10)
 
     def _change_proxy(self):
         if utils.force2bool(CHANGE_NETWORK):

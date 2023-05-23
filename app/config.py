@@ -42,6 +42,8 @@ EXTENSION_CRX      = os.environ.get('EXTENSION_CRX')
 EXTENSION_ID       = os.environ.get('EXTENSION_ID')
 DRIVER_PATH        = os.environ.get('DRIVER_PATH')
 
+API_KEY = os.environ.get('API_KEY')
+
 # usefull extension, add more if you want
 HEKT_CAPTCHA       = os.environ.get('HEKT_CAPTCHA')
 DISCORD_LOGIN      = os.environ.get('DISCORD_LOGIN')

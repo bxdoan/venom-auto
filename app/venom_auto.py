@@ -194,6 +194,7 @@ class Venom(VenomAuto):
             tweet_tw = self.auto.try_find(FOLLOW_XP)
             if tweet_tw:
                 tweet_tw.click()
+                time.sleep(2)
                 self.driver.close()
                 time.sleep(5)  # must wait for venom to check twitter follow
             self.auto.switch_to_window(-1)
@@ -222,6 +223,7 @@ class Venom(VenomAuto):
             tweet_tw = self.auto.try_find("//span[contains(text(),'Tweet')]")
             if tweet_tw:
                 tweet_tw.click()
+                time.sleep(2)
                 self.driver.close()
                 time.sleep(30)
             self.auto.switch_to_window(0)
@@ -276,6 +278,7 @@ class Venom(VenomAuto):
             fl_again_tw = self.auto.try_find(FOLLOW_XP)
             if fl_again_tw:
                 fl_again_tw.click()
+                time.sleep(3)
                 self.driver.close()
                 time.sleep(20)
             self.auto.switch_to_window(-1)
@@ -304,6 +307,7 @@ class Venom(VenomAuto):
             tweet_tw = self.auto.try_find("//span[contains(text(),'Tweet')]")
             if tweet_tw:
                 tweet_tw.click()
+                time.sleep(2)
                 self.driver.close()
                 time.sleep(20)
             self.auto.switch_to_window(-1)
