@@ -51,20 +51,21 @@ class Venom(VenomAuto):
 
         # setup metamask with seed phrase and password
         self.auto.switch_to_window(0)
-        self.auto.walletSetup(account['seed_phrase'], account['password'])
+        logged_in_wallet = self._check_logged_in_wallet()
+        if not logged_in_wallet:
+            self.auto.walletSetup(account['seed_phrase'], account['password'])
+
         # click on the Connect Wallet button
         self.auto.switch_to_window(0)
-        self.driver.refresh()
-        time.sleep(7)
-        self.auto.click('//*[@id="root"]/div[2]/div[1]/div[2]/div[2]/span', 2)
-        self.auto.click("//div[contains(text(),'Venom Chrome')]", 3)
-        self.auto.switch_to_window(-1)
-        self.auto.click("//div[contains(text(),'Connect')]", 3)
+        self._connect_wallet()
         # login twitter and discord
         self.auto.switch_to_window(0)
-        self.login_twitter(account)
-        self.driver.close()
+        logged_in_twitter = self._check_logged_in_twitter()
+        if not logged_in_twitter:
+            self.login_twitter(account)
+            self.driver.close()
         # self.auto.switch_to_window(0)
+        # logged_in_discord = self._check_logged_in_discord()
         # self.login_discord(account)
         # self.driver.close()
 
@@ -93,6 +94,25 @@ class Venom(VenomAuto):
         time.sleep(2)
 
         logger.info(f"Incentive success")
+
+    def _connect_wallet(self):
+        self.driver.refresh()
+        time.sleep(7)
+        connect_wallet = self.auto.try_find("//h1[contains(text(),'Complete three tasks and')]")
+        if connect_wallet:
+            self.auto.click('//*[@id="root"]/div[2]/div[1]/div[2]/div[2]/span', 2)
+            self.auto.click("//div[contains(text(),'Venom Chrome')]", 3)
+            self.auto.switch_to_window(-1)
+            self.auto.click("//div[contains(text(),'Connect')]", 3)
+
+    def _check_logged_in_wallet(self):
+        self.auto.open_new_tab(venom.POPUP_URL)
+        logged_in_wallet = False
+        if self.auto.try_find("//p[contains(text(),'Account 1')]"):
+            logged_in_wallet = True
+        self.driver.close()
+        self.auto.switch_to_window(0)
+        return logged_in_wallet
 
     def balance(self, account):
         # setup metamask with seed phrase and password
@@ -287,7 +307,12 @@ class Venom(VenomAuto):
                 self.driver.close()
                 time.sleep(20)
             self.auto.switch_to_window(-1)
-            self.auto.try_click("//button[contains(text(),'Check')]", 30)
+
+            check = self.auto.try_find("//button[contains(text(),'Check')]")
+            while check:
+                check.click()
+                time.sleep(10)
+                check = self.auto.try_find("//button[contains(text(),'Check')]")
 
             self.auto.try_click("//button[contains(text(),'Mint')]", 4)
             self.auto.confirm(acc['password'])

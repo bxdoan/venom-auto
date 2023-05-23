@@ -84,7 +84,6 @@ class BaseAuto(object):
                 except Exception as e:
                     logger.error(e)
 
-                self._change_proxy()
                 self.driver.quit()
                 create_driver = True
             else:
@@ -92,6 +91,7 @@ class BaseAuto(object):
                 create_driver = False
 
             self.save_report(account)
+            self._change_proxy()
 
         logger.info(f'Request Success for account len: {len(list_account)}')
         logger.info(f"file report: {self.file_report}")
@@ -102,10 +102,7 @@ class BaseAuto(object):
 
     def login_twitter(self, acc: dict) -> None:
         url = "https://twitter.com/i/flow/login"
-        self.driver.execute_script("window.open('');")
-        time.sleep(4)  # wait for the new window to open
-        self.auto.switch_to_window(-1)
-        self.driver.get(url)
+        self.auto.open_new_tab(url)
         time.sleep(9)
         # fill in email
         twemail_or_twacc = self.auto.try_find('//input')
@@ -181,6 +178,28 @@ class BaseAuto(object):
 
         time.sleep(5)
         logger.info(f"Login discord for account: {account['dis_email']}")
+
+    def _check_logged_in_twitter(self):
+        self.auto.open_new_tab("https://twitter.com/home")
+        time.sleep(8)
+        logged_in_twitter = False
+        if not self.auto.try_find("//span[contains(text(),'Sign in to Twitter')]"):
+            logged_in_twitter = True
+
+        self.driver.close()
+        self.auto.switch_to_window(0)
+        return logged_in_twitter
+
+    def _check_logged_in_discord(self):
+        self.auto.open_new_tab("https://discord.com/channels/@me")
+        time.sleep(8)
+        logged_in_discord = False
+        if not self.auto.try_find("//div[contains(text(),'re so excited to see you again')]"):
+            logged_in_discord = True
+
+        self.driver.close()
+        self.auto.switch_to_window(0)
+        return logged_in_discord
 
     def swap(self, account: dict = None):
         pass
