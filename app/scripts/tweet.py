@@ -1,7 +1,8 @@
 # Desc: Tweet 20 words from the GPT-3.5 model
-from app.chatgpt import tweet_20_words
+import textwrap
+from app.chatgpt import tweet
 
 
 if __name__ == '__main__':
-    res = tweet_20_words()
+    res = textwrap.fill(tweet().replace('"', ''), 80)
     print(res)

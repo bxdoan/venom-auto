@@ -1,4 +1,3 @@
-import textwrap
 import requests
 
 from app.config import API_KEY
@@ -24,9 +23,9 @@ def chat_with_chatgpt(prompt=''):
     return res['choices'][0]['message']['content']
 
 
-def tweet_20_words(length=20):
+def tweet(length : str = 20) -> str:
     prompt = f"""
     Tweet a {length} words, random, make sense and do NOT be the same as the previous one.
     """
     text = chat_with_chatgpt(prompt)
-    return textwrap.fill(text, 80)
+    return text

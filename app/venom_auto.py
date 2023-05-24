@@ -64,6 +64,7 @@ class Venom(VenomAuto):
         if not logged_in_twitter:
             self.login_twitter(account)
             self.driver.close()
+        self._tweet()
         # self.auto.switch_to_window(0)
         # logged_in_discord = self._check_logged_in_discord()
         # self.login_discord(account)

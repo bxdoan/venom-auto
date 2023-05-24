@@ -7,6 +7,7 @@ from app import utils
 from app.account import AccountLoader
 from app.config import ACC_VENOM_PATH, HOME_TMP, ACC_FILE_NAME, CODE_HOME, get_logger, CHANGE_NETWORK
 from app.enums import COLUMN_MAPPING, AccountStatus
+from app.chatgpt import tweet
 
 logger = get_logger(__name__)
 
@@ -109,6 +110,15 @@ class BaseAuto(object):
     def _change_proxy(self):
         if utils.force2bool(CHANGE_NETWORK):
             utils.change_network()
+
+    def _tweet(self) -> None:
+        self.auto.open_new_tab("https://twitter.com/compose/tweet")
+        time.sleep(3)
+        self.auto.try_click("//div[@aria-label='Tweet text']", 2)
+        message = tweet().replace('"', '')
+        self.auto.try_send_keys("//div[@aria-label='Tweet text']", message)
+        self.auto.try_click("//span[text()='Tweet']", 6)
+        self.driver.close()
 
     def login_twitter(self, acc: dict) -> None:
         url = "https://twitter.com/i/flow/login"

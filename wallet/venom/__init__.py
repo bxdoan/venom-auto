@@ -125,6 +125,14 @@ def try_finds(xpath="", by=By.XPATH):
         return []
 
 
+def try_send_keys(xpath="", msg="", time_to_wait=5, by=By.XPATH) -> None:
+    try:
+        driver.find_element(by, xpath).send_keys(msg)
+        time.sleep(time_to_wait)
+    except Exception as _e:
+        logger.error(f"Send key error: {str(_e)}")
+
+
 def open_new_tab(url, time_to_wait=5):
     driver.execute_script("window.open('');")
     switch_to_window(-1)
