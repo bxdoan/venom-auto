@@ -114,10 +114,12 @@ class BaseAuto(object):
     def _tweet(self) -> None:
         self.auto.open_new_tab("https://twitter.com/compose/tweet")
         time.sleep(3)
+        self.auto.try_click("//span[contains(text(),'Maybe later')]", 4)
         self.auto.try_click("//div[@aria-label='Tweet text']", 2)
         message = tweet().replace('"', '')
-        self.auto.try_send_keys("//div[@aria-label='Tweet text']", message)
-        self.auto.try_click("//span[text()='Tweet']", 6)
+        self.auto.try_send_keys("//div[@aria-label='Tweet text']", f"{message}\n")
+        self.auto.try_click("//span[text()='Tweet']", 5)
+        self.auto.try_click("//span[contains(text(),'Got it')]", 3)
         self.driver.close()
 
     def login_twitter(self, acc: dict) -> None:

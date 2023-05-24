@@ -4,7 +4,7 @@ from selenium.webdriver.common.by import By
 from wallet import venom
 from app.account import AccountLoader
 from app.base import VenomAuto
-from app.config import get_logger, ACC_VENOM_PATH
+from app.config import get_logger, ACC_VENOM_PATH, DAILY_ANSWER
 
 logger = get_logger(__name__)
 
@@ -64,6 +64,7 @@ class Venom(VenomAuto):
         if not logged_in_twitter:
             self.login_twitter(account)
             self.driver.close()
+        self.auto.switch_to_window(0)
         self._tweet()
         # self.auto.switch_to_window(0)
         # logged_in_discord = self._check_logged_in_discord()
@@ -312,10 +313,11 @@ class Venom(VenomAuto):
                 self.driver.close()
                 time.sleep(20)
             self.auto.switch_to_window(-1)
+            self.auto.try_click("//button[contains(text(),'Check')]", 30)
 
             mint_button = self.auto.try_find("//button[contains(text(),'Mint')]")
-            while not mint_button:
-                self.auto.try_click("//button[contains(text(),'Check')]", 4)
+            if not mint_button:
+                self.auto.try_click("//button[contains(text(),'Check')]", 30)
                 mint_button = self.auto.try_find("//button[contains(text(),'Mint')]")
 
             mint_button.click()
@@ -419,8 +421,10 @@ class Venom(VenomAuto):
             time.sleep(10)
 
             follow_tw = self.auto.try_find("//a[contains(text(),'Follow')]")
-            if not follow_tw:
-                return
+            while not follow_tw:
+                self.driver.refresh()
+                time.sleep(5)
+                follow_tw = self.auto.try_find("//a[contains(text(),'Follow')]")
 
             follow_tw.click()
             time.sleep(6)
@@ -479,7 +483,7 @@ if __name__ == '__main__':
     }
     params = {
         "list_add": list_account,
-        "answer": "Use Venomscan",
+        "answer": DAILY_ANSWER,
         "amount": "1",
     }
     try:
