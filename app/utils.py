@@ -142,6 +142,16 @@ def add_to_csv(file_path, add_text):
     df_to_csv(df, file_path)
 
 
+def get_fa_backup(str_fab) -> str:
+    co = str_fab.replace('\n', ' ').split(' ')
+    fab = ''
+    for text in co:
+        if len(text) == 12:
+            fab = text
+            break
+    return fab
+
+
 def ip():
     try:
         ip = requests.get('https://checkip.amazonaws.com').text.strip()

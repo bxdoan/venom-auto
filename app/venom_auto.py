@@ -4,6 +4,7 @@ from selenium.webdriver.common.by import By
 from wallet import venom
 from app.account import AccountLoader
 from app.base import VenomAuto
+from app.enums import FOLLOW_XP
 from app.config import get_logger, ACC_VENOM_PATH, DAILY_ANSWER
 
 logger = get_logger(__name__)
@@ -33,7 +34,6 @@ CONFIG = {
     },
 }
 VENOM_ADDRESS = "0:077873f1453fa67b0f1ce77f1e806675acd19c4694b9738be61fd406618f2f7a"
-FOLLOW_XP = "//*[@id='layers']/div[2]/div/div/div/div/div/div[2]/div[2]/div[2]/div[1]/div/span/span"
 
 
 class Venom(VenomAuto):
@@ -64,8 +64,9 @@ class Venom(VenomAuto):
         if not logged_in_twitter:
             self.login_twitter(account)
             self.driver.close()
-        self.auto.switch_to_window(0)
         self._tweet()
+        self._follow()
+        self._get_2fa(account)
         # self.auto.switch_to_window(0)
         # logged_in_discord = self._check_logged_in_discord()
         # self.login_discord(account)

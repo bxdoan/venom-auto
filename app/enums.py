@@ -1,5 +1,7 @@
 from enum import Enum, EnumMeta
 
+FOLLOW_XP = "//*[@id='layers']/div[2]/div/div/div/div/div/div[2]/div[2]/div[2]/div[1]/div/span/span"
+
 
 class EnumDirectValueMeta(EnumMeta):
     def __getattribute__(cls, name):

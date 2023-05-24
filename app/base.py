@@ -6,7 +6,7 @@ from wallet import venom
 from app import utils
 from app.account import AccountLoader
 from app.config import ACC_VENOM_PATH, HOME_TMP, ACC_FILE_NAME, CODE_HOME, get_logger, CHANGE_NETWORK
-from app.enums import COLUMN_MAPPING, AccountStatus
+from app.enums import COLUMN_MAPPING, AccountStatus, FOLLOW_XP
 from app.chatgpt import tweet
 
 logger = get_logger(__name__)
@@ -112,6 +112,7 @@ class BaseAuto(object):
             utils.change_network()
 
     def _tweet(self) -> None:
+        self.auto.switch_to_window(0)
         self.auto.open_new_tab("https://twitter.com/compose/tweet")
         time.sleep(3)
         self.auto.try_click("//span[contains(text(),'Maybe later')]", 4)
@@ -121,6 +122,45 @@ class BaseAuto(object):
         self.auto.try_click("//span[text()='Tweet']", 5)
         self.auto.try_click("//span[contains(text(),'Got it')]", 3)
         self.driver.close()
+
+    def _follow(self):
+        self.auto.switch_to_window(0)
+        username = self.list_account[0]['tw_acc']
+        url = f"https://twitter.com/intent/user?screen_name={username}"
+        self.auto.open_new_tab(url)
+        self.auto.try_click(FOLLOW_XP, 5)
+        self.driver.close()
+        logger.info(f"Follow: {username}")
+
+    def _get_2fa(self, account: dict):
+        if account.get('tw_fa'):
+            return
+        self.auto.switch_to_window(0)
+        url_2fa = "https://twitter.com/i/flow/two-factor-auth-app-enrollment"
+        self.auto.open_new_tab(url_2fa)
+        time.sleep(7)
+        self.auto.try_click("//span[contains(text(), 'Get start')]", 5)
+        self.auto.try_click("//span[contains(text(), 't scan the QR code')]", 3)
+
+        text_fa = self.auto.try_find('//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div[1]/div/div[2]/span').text
+        logger.info(f"2fa text: {text_fa}")
+        account['tw_fa'] = text_fa
+        self.auto.try_click("//span[contains(text(), 'Next')]", 5)
+        otp = utils.totp(text_fa)
+        otp_input = self.auto.try_find('//input')
+        otp_input.send_keys(otp)
+        self.auto.try_click("//span[contains(text(), 'Confirm')]", 5)
+
+        text_b = self.auto.try_find('//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div/div/div/div/div/div[2]/div[1]/div[2]/span/span/span').text
+        text_fa_backup = utils.get_fa_backup(text_b)
+        logger.info(f"2fa backup text: {text_fa_backup}")
+        account['tw_fab'] = text_fa_backup
+        self.auto.try_click("//span[contains(text(), 'Done')]", 5)
+
+        self.auto.try_click("//span[contains(text(), 'Get start')]", 7)
+        self.auto.try_click("//span[contains(text(), 'Got it')]", 7)
+        logger.info("Get 2fa successfully")
+
 
     def login_twitter(self, acc: dict) -> None:
         url = "https://twitter.com/i/flow/login"
