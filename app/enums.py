@@ -65,5 +65,6 @@ COLUMN_MAPPING = {
     "DISEMAIL": 'dis_email',
     "DISPASS": 'dis_pass',
     "DISTOKEN": 'dis_token',
+    "TWFAB": 'tw_fab',
     'Description': 'description',
 }
