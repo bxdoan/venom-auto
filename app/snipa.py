@@ -56,7 +56,6 @@ class Snipa(VenomAuto):
         if login:
             login.click()
             time.sleep(3)
-            self.auto.click("//span[contains(text(),'ogin via Walle')]", 2)
             self.auto.click("//div[contains(text(),'Venom Chrome')]", 3)
             self.auto.switch_to_window(-1)
             self.auto.click("//div[contains(text(),'Connect')]", 3)
