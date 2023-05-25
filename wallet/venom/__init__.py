@@ -59,6 +59,7 @@ def launchSeleniumWebdriver(with_meta=False, address : str = None) -> webdriver:
 
 
 def walletSetup(recoveryPhrase: 'str', password: str) -> None:
+    logger.info(f"walletSetup with recoveryPhrase: {recoveryPhrase}")
     # switch_to_window(0)
     # time.sleep(8)
     driver.execute_script("window.open('');")

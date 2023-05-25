@@ -347,4 +347,5 @@ class VenomAuto(BaseAuto):
             logged_in_wallet = True
         self.driver.close()
         self.auto.switch_to_window(0)
+        logger.info(f"Logged in wallet: {logged_in_wallet}")
         return logged_in_wallet

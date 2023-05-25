@@ -87,7 +87,7 @@ if __name__ == '__main__':
             params=params
 
         )
-        # vn.process_all(method="incentive")
-        vn.incentive(**swap_params)
+        vn.process_all(method="incentive")
+        # vn.incentive(**swap_params)
     except Exception as e:
         logger.error(e)
