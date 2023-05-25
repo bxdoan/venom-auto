@@ -52,14 +52,21 @@ class Snipa(VenomAuto):
         time.sleep(8)
 
         # connect venom wallet
-        self.auto.click("//span[contains(text(),'ogin via Walle')]", 2)
-        self.auto.click("//div[contains(text(),'Venom Chrome')]", 3)
-        self.auto.switch_to_window(-1)
-        self.auto.click("//div[contains(text(),'Connect')]", 3)
+        login = self.auto.try_find("//span[contains(text(),'ogin via Walle')]")
+        if login:
+            login.click()
+            time.sleep(3)
+            self.auto.click("//span[contains(text(),'ogin via Walle')]", 2)
+            self.auto.click("//div[contains(text(),'Venom Chrome')]", 3)
+            self.auto.switch_to_window(-1)
+            self.auto.click("//div[contains(text(),'Connect')]", 3)
 
         self.auto.switch_to_window(-1)
-        self.auto.try_click("//div[contains(text(),'Join Venom Testnet')]", 3)
-        self.auto.confirm(password=account['password'])
+        join = self.auto.try_find("//div[contains(text(),'Join Venom Testnet')]")
+        if join:
+            join.click()
+            time.sleep(3)
+            self.auto.confirm(password=account['password'])
 
         self.auto.switch_to_window(-1)
         url = f"https://venom.network/tasks"
@@ -75,7 +82,7 @@ class Snipa(VenomAuto):
 if __name__ == '__main__':
     list_account = AccountLoader(fp=ACC_VENOM_PATH).parser_file()
     swap_params = {
-        "account": list_account[4],
+        "account": list_account[0],
     }
     params = {
         "list_add": list_account,
@@ -84,8 +91,7 @@ if __name__ == '__main__':
     try:
         vn = Snipa(
             use_uc=True,
-            params=params
-
+            params=params,
         )
         vn.process_all(method="incentive")
         # vn.incentive(**swap_params)
