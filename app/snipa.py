@@ -48,7 +48,7 @@ class Snipa(VenomAuto):
         # self._follow(account)
 
         self.auto.switch_to_window(0)
-        self.driver.refresh()
+        self.driver.get(f"{self.config['app']['snipa']}")
         time.sleep(8)
 
         # connect venom wallet
