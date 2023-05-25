@@ -123,12 +123,13 @@ class BaseAuto(object):
         self.auto.try_click("//span[contains(text(),'Got it')]", 3)
         self.driver.close()
 
-    def _follow(self):
+    def _follow(self, account: dict = None) -> None:
         self.auto.switch_to_window(0)
         username = self.list_account[0]['tw_acc']
-        url = f"https://twitter.com/intent/user?screen_name={username}"
-        self.auto.open_new_tab(url)
-        self.auto.try_click(FOLLOW_XP, 5)
+        if username != account['tw_acc']:
+            url = f"https://twitter.com/intent/user?screen_name={username}"
+            self.auto.open_new_tab(url)
+            self.auto.try_click(FOLLOW_XP, 5)
         self.driver.close()
         logger.info(f"Follow: {username}")
 
@@ -160,7 +161,6 @@ class BaseAuto(object):
         self.auto.try_click("//span[contains(text(), 'Get start')]", 7)
         self.auto.try_click("//span[contains(text(), 'Got it')]", 7)
         logger.info("Get 2fa successfully")
-
 
     def login_twitter(self, acc: dict) -> None:
         url = "https://twitter.com/i/flow/login"
@@ -206,7 +206,8 @@ class BaseAuto(object):
                 self.auto.click('//span[text()="Log in"]', 3)
             else:
                 twpass_or_username[1].send_keys(acc['tw_pass'])
-                self.auto.click('//span[text()="Next"]', 3)
+                self.auto.try_click('//span[text()="Log in"]', 3)
+                self.auto.try_click('//span[text()="Next"]', 3)
 
         time.sleep(3)
         logger.info(f"Login twitter for account: {acc['tw_email']}")
@@ -263,6 +264,23 @@ class BaseAuto(object):
         self.auto.switch_to_window(0)
         return logged_in_discord
 
+    def _daily_faucet(self, account: dict = None):
+        try:
+            url = f"https://venom.network/faucet"
+            self.auto.switch_to_window(-1)
+            self.driver.get(url)
+            time.sleep(5)
+            answer = self.params.get('answer')
+            self.auto.try_click("//a[contains(text(), 'Start')]", 3)
+            self.auto.try_click(f"//span[contains(text(), '{answer}')]", 3)
+            self.auto.try_click("//button[contains(text(), 'Send')]", 7)
+            self.auto.try_click("//span[contains(text(), 'Claim')]", 3)
+            self.auto.sign()
+            time.sleep(15)
+            logger.info(f"Faucet claim successfull for {account['address']}")
+        except Exception as e:
+            logger.error(e)
+
     def swap(self, account: dict = None):
         pass
 
@@ -295,12 +313,12 @@ class VenomAuto(BaseAuto):
         self.use_uc = kwargs.get('use_uc', True)
         self.auto = venom
 
-    def _daily_faucet(self):
-        url = f"https://venom.network/faucet"
+    def _daily_faucet(self, account: dict = None):
         try:
+            url = f"https://venom.network/faucet"
             self.auto.switch_to_window(-1)
             self.driver.get(url)
-            time.sleep(5)
+            time.sleep(10)
             answer = self.params.get('answer')
             self.auto.try_click("//a[contains(text(), 'Start')]", 3)
             self.auto.try_click(f"//span[contains(text(), '{answer}')]", 3)
@@ -308,5 +326,25 @@ class VenomAuto(BaseAuto):
             self.auto.try_click("//span[contains(text(), 'Claim')]", 3)
             self.auto.sign()
             time.sleep(15)
+            logger.info(f"Faucet claim successfull for {account['address']}")
         except Exception as e:
             logger.error(e)
+
+    def _connect_wallet(self):
+        self.driver.refresh()
+        time.sleep(7)
+        connect_wallet = self.auto.try_find("//h1[contains(text(),'Complete three tasks and')]")
+        if connect_wallet:
+            self.auto.click('//*[@id="root"]/div[2]/div[1]/div[2]/div[2]/span', 2)
+            self.auto.click("//div[contains(text(),'Venom Chrome')]", 3)
+            self.auto.switch_to_window(-1)
+            self.auto.click("//div[contains(text(),'Connect')]", 3)
+
+    def _check_logged_in_wallet(self):
+        self.auto.open_new_tab(venom.POPUP_URL)
+        logged_in_wallet = False
+        if self.auto.try_find("//p[contains(text(),'Account 1')]"):
+            logged_in_wallet = True
+        self.driver.close()
+        self.auto.switch_to_window(0)
+        return logged_in_wallet

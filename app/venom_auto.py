@@ -65,7 +65,7 @@ class Venom(VenomAuto):
             self.login_twitter(account)
             self.driver.close()
         self._tweet()
-        self._follow()
+        self._follow(account)
         self._get_2fa(account)
         # self.auto.switch_to_window(0)
         # logged_in_discord = self._check_logged_in_discord()
@@ -74,7 +74,6 @@ class Venom(VenomAuto):
 
         # main incentive
         # self.auto.switch_to_window(0)
-        # self._daily_faucet(account)
         self.auto.switch_to_window(0)
         self._venom_pad(account)
         self.auto.switch_to_window(0)
@@ -97,25 +96,6 @@ class Venom(VenomAuto):
         time.sleep(2)
 
         logger.info(f"Incentive success")
-
-    def _connect_wallet(self):
-        self.driver.refresh()
-        time.sleep(7)
-        connect_wallet = self.auto.try_find("//h1[contains(text(),'Complete three tasks and')]")
-        if connect_wallet:
-            self.auto.click('//*[@id="root"]/div[2]/div[1]/div[2]/div[2]/span', 2)
-            self.auto.click("//div[contains(text(),'Venom Chrome')]", 3)
-            self.auto.switch_to_window(-1)
-            self.auto.click("//div[contains(text(),'Connect')]", 3)
-
-    def _check_logged_in_wallet(self):
-        self.auto.open_new_tab(venom.POPUP_URL)
-        logged_in_wallet = False
-        if self.auto.try_find("//p[contains(text(),'Account 1')]"):
-            logged_in_wallet = True
-        self.driver.close()
-        self.auto.switch_to_window(0)
-        return logged_in_wallet
 
     def balance(self, account):
         # setup metamask with seed phrase and password
@@ -358,25 +338,8 @@ class Venom(VenomAuto):
         self.auto.try_click("//div[contains(text(),'Venom Chrome')]", 3)
         self.auto.switch_to_window(-1)
         self.auto.try_click("//div[contains(text(),'Connect')]", 3)
-        self._daily_faucet()
+        self._daily_faucet(account)
         logger.info(f"Faucet claim successfull for {account['address']}")
-
-    def _daily_faucet(self, account: dict = None):
-        try:
-            url = f"https://venom.network/faucet"
-            self.auto.switch_to_window(-1)
-            self.driver.get(url)
-            time.sleep(5)
-            answer = self.params.get('answer')
-            self.auto.try_click("//a[contains(text(), 'Start')]", 3)
-            self.auto.try_click(f"//span[contains(text(), '{answer}')]", 3)
-            self.auto.try_click("//button[contains(text(), 'Send')]", 7)
-            self.auto.try_click("//span[contains(text(), 'Claim')]", 3)
-            self.auto.sign()
-            time.sleep(15)
-            logger.info(f"Faucet claim successfull for {account['address']}")
-        except Exception as e:
-            logger.error(e)
 
     def _web3_world(self, acc: dict = None):
         try:
