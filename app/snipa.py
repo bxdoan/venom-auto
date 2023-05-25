@@ -58,7 +58,7 @@ class Snipa(VenomAuto):
         self.auto.click("//div[contains(text(),'Connect')]", 3)
 
         self.auto.switch_to_window(-1)
-        self.auto.click("//div[contains(text(),'Join Venom Testnet')]", 3)
+        self.auto.try_click("//div[contains(text(),'Join Venom Testnet')]", 3)
         self.auto.confirm(password=account['password'])
 
         self.auto.switch_to_window(-1)
