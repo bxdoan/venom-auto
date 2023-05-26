@@ -222,8 +222,7 @@ def totp(secret: str) -> str:
 def change_network():
     """ Change network """
     try:
-        logger.info(f"IP Address: {ip()}")
-        Dongle().reboot()
+        logger.info(f"IP Address:    {ip()}")
         change_to_network = None
         while not change_to_network:
             try:
@@ -233,6 +232,8 @@ def change_network():
             time.sleep(3)
         logger.info(f"Change from {macwifi.get_ssid()} to {change_to_network}")
 
+        Dongle().reboot()
+
         res = None
         while not res:
             try:
@@ -241,7 +242,7 @@ def change_network():
                 logger.error(f"Error connect {change_to_network}: {_e} retry after 10s")
             time.sleep(10)
 
-        logger.info(f"IP Address: {ip()}")
+        logger.info(f"New IP Address: {ip()}")
     except Exception as e:
         logger.error(f"Error change network: {e}")
 
