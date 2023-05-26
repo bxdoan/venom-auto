@@ -434,7 +434,7 @@ class Venom(VenomAuto):
                 tweet_tw.click()
                 time.sleep(2)
                 self.driver.close()
-                time.sleep(30)
+                time.sleep(5)
             self.auto.switch_to_window(-1)
             self.auto.try_click("//button[contains(text(),'Check')]", 20)
 
@@ -448,9 +448,12 @@ class Venom(VenomAuto):
                 # and then close window
                 self.auto.switch_to_window(-1)
                 time.sleep(8)
+                self.auto.try_click("//span[contains(text(),'Tweet')]", 3)
                 self.driver.close()
 
             self.auto.switch_to_window(-1)
+            self.auto.try_click("//a[contains(text(),'Tweet')]", 10)
+            self.auto.try_click("//button[contains(text(),'Tweet')]", 30)
             self.auto.try_click("//button[contains(text(),'Check')]", 30)
 
             self.auto.click("//button[contains(text(),'Mint')]", 4)

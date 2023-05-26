@@ -119,8 +119,8 @@ class BaseAuto(object):
         self.auto.try_click("//div[@aria-label='Tweet text']", 2)
         message = tweet().replace('"', '')
         self.auto.try_send_keys("//div[@aria-label='Tweet text']", f"{message}\n")
-        self.auto.try_click("//span[text()='Tweet']", 5)
-        self.auto.try_click("//span[contains(text(),'Got it')]", 3)
+        self.auto.try_click("//span[text()='Tweet']", 10)
+        self.auto.try_click("//span[contains(text(),'Got it')]", 5)
         self.driver.close()
 
     def _follow(self, account: dict = None) -> None:
@@ -129,7 +129,7 @@ class BaseAuto(object):
         if username != account['tw_acc']:
             url = f"https://twitter.com/intent/user?screen_name={username}"
             self.auto.open_new_tab(url)
-            self.auto.try_click(FOLLOW_XP, 5)
+            self.auto.try_click(FOLLOW_XP, 10)
         self.driver.close()
         logger.info(f"Follow: {username}")
 
@@ -235,7 +235,7 @@ class BaseAuto(object):
             twemail[1].send_keys(account['dis_pass'])
             self.auto.click('//div[text()="Log In"]', 8)
 
-        time.sleep(5)
+        time.sleep(10)
         logger.info(f"Login discord for account: {account['dis_email']}")
 
     def _check_logged_in_twitter(self):

@@ -19,6 +19,7 @@ logger = get_logger(__name__)
 EXT_URL = f"chrome-extension://{EXTENSION_ID}/home.html"
 POPUP_URL = f"chrome-extension://{EXTENSION_ID}/popup.html"
 FILE_NAME = f"{CODE_HOME}/account.venom2.csv"
+DEFAULT_WAIT_CONFIRM = 60
 
 
 def launchSeleniumWebdriver(with_meta=False, address : str = None) -> webdriver:
@@ -222,15 +223,6 @@ def insert_text(xpath, text) -> None:
     time.sleep(0.5)
 
 
-def sign():
-    switch_to_window(-1)
-    inputs = try_finds("//input")
-    if len(inputs) > 0:
-        inputs[0].send_keys(PASSWORD)
-    switch_to_window(-1)
-    try_click("//button[@type='submit']", 30)
-
-
 def send(receiver : str, amount : str) -> None:
     open_new_tab(POPUP_URL)
 
@@ -248,13 +240,24 @@ def send(receiver : str, amount : str) -> None:
     try_click("//div[contains(text(),'Ok')]", 4)
 
 
-def confirm(password : str = PASSWORD) -> None:
+def confirm(password : str = PASSWORD, time_to_sleep : int = DEFAULT_WAIT_CONFIRM) -> bool:
     switch_to_window(-1)
     inputs = try_finds("//input")
     if inputs:
         inputs[0].send_keys(password)
-        try_click("//span[contains(text(),'Remember')]", 2)
-    try_click("//div[contains(text(),'Confirm tran')]", 30)
+        click("//span[contains(text(),'Remember')]", 2)
+    click("//div[contains(text(),'Confirm tran')]", time_to_sleep)
+    return True
+
+
+def sign(time_to_sleep : int = DEFAULT_WAIT_CONFIRM) -> bool:
+    switch_to_window(-1)
+    inputs = try_finds("//input")
+    if len(inputs) > 0:
+        inputs[0].send_keys(PASSWORD)
+    switch_to_window(-1)
+    click("//button[@type='submit']", time_to_sleep)
+    return True
 
 
 def process_acc(idx):
