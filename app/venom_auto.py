@@ -27,6 +27,7 @@ CONFIG = {
             "venom_pad": "https://venom.network/tasks/venom-pad",
             "oasis_gallery": "https://venom.network/tasks/oasis-gallery",
             "venom_bridge": "https://venom.network/tasks/venom-bridge",
+            "snipa": "https://venom.network/tasks/snipa-finance",
         },
         "app": {
             "venom_stake": "https://testnet.venomstake.com/",
@@ -66,34 +67,41 @@ class Venom(VenomAuto):
             self.driver.close()
         self._tweet()
         self._follow(account)
-        self._get_2fa(account)
-        # self.auto.switch_to_window(0)
-        # logged_in_discord = self._check_logged_in_discord()
-        # self.login_discord(account)
-        # self.driver.close()
+        if account['dis_token']:
+            self.auto.switch_to_window(0)
+            logged_in_discord = self._check_logged_in_discord()
+            if not logged_in_discord:
+                self.login_discord(account)
+                self.driver.close()
 
         # main incentive
         # self.auto.switch_to_window(0)
-        self.auto.switch_to_window(0)
-        self._venom_pad(account)
-        self.auto.switch_to_window(0)
-        self._venom_stake(account)
-        self.auto.switch_to_window(0)
-        self._foundation(account)
-        self.auto.switch_to_window(0)
-        self._venom_wallet(account)
-        self.auto.switch_to_window(0)
-        self._web3_world(account)
-        self.auto.switch_to_window(0)
-        self._bridge(account)
+        # self._venom_pad(account)
+        # self.auto.switch_to_window(0)
+        # self._venom_stake(account)
+        # self.auto.switch_to_window(0)
+        # self._foundation(account)
+        # self.auto.switch_to_window(0)
+        # self._venom_wallet(account)
+        # self.auto.switch_to_window(0)
+        # self._web3_world(account)
+        # self.auto.switch_to_window(0)
+        # self._bridge(account)
+        # self.auto.switch_to_window(0)
+        # self._oasis_gallery(account)
         self.auto.switch_to_window(0)
         self._daily_faucet(account)
         self.auto.switch_to_window(0)
-        self._oasis_gallery(account)
+        self._snipa(account)
 
         self.auto.switch_to_window(0)
         self.driver.get(url)
-        time.sleep(2)
+        time.sleep(5)
+        claim = self.auto.try_find("//button[contains(text(),'Claim')]")
+        if claim:
+            claim.click()
+            time.sleep(4)
+            self.auto.sign()
 
         logger.info(f"Incentive success")
 
@@ -408,6 +416,44 @@ class Venom(VenomAuto):
 
             self.auto.switch_to_window(-1)
             self.auto.try_click("//button[contains(text(),'Mint')]", 6)
+            self.auto.confirm(acc['password'])
+        except Exception as e:
+            logger.error(e)
+
+    def _snipa(self, acc: dict = None):
+        try:
+            self.driver.get(self.config['task']['snipa'])
+            time.sleep(10)
+
+            self.auto.try_click("//a[contains(text(),'Tweet')]", 6)
+            # they will popup new tab for tweet
+            self.auto.switch_to_window(-1)
+            self.auto.try_click("//span[contains(text(),'Maybe later')]", 4)
+            tweet_tw = self.auto.try_find("//span[contains(text(),'Tweet')]")
+            if tweet_tw:
+                tweet_tw.click()
+                time.sleep(2)
+                self.driver.close()
+                time.sleep(30)
+            self.auto.switch_to_window(-1)
+            self.auto.try_click("//button[contains(text(),'Check')]", 20)
+
+            # wait to solve captcha
+            while len(self.driver.window_handles) == 1:
+                self.auto.try_click("//button[contains(text(),'Check')]")
+                time.sleep(20)
+
+            if len(self.driver.window_handles) > 1:
+                # they may popup a new window for twitter follow again, go to that window and follow it
+                # and then close window
+                self.auto.switch_to_window(-1)
+                time.sleep(8)
+                self.driver.close()
+
+            self.auto.switch_to_window(-1)
+            self.auto.try_click("//button[contains(text(),'Check')]", 30)
+
+            self.auto.click("//button[contains(text(),'Mint')]", 4)
             self.auto.confirm(acc['password'])
         except Exception as e:
             logger.error(e)

@@ -214,11 +214,7 @@ class BaseAuto(object):
 
     def login_discord(self, account: dict) -> None:
         token = account['dis_token']
-        url = "https://discord.com/login"
-        self.driver.execute_script("window.open('');")
-        time.sleep(5)  # wait for the new window to open
-        self.auto.switch_to_window(-1)
-        self.driver.get(url)
+        self.auto.open_new_tab("https://discord.com/channels/@me")
         script = """
                 function login(token) {
                 setInterval(() => {

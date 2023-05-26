@@ -228,7 +228,7 @@ def sign():
     if len(inputs) > 0:
         inputs[0].send_keys(PASSWORD)
     switch_to_window(-1)
-    try_click("//button[@type='submit']", 12)
+    try_click("//button[@type='submit']", 30)
 
 
 def send(receiver : str, amount : str) -> None:

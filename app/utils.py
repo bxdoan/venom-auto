@@ -224,10 +224,23 @@ def change_network():
     try:
         logger.info(f"IP Address: {ip()}")
         Dongle().reboot()
-        change_to_network = get_network()
+        change_to_network = None
+        while not change_to_network:
+            try:
+                change_to_network = get_network()
+            except Exception as _e:
+                logger.error(f"Error get network: {_e}, retry after 3s")
+            time.sleep(3)
         logger.info(f"Change from {macwifi.get_ssid()} to {change_to_network}")
-        macwifi.connect(ssid=change_to_network, password=NETWORK_PASSWORD)
-        time.sleep(10)
+
+        res = None
+        while not res:
+            try:
+                res = macwifi.connect(ssid=change_to_network, password=NETWORK_PASSWORD)
+            except Exception as _e:
+                logger.error(f"Error connect {change_to_network}: {_e} retry after 10s")
+            time.sleep(10)
+
         logger.info(f"IP Address: {ip()}")
     except Exception as e:
         logger.error(f"Error change network: {e}")
