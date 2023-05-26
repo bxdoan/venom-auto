@@ -1,4 +1,5 @@
 import base64
+import copy
 import csv
 import hmac
 import json
@@ -222,7 +223,7 @@ def totp(secret: str) -> str:
 def change_network():
     """ Change network """
     try:
-        logger.info(f"IP Address:    {ip()}")
+        logger.info(f"IP Address:     {ip()}")
         change_to_network = None
         while not change_to_network:
             try:
@@ -252,7 +253,9 @@ def get_network(exclude_network: str = None) -> str:
     if exclude_network is None:
         exclude_network = macwifi.get_ssid()
 
-    list_network = LIST_NETWORK
-    list_network.remove(exclude_network)
+    list_network = copy.deepcopy(LIST_NETWORK)
+    if exclude_network in list_network:
+        list_network.remove(exclude_network)
+    logger.info(f"List network: {list_network}")
     network = list_network[0]
     return network
