@@ -54,6 +54,7 @@ EXTENSION_META_ID  = os.environ.get('EXTENSION_META_ID')
 
 USER_DATA_DIR      = os.environ.get('USER_DATA_DIR')
 ALL_USER_DATA_DIR  = os.environ.get('ALL_USER_DATA_DIR')  # for all user data dir
+DEFAULT_WAIT_CONFIRM = os.environ.get('DEFAULT_WAIT_CONFIRM')
 
 
 DEFAULT_EXTENSION = f"{EXTENSION_DIR}"

@@ -121,6 +121,7 @@ class BaseAuto(object):
         self.auto.try_send_keys("//div[@aria-label='Tweet text']", f"{message}\n")
         self.auto.try_click("//span[text()='Tweet']", 10)
         self.auto.try_click("//span[contains(text(),'Got it')]", 5)
+        logger.info(f"Tweet: {message}")
         self.driver.close()
 
     def _follow(self, account: dict = None) -> None:

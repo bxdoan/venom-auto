@@ -8,7 +8,7 @@ import undetected_chromedriver as uc
 
 from app import utils
 from app.config import get_logger, PASSWORD, CODE_HOME, WIDTH, HEADLESS, EXTENSION_ID, \
-    HEIGHT, EXTENSION_META_DIR, DEFAULT_EXTENSION
+    HEIGHT, EXTENSION_META_DIR, DEFAULT_EXTENSION, DEFAULT_WAIT_CONFIRM
 
 logger = get_logger(__name__)
 
@@ -19,7 +19,6 @@ logger = get_logger(__name__)
 EXT_URL = f"chrome-extension://{EXTENSION_ID}/home.html"
 POPUP_URL = f"chrome-extension://{EXTENSION_ID}/popup.html"
 FILE_NAME = f"{CODE_HOME}/account.venom2.csv"
-DEFAULT_WAIT_CONFIRM = 60
 
 
 def launchSeleniumWebdriver(with_meta=False, address : str = None) -> webdriver:
