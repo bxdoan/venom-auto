@@ -439,9 +439,13 @@ class Venom(VenomAuto):
             self.auto.try_click("//button[contains(text(),'Check')]", 20)
 
             # wait to solve captcha
+            try_counter = 0
             while len(self.driver.window_handles) == 1:
                 self.auto.try_click("//button[contains(text(),'Check')]")
                 time.sleep(20)
+                if try_counter > 10:
+                    raise Exception("Captcha not solved")
+                try_counter += 1
 
             if len(self.driver.window_handles) > 1:
                 # they may popup a new window for twitter follow again, go to that window and follow it
@@ -452,9 +456,8 @@ class Venom(VenomAuto):
                 self.driver.close()
 
             self.auto.switch_to_window(-1)
-            self.auto.try_click("//a[contains(text(),'Tweet')]", 10)
-            self.auto.try_click("//button[contains(text(),'Tweet')]", 30)
-            self.auto.try_click("//button[contains(text(),'Check')]", 30)
+            self.auto.try_click("//button[contains(text(),'Tweet')]", 20)
+            self.auto.try_click("//button[contains(text(),'Check')]", 20)
 
             self.auto.click("//button[contains(text(),'Mint')]", 4)
             self.auto.confirm(acc['password'])
