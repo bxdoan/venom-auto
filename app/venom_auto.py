@@ -425,7 +425,7 @@ class Venom(VenomAuto):
             self.driver.get(self.config['task']['snipa'])
             time.sleep(10)
 
-            self.auto.try_click("//a[contains(text(),'Tweet')]", 6)
+            self.auto.try_click("//a[contains(text(),'Tweet')]", 15)
             # they will popup new tab for tweet
             self.auto.switch_to_window(-1)
             self.auto.try_click("//span[contains(text(),'Maybe later')]", 4)
@@ -443,7 +443,7 @@ class Venom(VenomAuto):
             while len(self.driver.window_handles) == 1:
                 self.auto.try_click("//button[contains(text(),'Check')]")
                 time.sleep(20)
-                if try_counter > 10:
+                if try_counter > 15:
                     raise Exception("Captcha not solved")
                 try_counter += 1
 
@@ -451,7 +451,7 @@ class Venom(VenomAuto):
                 # they may popup a new window for twitter follow again, go to that window and follow it
                 # and then close window
                 self.auto.switch_to_window(-1)
-                time.sleep(8)
+                time.sleep(15)
                 self.auto.try_click("//span[contains(text(),'Tweet')]", 3)
                 self.driver.close()
 
