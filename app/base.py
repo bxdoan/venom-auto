@@ -173,11 +173,11 @@ class BaseAuto(object):
         if acc['tw_fa']:
             logger.info(f"Login with 2FA {acc['tw_acc']}")
             twemail_or_twacc.send_keys(acc['tw_acc'])
-            self.auto.try_click('//span[text()="Next"]', 4)
+            self.auto.try_click('//span[text()="Next"]', 6)
             twpass_or_username = self.auto.try_finds('//input')
             twpass_or_username[1].send_keys(acc['tw_pass'])
-            self.auto.try_click('//span[text()="Log in"]', 3)
-            self.auto.try_click('//span[text()="Next"]', 3)
+            self.auto.try_click('//span[text()="Log in"]', 6)
+            self.auto.try_click('//span[text()="Next"]', 6)
 
             input_totp = self.auto.try_find('//input')
             input_totp.send_keys(utils.totp(acc['tw_fa']))
