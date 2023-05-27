@@ -67,6 +67,8 @@ class Venom(VenomAuto):
             self.driver.close()
         self._tweet()
         self._follow_list(account)
+        self._follow(account=account, user_name="Chaineye_tools")
+        self._retweet_faucet()
         if account['dis_token']:
             self.auto.switch_to_window(0)
             logged_in_discord = self._check_logged_in_discord()
@@ -91,6 +93,8 @@ class Venom(VenomAuto):
         # self._oasis_gallery(account)
         self.auto.switch_to_window(0)
         self._daily_faucet(account)
+        self.auto.switch_to_window(0)
+        self._snipa_finance(account)
         self.auto.switch_to_window(0)
         self._snipa(account)
 
@@ -447,8 +451,8 @@ class Venom(VenomAuto):
 
                 self.auto.try_click("//button[contains(text(),'Check')]")
                 time.sleep(20)
-                if try_counter > 15:
-                    raise Exception("Captcha not solved")
+                # if try_counter > 15:
+                #     raise Exception("Captcha not solved")
                 try_counter += 1
 
             if len(self.driver.window_handles) > 1:
@@ -467,7 +471,30 @@ class Venom(VenomAuto):
             self.auto.confirm(acc['password'])
         except Exception as e:
             logger.error(e)
-            raise e
+
+    def _snipa_finance(self, account: dict = None):
+        try:
+            self.auto.switch_to_window(0)
+            self.driver.get("https://venom.snipa.finance")
+            time.sleep(8)
+
+            # connect venom wallet
+            login = self.auto.try_find("//span[contains(text(),'ogin via Walle')]")
+            if login:
+                login.click()
+                time.sleep(3)
+                self.auto.click("//div[contains(text(),'Venom Chrome')]", 3)
+                self.auto.switch_to_window(-1)
+                self.auto.click("//div[contains(text(),'Connect')]", 3)
+
+            self.auto.switch_to_window(-1)
+            join = self.auto.try_find("//div[contains(text(),'Join Venom Testnet')]")
+            if join:
+                join.click()
+                time.sleep(3)
+                self.auto.confirm(password=account['password'])
+        except Exception as e:
+            logger.error(e)
 
     def _bridge(self, acc: dict = None):
         try:

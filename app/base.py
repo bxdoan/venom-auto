@@ -130,17 +130,27 @@ class BaseAuto(object):
         for fl in list_fl:
             self._follow(account, fl)
 
-    def _follow(self, account: dict = None, index_user : int = None) -> None:
-        if not index_user:
+    def _follow(self, account: dict = None, index_user : int = None, user_name : str = None) -> None:
+        if not index_user and not user_name:
             return
+
+        if index_user:
+            user_name = self.list_account[index_user]['tw_acc']
+
         self.auto.switch_to_window(0)
-        username = self.list_account[index_user]['tw_acc']
-        if username != account['tw_acc']:
-            url = f"https://twitter.com/intent/user?screen_name={username}"
+        if user_name != account['tw_acc']:
+            url = f"https://twitter.com/intent/user?screen_name={user_name}"
             self.auto.open_new_tab(url)
             self.auto.try_click(FOLLOW_XP, 10)
         self.driver.close()
-        logger.info(f"Follow: {username}")
+        logger.info(f"Follow: {user_name}")
+
+    def _retweet_faucet(self, tweet_id: str = '1649705856236417024') -> None:
+        url = f"https://twitter.com/intent/retweet?tweet_id={tweet_id}"
+        self.auto.open_new_tab(url)
+        time.sleep(5)
+        self.auto.try_click('//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div[2]/div[2]/div[1]/div/span/span', 6)
+        self.driver.close()
 
     def _get_2fa(self, account: dict):
         if account.get('tw_fa'):
@@ -330,7 +340,6 @@ class VenomAuto(BaseAuto):
             self.auto.try_click("//button[contains(text(), 'Send')]", 7)
             self.auto.try_click("//span[contains(text(), 'Claim')]", 3)
             self.auto.sign()
-            time.sleep(15)
             logger.info(f"Faucet claim successfull for {account['address']}")
         except Exception as e:
             logger.error(e)
