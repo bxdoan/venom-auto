@@ -71,12 +71,12 @@ class Venom(VenomAuto):
         self._follow_list(account)
         self._follow(account=account, user_name="Chaineye_tools")
         self._retweet_faucet()
-        if account['dis_token']:
-            self.auto.switch_to_window(0)
-            logged_in_discord = self._check_logged_in_discord()
-            if not logged_in_discord:
-                self.login_discord(account)
-                self.driver.close()
+        # if account['dis_token']:
+        #     self.auto.switch_to_window(0)
+        #     logged_in_discord = self._check_logged_in_discord()
+        #     if not logged_in_discord:
+        #         self.login_discord(account)
+        #         self.driver.close()
 
         # main incentive
         # self.auto.switch_to_window(0)
@@ -100,14 +100,14 @@ class Venom(VenomAuto):
         self.auto.switch_to_window(0)
         self._snipa(account)
 
-        self.auto.switch_to_window(0)
-        self.driver.get(url)
-        time.sleep(5)
-        claim = self.auto.try_find("//button[contains(text(),'Claim')]")
-        if claim:
-            claim.click()
-            time.sleep(4)
-            self.auto.sign()
+        # self.auto.switch_to_window(0)
+        # self.driver.get(url)
+        # time.sleep(5)
+        # claim = self.auto.try_find("//button[contains(text(),'Claim')]")
+        # if claim:
+        #     claim.click()
+        #     time.sleep(4)
+        #     self.auto.sign()
         self.auto.switch_to_window(0)
         self._check_incentive(account)
 
@@ -465,8 +465,8 @@ class Venom(VenomAuto):
 
                 self.auto.try_click("//button[contains(text(),'Check')]")
                 time.sleep(20)
-                # if try_counter > 15:
-                #     raise Exception("Captcha not solved")
+                if try_counter > 5:
+                    raise Exception("Captcha not solved")
                 try_counter += 1
 
             if len(self.driver.window_handles) > 1:

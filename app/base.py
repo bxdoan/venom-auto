@@ -92,7 +92,8 @@ class BaseAuto(object):
                 create_driver = False
 
             self.save_report(account)
-            self._change_proxy()
+            if create_driver:
+                self._change_proxy()
 
         logger.info(f'Request Success for account len: {len(list_account)}')
         logger.info(f"file report: {self.file_report}")
@@ -128,7 +129,7 @@ class BaseAuto(object):
         list_fl = LIST_FOLLOW.split(',')
         list_fl = [int(x) for x in list_fl]
         for fl in list_fl:
-            self._follow(account, fl)
+            self._follow(account=account, index_user=fl)
 
     def _follow(self, account: dict = None, index_user : int = None, user_name : str = None) -> None:
         if not index_user and not user_name:
@@ -267,6 +268,7 @@ class BaseAuto(object):
 
         self.driver.close()
         self.auto.switch_to_window(0)
+        logger.info(f"Logged in Twitter: {logged_in_twitter}")
         return logged_in_twitter
 
     def _check_logged_in_discord(self):
@@ -278,6 +280,7 @@ class BaseAuto(object):
 
         self.driver.close()
         self.auto.switch_to_window(0)
+        logger.info(f"Logged in discord: {logged_in_discord}")
         return logged_in_discord
 
     def _daily_faucet(self, account: dict = None):
