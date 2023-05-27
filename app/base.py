@@ -5,7 +5,7 @@ from datetime import datetime
 from wallet import venom
 from app import utils
 from app.account import AccountLoader
-from app.config import ACC_VENOM_PATH, HOME_TMP, ACC_FILE_NAME, CODE_HOME, get_logger, CHANGE_NETWORK
+from app.config import ACC_VENOM_PATH, HOME_TMP, ACC_FILE_NAME, CODE_HOME, get_logger, CHANGE_NETWORK, LIST_FOLLOW
 from app.enums import COLUMN_MAPPING, AccountStatus, FOLLOW_XP
 from app.chatgpt import tweet
 
@@ -124,9 +124,17 @@ class BaseAuto(object):
         logger.info(f"Tweet: {message}")
         self.driver.close()
 
-    def _follow(self, account: dict = None) -> None:
+    def _follow_list(self, account: dict = None) -> None:
+        list_fl = LIST_FOLLOW.split(',')
+        list_fl = [int(x) for x in list_fl]
+        for fl in list_fl:
+            self._follow(account, fl)
+
+    def _follow(self, account: dict = None, index_user : int = None) -> None:
+        if not index_user:
+            return
         self.auto.switch_to_window(0)
-        username = self.list_account[0]['tw_acc']
+        username = self.list_account[index_user]['tw_acc']
         if username != account['tw_acc']:
             url = f"https://twitter.com/intent/user?screen_name={username}"
             self.auto.open_new_tab(url)

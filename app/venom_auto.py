@@ -66,7 +66,7 @@ class Venom(VenomAuto):
             self.login_twitter(account)
             self.driver.close()
         self._tweet()
-        self._follow(account)
+        self._follow_list(account)
         if account['dis_token']:
             self.auto.switch_to_window(0)
             logged_in_discord = self._check_logged_in_discord()
@@ -441,6 +441,10 @@ class Venom(VenomAuto):
             # wait to solve captcha
             try_counter = 0
             while len(self.driver.window_handles) == 1:
+                mint = self.auto.try_find("//button[contains(text(),'Mint')]")
+                if mint:
+                    break
+
                 self.auto.try_click("//button[contains(text(),'Check')]")
                 time.sleep(20)
                 if try_counter > 15:
@@ -463,6 +467,7 @@ class Venom(VenomAuto):
             self.auto.confirm(acc['password'])
         except Exception as e:
             logger.error(e)
+            raise e
 
     def _bridge(self, acc: dict = None):
         try:

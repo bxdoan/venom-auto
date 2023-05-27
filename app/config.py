@@ -67,6 +67,7 @@ NETWORK_NAME1    = os.environ.get('NETWORK_NAME1')
 NETWORK_NAME2    = os.environ.get('NETWORK_NAME2')
 CHANGE_NETWORK   = os.environ.get('CHANGE_NETWORK')
 LIST_NETWORK     = [NETWORK_NAME1, NETWORK_NAME2]
+LIST_FOLLOW      = os.environ.get('LIST_FOLLOW')
 
 
 def get_logger(name):
