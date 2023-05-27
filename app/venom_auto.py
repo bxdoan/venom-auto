@@ -45,6 +45,8 @@ class Venom(VenomAuto):
         self.config = CONFIG[self.environment]
 
     def incentive(self, account: dict = None):
+        if not self.driver:
+            self._try_start_driver(account)
 
         url = f"https://venom.network/tasks"
         self.driver.get(url)
@@ -106,8 +108,19 @@ class Venom(VenomAuto):
             claim.click()
             time.sleep(4)
             self.auto.sign()
+        self._check_incentive(account)
 
         logger.info(f"Incentive success")
+
+    def _check_incentive(self, account : dict = None):
+        url = f"https://venom.network/tasks"
+        self.driver.get(url)
+        time.sleep(8)
+        # get element data-toggle modal and
+        nfts = self.auto.try_finds('//div[@class="task-header__item"][@data-toggle="modal"]')
+        description = f"{len(nfts)} NFTs"
+        logger.info(description)
+        account['description'] = description
 
     def balance(self, account):
         # setup metamask with seed phrase and password
@@ -522,8 +535,8 @@ class Venom(VenomAuto):
 
 if __name__ == '__main__':
     list_account = AccountLoader(fp=ACC_VENOM_PATH).parser_file()
-    swap_params = {
-        "account": list_account[1],
+    incentive_params = {
+        "account": list_account[0],
     }
     params = {
         "list_add": list_account,
@@ -532,9 +545,9 @@ if __name__ == '__main__':
     }
     try:
         vn = Venom(
-            use_uc=True,
             params=params
         )
         vn.process_all(method="incentive")
+        # vn.incentive(**incentive_params)
     except Exception as e:
         logger.error(e)
