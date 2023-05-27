@@ -108,6 +108,7 @@ class Venom(VenomAuto):
             claim.click()
             time.sleep(4)
             self.auto.sign()
+        self.auto.switch_to_window(0)
         self._check_incentive(account)
 
         logger.info(f"Incentive success")

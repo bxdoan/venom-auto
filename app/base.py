@@ -146,6 +146,7 @@ class BaseAuto(object):
         logger.info(f"Follow: {user_name}")
 
     def _retweet_faucet(self, tweet_id: str = '1649705856236417024') -> None:
+        self.auto.switch_to_window(0)
         url = f"https://twitter.com/intent/retweet?tweet_id={tweet_id}"
         self.auto.open_new_tab(url)
         time.sleep(5)
