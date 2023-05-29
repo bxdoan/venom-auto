@@ -1,6 +1,7 @@
 import time
 from selenium.webdriver.common.by import By
 
+from app import utils
 from wallet import venom
 from app.account import AccountLoader
 from app.base import VenomAuto
@@ -67,10 +68,10 @@ class Venom(VenomAuto):
         if not logged_in_twitter:
             self.login_twitter(account)
             self.driver.close()
-        self._tweet()
+        # self._tweet()
         self._follow_list(account)
         self._follow(account=account, user_name="Chaineye_tools")
-        self._retweet_faucet()
+        self._retweet_faucet(account)
         # if account['dis_token']:
         #     self.auto.switch_to_window(0)
         #     logged_in_discord = self._check_logged_in_discord()
@@ -93,21 +94,21 @@ class Venom(VenomAuto):
         # self._bridge(account)
         # self.auto.switch_to_window(0)
         # self._oasis_gallery(account)
-        self.auto.switch_to_window(0)
-        self._daily_faucet(account)
-        self.auto.switch_to_window(0)
-        self._snipa_finance(account)
-        self.auto.switch_to_window(0)
-        self._snipa(account)
-
         # self.auto.switch_to_window(0)
-        # self.driver.get(url)
-        # time.sleep(5)
-        # claim = self.auto.try_find("//button[contains(text(),'Claim')]")
-        # if claim:
-        #     claim.click()
-        #     time.sleep(4)
-        #     self.auto.sign()
+        # self._daily_faucet(account)
+        # self.auto.switch_to_window(0)
+        # self._snipa_finance(account)
+        # self.auto.switch_to_window(0)
+        # self._snipa(account)
+
+        self.auto.switch_to_window(0)
+        self.driver.get(url)
+        time.sleep(5)
+        claim = self.auto.try_find("//button[contains(text(),'Claim')]")
+        if claim:
+            claim.click()
+            time.sleep(4)
+            self.auto.sign()
         self.auto.switch_to_window(0)
         self._check_incentive(account)
 
@@ -116,10 +117,12 @@ class Venom(VenomAuto):
     def _check_incentive(self, account : dict = None):
         url = f"https://venom.network/tasks"
         self.driver.get(url)
-        time.sleep(8)
-        # get element data-toggle modal and
-        nfts = self.auto.try_finds('//div[@class="task-header__item"][@data-toggle="modal"]')
-        description = f"{len(nfts)} NFTs"
+        time.sleep(12)
+        element = self.auto.try_find('//*[@id="ecosystem"]/div[1]/a/b')
+        new_nfts = element.text if element else 0
+        if utils.force_int(new_nfts) != 7:
+            logger.info(new_nfts)
+        description = f"{new_nfts} NFTs"
         logger.info(description)
         account['description'] = description
 

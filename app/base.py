@@ -126,8 +126,13 @@ class BaseAuto(object):
         self.driver.close()
 
     def _follow_list(self, account: dict = None) -> None:
-        list_fl = LIST_FOLLOW.split(',')
-        list_fl = [int(x) for x in list_fl]
+        if LIST_FOLLOW:
+            list_fl = LIST_FOLLOW.split(',')
+            list_fl = [int(x) for x in list_fl]
+        else:
+            account_index = self.params.get('account_index')
+            list_fl = [x for x in range(account_index + 1, account_index + 4)]
+
         for fl in list_fl:
             self._follow(account=account, index_user=fl)
 
@@ -146,12 +151,15 @@ class BaseAuto(object):
         self.driver.close()
         logger.info(f"Follow: {user_name}")
 
-    def _retweet_faucet(self, tweet_id: str = '1649705856236417024') -> None:
+    def _retweet_faucet(self, account, tweet_id: str = '1663134038713069570') -> None:
         self.auto.switch_to_window(0)
-        url = f"https://twitter.com/intent/retweet?tweet_id={tweet_id}"
+        url = f"https://twitter.com/intent/tweet?text=I%20am%20getting%20free%20gETH%20from%20Goerli%20Testnet%20at%20" \
+              f"@Chaineye_tools%27s%20faucet%20for%20my%20wallet%20address%20{account['name']}%20https://twitter.com/" \
+              f"Chaineye_tools/status/{tweet_id}"
+        logger.info(f"Retweet: {url}")
         self.auto.open_new_tab(url)
-        time.sleep(5)
-        self.auto.try_click('//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div[2]/div[2]/div[1]/div/span/span', 6)
+        time.sleep(6)
+        self.auto.try_click("//span[text()='Tweet']", 6)
         self.driver.close()
 
     def _get_2fa(self, account: dict):
