@@ -36,8 +36,8 @@ def launchSeleniumWebdriver(with_meta=False, address : str = None) -> webdriver:
     options.add_argument("--disable-popup-blocking")
 
     prefs = {
-        "extensions.ui.developer_mode": True,
-        "credentials_enable_service": False,
+        "extensions.ui.developer_mode"    : True,
+        "credentials_enable_service"      : False,
         "profile.password_manager_enabled": False,
     }
     options.add_experimental_option("prefs", prefs)
@@ -45,6 +45,10 @@ def launchSeleniumWebdriver(with_meta=False, address : str = None) -> webdriver:
     # add headless option
     if utils.force2bool(HEADLESS):
         logger.info('headless mode')
+        options.add_argument('--disable-gpu')
+        options.add_argument("--no-sandbox")
+        options.add_argument("--start-maximized")
+        options.add_argument('--disable-gpu')
         options.add_argument('--headless')
 
     global driver

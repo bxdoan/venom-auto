@@ -126,13 +126,36 @@ class BaseAuto(object):
         self.driver.close()
 
     def _follow_list(self, account: dict = None) -> None:
-        if LIST_FOLLOW:
-            list_fl = LIST_FOLLOW.split(',')
+        # if LIST_FOLLOW:
+        #     list_fl = LIST_FOLLOW.split(',')
+        #     list_fl = [int(x) for x in list_fl]
+        # else:
+        #     list_fl = [x for x in range(account_index + 1, account_index + 4)]
+
+        account_index = self.params.get('account_index')
+
+        if account_index < 60:
+            list_fl = "118,119,120,121".split(',')
+            list_fl = [int(x) for x in list_fl]
+        elif account_index < 70:
+            list_fl = "122,123,124,125".split(',')
+            list_fl = [int(x) for x in list_fl]
+        elif account_index < 80:
+            list_fl = "126,127,128,129".split(',')
+            list_fl = [int(x) for x in list_fl]
+        elif account_index < 90:
+            list_fl = "130,131,132,133".split(',')
+            list_fl = [int(x) for x in list_fl]
+        elif account_index < 100:
+            list_fl = "134,135,136,137".split(',')
+            list_fl = [int(x) for x in list_fl]
+        elif account_index < 110:
+            list_fl = "138,139,140,141,142".split(',')
             list_fl = [int(x) for x in list_fl]
         else:
-            account_index = self.params.get('account_index')
-            list_fl = [x for x in range(account_index + 1, account_index + 4)]
+            list_fl = [x for x in range(account_index - 5, account_index - 1)]
 
+        logger.info(f"Follow list: {list_fl=}")
         for fl in list_fl:
             self._follow(account=account, index_user=fl)
 
@@ -153,12 +176,11 @@ class BaseAuto(object):
 
     def _retweet_faucet(self, account, tweet_id: str = '1663134038713069570') -> None:
         self.auto.switch_to_window(0)
-        url = f"https://twitter.com/intent/tweet?text=I%20am%20getting%20free%20gETH%20from%20Goerli%20Testnet%20at%20" \
-              f"@Chaineye_tools%27s%20faucet%20for%20my%20wallet%20address%20{account['name']}%20https://twitter.com/" \
+        url = f"https://twitter.com/intent/tweet?text={account['name']}%20https://twitter.com/" \
               f"Chaineye_tools/status/{tweet_id}"
         logger.info(f"Retweet: {url}")
         self.auto.open_new_tab(url)
-        time.sleep(6)
+        time.sleep(4)
         self.auto.try_click("//span[text()='Tweet']", 6)
         self.driver.close()
 

@@ -53,15 +53,15 @@ class Venom(VenomAuto):
         self.driver.get(url)
         time.sleep(2)
 
-        # setup metamask with seed phrase and password
-        self.auto.switch_to_window(0)
-        logged_in_wallet = self._check_logged_in_wallet()
-        if not logged_in_wallet:
-            self.auto.walletSetup(account['seed_phrase'], account['password'])
-
-        # click on the Connect Wallet button
-        self.auto.switch_to_window(0)
-        self._connect_wallet()
+        # # setup metamask with seed phrase and password
+        # self.auto.switch_to_window(0)
+        # logged_in_wallet = self._check_logged_in_wallet()
+        # if not logged_in_wallet:
+        #     self.auto.walletSetup(account['seed_phrase'], account['password'])
+        #
+        # # click on the Connect Wallet button
+        # self.auto.switch_to_window(0)
+        # self._connect_wallet()
         # login twitter and discord
         self.auto.switch_to_window(0)
         logged_in_twitter = self._check_logged_in_twitter()
@@ -101,16 +101,16 @@ class Venom(VenomAuto):
         # self.auto.switch_to_window(0)
         # self._snipa(account)
 
-        self.auto.switch_to_window(0)
-        self.driver.get(url)
-        time.sleep(5)
-        claim = self.auto.try_find("//button[contains(text(),'Claim')]")
-        if claim:
-            claim.click()
-            time.sleep(4)
-            self.auto.sign()
-        self.auto.switch_to_window(0)
-        self._check_incentive(account)
+        # self.auto.switch_to_window(0)
+        # self.driver.get(url)
+        # time.sleep(5)
+        # claim = self.auto.try_find("//button[contains(text(),'Claim')]")
+        # if claim:
+        #     claim.click()
+        #     time.sleep(4)
+        #     self.auto.sign()
+        # self.auto.switch_to_window(0)
+        # self._check_incentive(account)
 
         logger.info(f"Incentive success")
 
