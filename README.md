@@ -9,8 +9,11 @@ The script will automation almost task on [venom network tasks](https://venom.ne
 - [x] [Web3 World](https://venom.network/tasks/web3-world)
 - [x] [Venom Pad](https://venom.network/tasks/venom-pad)
 - [x] [NFT Oasis_Gallery](https://venom.network/tasks/oasis-gallery)
+- [x] [Snipa Finance](https://venom.network/tasks/venom-snipa)
+- [x] [Snipa Finance](https://venom.network/tasks/venom-numi)
 - [ ] [Venom Bridge](https://venom.network/tasks/venom-bridge)
 - [ ] [Venom Pools](https://venom.network/tasks/venom-pools)
+- [ ] ...
 
 ## Install package
 ```sh

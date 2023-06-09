@@ -126,34 +126,33 @@ class BaseAuto(object):
         self.driver.close()
 
     def _follow_list(self, account: dict = None) -> None:
-        # if LIST_FOLLOW:
-        #     list_fl = LIST_FOLLOW.split(',')
-        #     list_fl = [int(x) for x in list_fl]
-        # else:
-        #     list_fl = [x for x in range(account_index + 1, account_index + 4)]
-
         account_index = self.params.get('account_index')
-
-        if account_index < 60:
-            list_fl = "118,119,120,121".split(',')
-            list_fl = [int(x) for x in list_fl]
-        elif account_index < 70:
-            list_fl = "122,123,124,125".split(',')
-            list_fl = [int(x) for x in list_fl]
-        elif account_index < 80:
-            list_fl = "126,127,128,129".split(',')
-            list_fl = [int(x) for x in list_fl]
-        elif account_index < 90:
-            list_fl = "130,131,132,133".split(',')
-            list_fl = [int(x) for x in list_fl]
-        elif account_index < 100:
-            list_fl = "134,135,136,137".split(',')
-            list_fl = [int(x) for x in list_fl]
-        elif account_index < 110:
-            list_fl = "138,139,140,141,142".split(',')
+        if LIST_FOLLOW:
+            list_fl = LIST_FOLLOW.split(',')
             list_fl = [int(x) for x in list_fl]
         else:
-            list_fl = [x for x in range(account_index - 5, account_index - 1)]
+            list_fl = [x for x in range(account_index + 1, account_index + 4)]
+
+        # if account_index < 60:
+        #     list_fl = "118,119,120,121".split(',')
+        #     list_fl = [int(x) for x in list_fl]
+        # elif account_index < 70:
+        #     list_fl = "122,123,124,125".split(',')
+        #     list_fl = [int(x) for x in list_fl]
+        # elif account_index < 80:
+        #     list_fl = "126,127,128,129".split(',')
+        #     list_fl = [int(x) for x in list_fl]
+        # elif account_index < 90:
+        #     list_fl = "130,131,132,133".split(',')
+        #     list_fl = [int(x) for x in list_fl]
+        # elif account_index < 100:
+        #     list_fl = "134,135,136,137".split(',')
+        #     list_fl = [int(x) for x in list_fl]
+        # elif account_index < 110:
+        #     list_fl = "138,139,140,141,142".split(',')
+        #     list_fl = [int(x) for x in list_fl]
+        # else:
+        #     list_fl = [x for x in range(account_index - 5, account_index - 1)]
 
         logger.info(f"Follow list: {list_fl=}")
         for fl in list_fl:
@@ -170,7 +169,10 @@ class BaseAuto(object):
         if user_name != account['tw_acc']:
             url = f"https://twitter.com/intent/user?screen_name={user_name}"
             self.auto.open_new_tab(url)
-            self.auto.try_click(FOLLOW_XP, 10)
+            try:
+                self.auto.click(FOLLOW_XP, 10)
+            except Exception as e:
+                logger.error(f"Error for {user_name}: {e}")
         self.driver.close()
         logger.info(f"Follow: {user_name}")
 

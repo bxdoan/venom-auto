@@ -119,7 +119,8 @@ def walletSetup(recoveryPhrase: 'str', password: str) -> None:
 def try_find(xpath="", by=By.XPATH):
     try:
         return driver.find_element(by, xpath)
-    except Exception as _e:
+    except Exception as e:
+        logger.error(f"Find {xpath} {by} error: {str(e)}")
         return None
 
 
@@ -127,6 +128,7 @@ def try_finds(xpath="", by=By.XPATH):
     try:
         return driver.find_elements(by, xpath)
     except Exception as _e:
+        logger.error(f"Finds {xpath} {by} error: {str(e)}")
         return []
 
 
@@ -135,7 +137,7 @@ def try_send_keys(xpath="", msg="", time_to_wait=5, by=By.XPATH) -> None:
         driver.find_element(by, xpath).send_keys(msg)
         time.sleep(time_to_wait)
     except Exception as _e:
-        logger.error(f"Send key error: {str(_e)}")
+        logger.error(f"Send key {xpath} {msg} {by} error: {str(_e)}")
 
 
 def open_new_tab(url, time_to_wait=5):
@@ -192,14 +194,15 @@ def metamaskSetup(recoveryPhrase : 'str', password : str) -> None:
 def try_click(xpath, time_to_sleep=None, by=By.XPATH, wd=None) -> None:
     try:
         click(xpath, time_to_sleep, by, wd)
-    except:
-        pass
+    except Exception as e:
+        logger.error(f"Click {xpath} {by} error: {str(e)}")
 
 
 def try_get_text(xpath, by=By.XPATH) -> str:
     try:
         return try_find(xpath, by).text
-    except:
+    except Exception as e:
+        logger.error(f"Get text {xpath} {by} error: {str(e)}")
         return ''
 
 
