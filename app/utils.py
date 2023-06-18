@@ -11,7 +11,7 @@ import os
 import pandas as pd
 import random
 import string
-import macwifi
+from pywifi import ControlConnection
 from dongle_lte_api import Dongle
 from app.config import HOME_PACKAGE, HOME_TMP, get_logger, USER_DATA_DIR, ALL_USER_DATA_DIR, NETWORK_PASSWORD, \
     LIST_NETWORK
@@ -237,7 +237,7 @@ def change_network():
             except Exception as _e:
                 logger.error(f"Error get network: {_e}, retry after 3s")
             time.sleep(3)
-        logger.info(f"Change from {macwifi.get_ssid()} to {change_to_network}")
+        logger.info(f"Change from {get_ssid()} to {change_to_network}")
 
         reboot()
 
