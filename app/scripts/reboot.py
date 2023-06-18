@@ -1,4 +1,3 @@
-from dongle_lte_api import Dongle
 
 from app import utils
 

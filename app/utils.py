@@ -14,7 +14,7 @@ import string
 from pywifi import ControlConnection
 from dongle_lte_api import Dongle
 from app.config import HOME_PACKAGE, HOME_TMP, get_logger, USER_DATA_DIR, ALL_USER_DATA_DIR, NETWORK_PASSWORD, \
-    LIST_NETWORK
+    LIST_NETWORK, PATH_OF_AIRPORT
 
 logger = get_logger(__name__)
 
@@ -254,7 +254,7 @@ def change_network():
         logger.error(f"Error change network: {e}")
 
 
-def get_ssid(PATH_OF_AIRPORT=None):
+def get_ssid():
     """Get the SSID of the connected WiFi."""
     process = subprocess.Popen([PATH_OF_AIRPORT, "-I"], stdout=subprocess.PIPE)
     out, err = process.communicate()

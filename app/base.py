@@ -125,13 +125,15 @@ class BaseAuto(object):
         logger.info(f"Tweet: {message}")
         self.driver.close()
 
-    def _follow_list(self, account: dict = None) -> None:
-        account_index = self.params.get('account_index')
-        if LIST_FOLLOW:
-            list_fl = LIST_FOLLOW.split(',')
-            list_fl = [int(x) for x in list_fl]
-        else:
-            list_fl = [x for x in range(account_index + 1, account_index + 4)]
+    def _follow_list(self, account: dict = None, list_acc = None) -> None:
+        list_fl_index = "0,1,2".split(',')
+        list_fl_index = [int(x) for x in list_fl_index]
+
+        # if LIST_FOLLOW:
+        #     list_fl = LIST_FOLLOW.split(',')
+        #     list_fl = [int(x) for x in list_fl]
+        # else:
+        #     list_fl = [x for x in range(account_index + 1, account_index + 4)]
 
         # if account_index < 60:
         #     list_fl = "118,119,120,121".split(',')
@@ -154,25 +156,40 @@ class BaseAuto(object):
         # else:
         #     list_fl = [x for x in range(account_index - 5, account_index - 1)]
 
-        logger.info(f"Follow list: {list_fl=}")
-        for fl in list_fl:
-            self._follow(account=account, index_user=fl)
+        logger.info(f"Follow list: {list_fl_index=}")
+        for fli in list_fl_index:
+            self._follow(account=account, index_user=fli, list_acc=list_acc)
 
-    def _follow(self, account: dict = None, index_user : int = None, user_name : str = None) -> None:
-        if not index_user and not user_name:
+    def _follow(
+            self,
+            account: dict = None,
+            index_user : int = None,
+            user_name : str = None,
+            list_acc : list = None,
+    ) -> None:
+        if index_user is None and not user_name:
+            # if not provide index_user and user_name, skip it
             return
+        if not list_acc:
+            # if not provide list account, use default self.list_account
+            list_acc = self.list_account
 
-        if index_user:
-            user_name = self.list_account[index_user]['tw_acc']
+        if index_user is not None:
+            user_name = list_acc[index_user]['tw_acc']
 
         self.auto.switch_to_window(0)
         if user_name != account['tw_acc']:
             url = f"https://twitter.com/intent/user?screen_name={user_name}"
             self.auto.open_new_tab(url)
-            try:
-                self.auto.click(FOLLOW_XP, 10)
-            except Exception as e:
-                logger.error(f"Error for {user_name}: {e}")
+            account_suspended = self.auto.try_find("//span[contains(text(),'Account suspended')]")
+            if account_suspended:
+                logger.error(f"Account {user_name} is suspended")
+            else:
+                try:
+                    self.auto.click(FOLLOW_XP, 10)
+                except Exception as e:
+                    logger.error(f"Error for {user_name}: {e}")
+
         self.driver.close()
         logger.info(f"Follow: {user_name}")
 

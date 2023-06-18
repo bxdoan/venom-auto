@@ -256,13 +256,13 @@ def confirm(password : str = PASSWORD, time_to_sleep : int = DEFAULT_WAIT_CONFIR
     return True
 
 
-def sign(time_to_sleep : int = DEFAULT_WAIT_CONFIRM) -> bool:
+def sign(tts : int = DEFAULT_WAIT_CONFIRM) -> bool:
     switch_to_window(-1)
     inputs = try_finds("//input")
     if len(inputs) > 0:
         inputs[0].send_keys(PASSWORD)
     switch_to_window(-1)
-    click("//button[@type='submit']", time_to_sleep)
+    click("//button[@type='submit']", tts)
     return True
 
 
