@@ -3,6 +3,7 @@ import copy
 import csv
 import hmac
 import json
+import subprocess
 import time
 import requests
 import openpyxl
@@ -220,6 +221,11 @@ def totp(secret: str) -> str:
     return "{:06d}".format(code)
 
 
+def reboot():
+    """ Reboot dongle """
+    Dongle().reboot()
+
+
 def change_network():
     """ Change network """
     try:
@@ -233,12 +239,12 @@ def change_network():
             time.sleep(3)
         logger.info(f"Change from {macwifi.get_ssid()} to {change_to_network}")
 
-        Dongle().reboot()
+        reboot()
 
         res = None
         while not res:
             try:
-                res = macwifi.connect(ssid=change_to_network, password=NETWORK_PASSWORD)
+                res = ControlConnection(wifi_ssid=change_to_network, wifi_password=NETWORK_PASSWORD).wifi_connector()
             except Exception as _e:
                 logger.error(f"Error connect {change_to_network}: {_e} retry after 10s")
             time.sleep(10)
@@ -248,10 +254,26 @@ def change_network():
         logger.error(f"Error change network: {e}")
 
 
+def get_ssid(PATH_OF_AIRPORT=None):
+    """Get the SSID of the connected WiFi."""
+    process = subprocess.Popen([PATH_OF_AIRPORT, "-I"], stdout=subprocess.PIPE)
+    out, err = process.communicate()
+    process.wait()
+    output = {}
+    for line in out.decode("utf-8").split("\n"):
+        if ": " in line:
+            key, value = line.split(": ")
+            key = key.strip()
+            value = value.strip()
+            output[key] = value
+
+    return output["SSID"]
+
+
 def get_network(exclude_network: str = None) -> str:
     """ Get network """
     if exclude_network is None:
-        exclude_network = macwifi.get_ssid()
+        exclude_network = get_ssid()
 
     list_network = copy.deepcopy(LIST_NETWORK)
     if exclude_network in list_network:

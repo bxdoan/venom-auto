@@ -132,6 +132,7 @@ account.csv
 account.*.csv
 !account.sample.csv
 ip_address.txt
+twitter*.csv
 
 # Ignore config files except config.test.json and config.sample.json
 config.json
