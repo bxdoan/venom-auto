@@ -6,6 +6,7 @@ load_dotenv()
 logger = logging.getLogger(__name__)
 CODE_HOME = os.path.abspath(os.path.dirname(__file__) + '/..')
 HOME_PACKAGE = os.path.abspath(os.path.dirname(__file__) + '/package')
+PATH_OF_AIRPORT = "/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport"
 
 HOME_TMP = f'{CODE_HOME}/tmp'
 HOME_LOG = f'{CODE_HOME}/log'
