@@ -79,7 +79,7 @@ class Numi(VenomAuto):
         time.sleep(5)
         self.auto.click("//div[contains(text(),'Buy for')]", 3)
         self.auto.click("//input[@type='checkbox']", 3)
-        self.auto.click("//div[text('Buy for')]", 12)
+        self.auto.click("//div[text('Buy for')]", 10)
         self.auto.confirm()
 
         logger.info(f"Incentive success")
