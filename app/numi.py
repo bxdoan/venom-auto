@@ -76,8 +76,13 @@ class Numi(VenomAuto):
         # buy
         self.auto.switch_to_window(0)
         self.driver.get(f"{self.config['app']['numi']}/nft/648728d4b0f2b854106cf579")
-        time.sleep(5)
-        self.auto.click("//div[contains(text(),'Buy for')]", 3)
+        time.sleep(10)
+        buy_for_btn = self.auto.try_find("//div[contains(text(),'Buy for')]")
+        while not buy_for_btn:
+            time.sleep(10)
+            buy_for_btn = self.auto.try_find("//div[contains(text(),'Buy for')]")
+
+        self.auto.click("//div[contains(text(),'Buy for')]", 6)
         self.auto.click("//input[@type='checkbox']", 3)
         self.auto.click("//div[text('Buy for')]", 10)
         self.auto.confirm()
@@ -89,7 +94,7 @@ if __name__ == '__main__':
     list_account = AccountLoader(fp=ACC_VENOM_PATH).parser_file()
     list_tw_follow = AccountLoader(fp=f"{CODE_HOME}/twitter140.csv").parser_file()
     swap_params = {
-        "account": list_account[6],
+        "account": list_account[7],
     }
     params = {
         "list_add": list_account,
@@ -100,7 +105,7 @@ if __name__ == '__main__':
             params=params,
             list_tw_follow=list_tw_follow,
         )
-        # vn.process_all(method="buy")
-        vn.buy(**swap_params)
+        vn.process_all(method="buy")
+        # vn.buy(**swap_params)
     except Exception as e:
         logger.error(e)
