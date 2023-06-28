@@ -2,7 +2,7 @@ import time
 
 from app.account import AccountLoader
 from app.base import VenomAuto
-from app.config import get_logger, ACC_VENOM_PATH, CODE_HOME
+from app.config import get_logger, ACC_VENOM_PATH, CODE_HOME, EXTENSION_ID
 
 logger = get_logger(__name__)
 
@@ -45,6 +45,11 @@ class Numi(VenomAuto):
         self._follow_list(account=account, list_acc=self.list_tw_follow)
 
         self.auto.switch_to_window(0)
+        self._reload_extension()
+
+        self.auto.switch_to_window(0)
+        self.driver.refresh()
+        time.sleep(5)
         self.auto.click("//div[contains(text(),'Log In')]", 3)
 
         # click button Sign up and role tab
@@ -68,9 +73,9 @@ class Numi(VenomAuto):
         self.auto.click("//div[contains(text(),'Sign up')]", 3)
 
         self.auto.switch_to_window(0)
-        self.auto.click("//div[contains(text(),'Connect wallet')]", 3)
+        self.auto.click("//div[contains(text(),'Connect wallet')]", 5)
         self.auto.switch_to_window(-1)
-        self.auto.click("//div[contains(text(),'Connect')]", 3)
+        self.auto.click("//div[contains(text(),'Connect')]", 5)
         self.auto.sign()
 
         # buy
@@ -84,7 +89,9 @@ class Numi(VenomAuto):
 
         self.auto.click("//div[contains(text(),'Buy for')]", 6)
         self.auto.click("//input[@type='checkbox']", 3)
-        self.auto.click("//div[text('Buy for')]", 10)
+        buy_for_btn_2 = self.auto.try_finds("//div[contains(text(),'Buy for')]")
+        buy_for_btn_2[-1].click()
+        time.sleep(10)
         self.auto.confirm()
 
         logger.info(f"Incentive success")

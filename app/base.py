@@ -1,11 +1,13 @@
 import shutil
 import time
 from datetime import datetime
+from selenium.webdriver.common.by import By
 
 from wallet import venom
 from app import utils
 from app.account import AccountLoader
-from app.config import ACC_VENOM_PATH, HOME_TMP, ACC_FILE_NAME, CODE_HOME, get_logger, CHANGE_NETWORK, LIST_FOLLOW
+from app.config import ACC_VENOM_PATH, HOME_TMP, ACC_FILE_NAME, CODE_HOME, get_logger, CHANGE_NETWORK, LIST_FOLLOW, \
+    EXTENSION_ID
 from app.enums import COLUMN_MAPPING, AccountStatus, FOLLOW_XP
 from app.chatgpt import tweet
 
@@ -126,7 +128,7 @@ class BaseAuto(object):
         self.driver.close()
 
     def _follow_list(self, account: dict = None, list_acc = None) -> None:
-        list_fl_index = "0,1,2".split(',')
+        list_fl_index = "6,7,8".split(',')
         list_fl_index = [int(x) for x in list_fl_index]
 
         # if LIST_FOLLOW:
@@ -416,3 +418,16 @@ class VenomAuto(BaseAuto):
         self.auto.switch_to_window(0)
         logger.info(f"Logged in wallet: {logged_in_wallet}")
         return logged_in_wallet
+
+    def _reload_extension(self):
+        # # setup metamask with seed phrase and password
+        self.auto.open_new_tab(f"chrome://extensions/?id={EXTENSION_ID}")
+        time.sleep(5)
+
+        ext_ma = self.driver.find_element(By.CSS_SELECTOR, "extensions-manager")
+        toolbar = ext_ma.shadow_root.find_element(By.CSS_SELECTOR, "extensions-toolbar")
+        update_button = toolbar.shadow_root.find_element(By.ID, "updateNow")
+        update_button.click()
+        time.sleep(5)
+        self.driver.close()
+
