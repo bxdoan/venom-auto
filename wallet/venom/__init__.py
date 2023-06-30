@@ -116,28 +116,31 @@ def walletSetup(recoveryPhrase: 'str', password: str) -> None:
     time.sleep(7)
 
 
-def try_find(xpath="", by=By.XPATH):
+def try_find(xpath="", by=By.XPATH, print_error=True):
     try:
         return driver.find_element(by, xpath)
-    except Exception as e:
-        logger.error(f"Find {xpath} {by} error: {str(e)}")
+    except Exception as _e:
+        if print_error:
+            logger.error(f"Find {xpath} {by} error: {str(_e)}")
         return None
 
 
-def try_finds(xpath="", by=By.XPATH):
+def try_finds(xpath="", by=By.XPATH, print_error=True):
     try:
         return driver.find_elements(by, xpath)
     except Exception as _e:
-        logger.error(f"Finds {xpath} {by} error: {str(e)}")
+        if print_error:
+            logger.error(f"Finds {xpath} {by} error: {str(_e)}")
         return []
 
 
-def try_send_keys(xpath="", msg="", time_to_wait=5, by=By.XPATH) -> None:
+def try_send_keys(xpath="", msg="", time_to_wait=5, by=By.XPATH, print_error=True) -> None:
     try:
         driver.find_element(by, xpath).send_keys(msg)
         time.sleep(time_to_wait)
     except Exception as _e:
-        logger.error(f"Send key {xpath} {msg} {by} error: {str(_e)}")
+        if print_error:
+            logger.error(f"Send key {xpath} {msg} {by} error: {str(_e)}")
 
 
 def open_new_tab(url, time_to_wait=5):
@@ -191,18 +194,20 @@ def metamaskSetup(recoveryPhrase : 'str', password : str) -> None:
     driver.switch_to.window(driver.window_handles[0])
 
 
-def try_click(xpath, time_to_sleep=None, by=By.XPATH, wd=None) -> None:
+def try_click(xpath, time_to_sleep=None, by=By.XPATH, wd=None, print_error=True) -> None:
     try:
         click(xpath, time_to_sleep, by, wd)
-    except Exception as e:
-        logger.error(f"Click {xpath} {by} error: {str(e)}")
+    except Exception as _e:
+        if print_error:
+            logger.error(f"Click {xpath} {by} error: {str(_e)}")
 
 
-def try_get_text(xpath, by=By.XPATH) -> str:
+def try_get_text(xpath, by=By.XPATH, print_error=True) -> str:
     try:
         return try_find(xpath, by).text
-    except Exception as e:
-        logger.error(f"Get text {xpath} {by} error: {str(e)}")
+    except Exception as _e:
+        if print_error:
+            logger.error(f"Get text {xpath} {by} error: {str(_e)}")
         return ''
 
 

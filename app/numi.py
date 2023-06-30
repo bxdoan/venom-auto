@@ -70,7 +70,7 @@ class Numi(VenomAuto):
         time.sleep(0.3)
         inputs[5].click()
         time.sleep(0.3)
-        self.auto.click("//div[contains(text(),'Sign up')]", 3)
+        self.auto.click("//div[contains(text(),'Sign up')]", 30)
 
         self.auto.switch_to_window(0)
         self.auto.click("//div[contains(text(),'Connect wallet')]", 5)

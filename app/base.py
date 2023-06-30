@@ -128,8 +128,9 @@ class BaseAuto(object):
         self.driver.close()
 
     def _follow_list(self, account: dict = None, list_acc = None) -> None:
-        list_fl_index = "6,7,8".split(',')
-        list_fl_index = [int(x) for x in list_fl_index]
+        account_index = self.params.get('account_index')
+        # list_fl_index = "12,13,14,15".split(',')
+        # list_fl_index = [int(x) for x in list_fl_index]
 
         # if LIST_FOLLOW:
         #     list_fl = LIST_FOLLOW.split(',')
@@ -137,29 +138,38 @@ class BaseAuto(object):
         # else:
         #     list_fl = [x for x in range(account_index + 1, account_index + 4)]
 
-        # if account_index < 60:
-        #     list_fl = "118,119,120,121".split(',')
-        #     list_fl = [int(x) for x in list_fl]
-        # elif account_index < 70:
-        #     list_fl = "122,123,124,125".split(',')
-        #     list_fl = [int(x) for x in list_fl]
-        # elif account_index < 80:
-        #     list_fl = "126,127,128,129".split(',')
-        #     list_fl = [int(x) for x in list_fl]
-        # elif account_index < 90:
-        #     list_fl = "130,131,132,133".split(',')
-        #     list_fl = [int(x) for x in list_fl]
-        # elif account_index < 100:
-        #     list_fl = "134,135,136,137".split(',')
-        #     list_fl = [int(x) for x in list_fl]
-        # elif account_index < 110:
-        #     list_fl = "138,139,140,141,142".split(',')
-        #     list_fl = [int(x) for x in list_fl]
+        if account_index < 60:
+            list_fl = "12,13,14,15".split(',')
+            list_fl = [int(x) for x in list_fl]
+        elif account_index < 70:
+            list_fl = "15,16,17,18".split(',')
+            list_fl = [int(x) for x in list_fl]
+        elif account_index < 80:
+            list_fl = "19,20,21,22".split(',')
+            list_fl = [int(x) for x in list_fl]
+        elif account_index < 90:
+            list_fl = "23,24,25,26".split(',')
+            list_fl = [int(x) for x in list_fl]
+        elif account_index < 100:
+            list_fl = "27,28,29,30".split(',')
+            list_fl = [int(x) for x in list_fl]
+        elif account_index < 110:
+            list_fl = "31,32,33,34".split(',')
+            list_fl = [int(x) for x in list_fl]
+        elif account_index < 120:
+            list_fl = "35,36,37,38".split(',')
+            list_fl = [int(x) for x in list_fl]
+        elif account_index < 130:
+            list_fl = "39,40,41,42".split(',')
+            list_fl = [int(x) for x in list_fl]
+        elif account_index < 140:
+            list_fl = "43,44,45,46".split(',')
+            list_fl = [int(x) for x in list_fl]
         # else:
         #     list_fl = [x for x in range(account_index - 5, account_index - 1)]
 
-        logger.info(f"Follow list: {list_fl_index=}")
-        for fli in list_fl_index:
+        logger.info(f"Follow list: {list_fl=}")
+        for fli in list_fl:
             self._follow(account=account, index_user=fli, list_acc=list_acc)
 
     def _follow(
