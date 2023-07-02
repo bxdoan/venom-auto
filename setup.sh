@@ -1,8 +1,5 @@
 #!/bin/sh
 
-# pull latest code
-git pull
-
 # set pipenv path
 if [ `uname` = "Darwin" ]; then
     pipenv="/Users/`whoami`/.local/bin/pipenv"
