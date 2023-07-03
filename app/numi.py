@@ -49,7 +49,7 @@ class Numi(VenomAuto):
 
         self.auto.switch_to_window(0)
         self.driver.refresh()
-        time.sleep(5)
+        time.sleep(10)
         self.auto.click("//div[contains(text(),'Log In')]", 3)
 
         # click button Sign up and role tab
@@ -70,7 +70,7 @@ class Numi(VenomAuto):
         time.sleep(0.3)
         inputs[5].click()
         time.sleep(0.3)
-        self.auto.click("//div[contains(text(),'Sign up')]", 30)
+        self.auto.click("//div[contains(text(),'Sign up')]", 60)
 
         self.auto.switch_to_window(0)
         self.auto.click("//div[contains(text(),'Connect wallet')]", 5)

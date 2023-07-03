@@ -11,6 +11,7 @@ The script will automation almost task on [venom network tasks](https://venom.ne
 - [x] [NFT Oasis_Gallery](https://venom.network/tasks/oasis-gallery)
 - [x] [Snipa Finance](https://venom.network/tasks/venom-snipa)
 - [x] [Numi Finance](https://venom.network/tasks/venom-numi)
+- [x] [Ylide](https://venom.network/tasks/ylide)
 - [ ] [Venom Bridge](https://venom.network/tasks/venom-bridge)
 - [ ] [Venom Pools](https://venom.network/tasks/venom-pools)
 - [ ] ...

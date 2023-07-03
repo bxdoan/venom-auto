@@ -119,7 +119,7 @@ class BaseAuto(object):
         self.auto.open_new_tab("https://twitter.com/compose/tweet")
         time.sleep(3)
         self.auto.try_click("//span[contains(text(),'Maybe later')]", 4)
-        self.auto.try_click("//div[@aria-label='Tweet text']", 2)
+        self.auto.try_click("//div[@aria-label='Tweet text']")
         message = tweet().replace('"', '')
         self.auto.try_send_keys("//div[@aria-label='Tweet text']", f"{message}\n")
         self.auto.try_click("//span[text()='Tweet']", 10)
@@ -162,8 +162,8 @@ class BaseAuto(object):
         elif account_index < 130:
             list_fl = "39,40,41,42".split(',')
             list_fl = [int(x) for x in list_fl]
-        elif account_index < 140:
-            list_fl = "43,44,45,46".split(',')
+        elif account_index < 150:
+            list_fl = "43,44,45".split(',')
             list_fl = [int(x) for x in list_fl]
         # else:
         #     list_fl = [x for x in range(account_index - 5, account_index - 1)]
@@ -193,7 +193,7 @@ class BaseAuto(object):
         if user_name != account['tw_acc']:
             url = f"https://twitter.com/intent/user?screen_name={user_name}"
             self.auto.open_new_tab(url)
-            account_suspended = self.auto.try_find("//span[contains(text(),'Account suspended')]")
+            account_suspended = self.auto.try_find("//span[contains(text(),'Account suspended')]", print_error=False)
             if account_suspended:
                 logger.error(f"Account {user_name} is suspended")
             else:
