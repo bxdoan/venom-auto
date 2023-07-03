@@ -138,32 +138,50 @@ class BaseAuto(object):
         # else:
         #     list_fl = [x for x in range(account_index + 1, account_index + 4)]
 
-        if account_index < 60:
-            list_fl = "12,13,14,15".split(',')
+        if account_index < 10:
+            list_fl = "46,47,48,49".split(',')
+            list_fl = [int(x) for x in list_fl]
+        elif account_index < 20:
+            list_fl = "50,51,52,53".split(',')
+            list_fl = [int(x) for x in list_fl]
+        elif account_index < 30:
+            list_fl = "53,54,55,56".split(',')
+            list_fl = [int(x) for x in list_fl]
+        elif account_index < 40:
+            list_fl = "57,58,59,60".split(',')
+            list_fl = [int(x) for x in list_fl]
+        elif account_index < 50:
+            list_fl = "61,62,63,64".split(',')
+            list_fl = [int(x) for x in list_fl]
+        elif account_index < 60:
+            list_fl = "65,66,67,68".split(',')
             list_fl = [int(x) for x in list_fl]
         elif account_index < 70:
-            list_fl = "15,16,17,18".split(',')
+            list_fl = "69,70,71,72".split(',')
             list_fl = [int(x) for x in list_fl]
         elif account_index < 80:
-            list_fl = "19,20,21,22".split(',')
+            list_fl = "73,74,75,76".split(',')
             list_fl = [int(x) for x in list_fl]
         elif account_index < 90:
-            list_fl = "23,24,25,26".split(',')
+            list_fl = "77,78,79,80".split(',')
             list_fl = [int(x) for x in list_fl]
         elif account_index < 100:
-            list_fl = "27,28,29,30".split(',')
+            list_fl = "81,82,83,84".split(',')
             list_fl = [int(x) for x in list_fl]
         elif account_index < 110:
-            list_fl = "31,32,33,34".split(',')
+            list_fl = "85,86,87,88".split(',')
             list_fl = [int(x) for x in list_fl]
         elif account_index < 120:
-            list_fl = "35,36,37,38".split(',')
+            list_fl = "89,90,91,92".split(',')
             list_fl = [int(x) for x in list_fl]
         elif account_index < 130:
-            list_fl = "39,40,41,42".split(',')
+            list_fl = "93,94,95,96".split(',')
+            list_fl = [int(x) for x in list_fl]
+        elif account_index < 140:
+            list_fl = "97,98,99,100".split(',')
             list_fl = [int(x) for x in list_fl]
         elif account_index < 150:
-            list_fl = "43,44,45".split(',')
+            list_fl = "101,102,103,104".split(',')
             list_fl = [int(x) for x in list_fl]
         # else:
         #     list_fl = [x for x in range(account_index - 5, account_index - 1)]
