@@ -220,7 +220,7 @@ class BaseAuto(object):
                 except Exception as e:
                     logger.error(f"Error for {user_name}: {e}")
 
-        self.driver.close()
+            self.driver.close()
         logger.info(f"Follow: {user_name}")
 
     def _retweet_faucet(self, account, tweet_id: str = '1663134038713069570') -> None:
