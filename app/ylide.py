@@ -42,8 +42,12 @@ class Ylide(VenomAuto):
             self.login_twitter(account)
             self.driver.close()
 
-        self._tweet()
-        self._follow_list(account=account, list_acc=self.list_tw_follow)
+        self._follow(account=account, user_name="BarbDebiasi1452")
+        self._follow(account=account, user_name="VinceMont8004")
+        self._follow(account=account, user_name="MarkMekee6284")
+        self._follow(account=account, user_name="BasilFoeller404")
+        # self._tweet()
+        # self._follow_list(account=account, list_acc=self.list_tw_follow)
 
         self.auto.switch_to_window(0)
         self._reload_extension()
@@ -64,9 +68,9 @@ class Ylide(VenomAuto):
 
         # sign up
         self.auto.switch_to_window(0)
-        self.auto.try_click('//*[@id="root"]/div[2]/div[2]/div[2]/div/div[2]/div[1]/textarea', 3)
+        self.auto.try_click('//*[@id="root"]/div[2]/div[2]/div[2]/div/div/div[4]/textarea', 3)
         message = tweet().replace('"', '')
-        self.auto.try_send_keys('//*[@id="root"]/div[2]/div[2]/div[2]/div/div[2]/div[1]/textarea', f"{message}\n")
+        self.auto.try_send_keys('//*[@id="root"]/div[2]/div[2]/div[2]/div/div/div[4]/textarea', f"{message}\n")
         self.auto.click("//span[contains(text(),'Send via')]", 5)
         self.auto.confirm()
 
