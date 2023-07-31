@@ -42,10 +42,10 @@ class Ylide(VenomAuto):
             self.login_twitter(account)
             self.driver.close()
 
-        self._follow(account=account, user_name="BarbDebiasi1452")
-        self._follow(account=account, user_name="VinceMont8004")
-        self._follow(account=account, user_name="MarkMekee6284")
-        self._follow(account=account, user_name="BasilFoeller404")
+        self._follow(account=account, user_name="@GradyDuane19821")
+        self._follow(account=account, user_name="BrainBarrows")
+        self._follow(account=account, user_name="HoytGerlach")
+        self._follow(account=account, user_name="LailaFriesen")
         # self._tweet()
         # self._follow_list(account=account, list_acc=self.list_tw_follow)
 
