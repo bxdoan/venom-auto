@@ -29,9 +29,9 @@ def launchSeleniumWebdriver(with_meta=False, address : str = None) -> webdriver:
     else:
         options.add_argument(f"--load-extension={DEFAULT_EXTENSION}")
 
-    user_data_dir = utils.user_data_dir(address=address)
-    if user_data_dir:
-        options.add_argument(f"--user-data-dir={user_data_dir}")
+    # user_data_dir = utils.user_data_dir(address=address)
+    # if user_data_dir:
+    #     options.add_argument(f"--user-data-dir={user_data_dir}")
 
     options.add_argument("--disable-popup-blocking")
 
@@ -246,9 +246,10 @@ def send(receiver : str, amount : str) -> None:
         # if have password field
         inputs[3].send_keys(PASSWORD)
     time.sleep(5)
-    click("//div[contains(text(),'Confirm transaction')]", 4)
+    click("//div[contains(text(),'Confirm transaction')]", 15 )
     switch_to_window(-1)
-    try_click("//div[contains(text(),'Ok')]", 4)
+    try_click("//div[contains(text(),'Ok')]", 10)
+    logger.info(f"Send {amount} to {receiver} success")
 
 
 def confirm(password : str = PASSWORD, time_to_sleep : int = DEFAULT_WAIT_CONFIRM) -> bool:

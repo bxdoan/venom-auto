@@ -226,6 +226,23 @@ def reboot():
     Dongle().reboot()
 
 
+def reboot_reconnect():
+    """ Reboot dongle """
+    logger.info("Reboot dongle")
+    current_network = get_ssid()
+    reboot()
+    time.sleep(50)
+    res = None
+    while not res:
+        try:
+            res = ControlConnection(wifi_ssid=current_network, wifi_password=NETWORK_PASSWORD).wifi_connector()
+        except Exception as _e:
+            logger.error(f"Error connect {current_network}: {_e} retry after 10s")
+        time.sleep(10)
+    time.sleep(20)
+    logger.info(f"New IP Address: {ip()}")
+
+
 def change_network():
     """ Change network """
     try:

@@ -112,7 +112,8 @@ class BaseAuto(object):
 
     def _change_proxy(self):
         if utils.force2bool(CHANGE_NETWORK):
-            utils.change_network()
+            # utils.change_network()
+            utils.reboot_reconnect()
 
     def _tweet(self) -> None:
         self.auto.switch_to_window(0)
