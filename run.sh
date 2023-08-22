@@ -30,8 +30,8 @@ elif [[ -f "/usr/local/bin/pipenv" ]]; then
 else
   echo "pipenv application not found"
 fi
-
-echo "Running $pf"
+ptp=`pwd`
+echo "Running PYTHONPATH=$ptp $pipenv run python $pf"
 PYTHONPATH=`pwd` $pipenv run python $pf >> $file_name_log 2>&1
 cat $file_name_log
 echo "check file $file_name_log"

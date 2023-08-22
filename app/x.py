@@ -46,8 +46,7 @@ class X(VenomAuto):
 
 if __name__ == '__main__':
     list_account = AccountLoader(fp=ACC_VENOM_PATH).parser_file()
-    list_tw_follow = AccountLoader(fp=f"{CODE_HOME}/twitter140.csv").parser_file()
-    account_index = 0
+    account_index = 1
     swap_params = {
         "account": list_account[account_index],
     }
@@ -59,7 +58,6 @@ if __name__ == '__main__':
         vn = X(
             use_uc=True,
             params=params,
-            list_tw_follow=list_tw_follow,
         )
         # vn.process_all(method="view")
         vn.view(**swap_params)
