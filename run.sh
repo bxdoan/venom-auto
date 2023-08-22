@@ -10,7 +10,7 @@ mkdir -p tmp
 if [ $# -gt 0 ]; then
     pf=$1
 else
-    pf="app/venom_auto.py"
+    pf="app/x.py"
 fi
 
 
@@ -19,13 +19,17 @@ today=$(date '+%Y-%m-%d_%H:%M:%S')
 file_name_log="log/${file_name%.*}_${today}.log"
 
 # set pipenv path
-if [ `uname` = "Darwin" ]; then
-    pipenv="/Users/`whoami`/.local/bin/pipenv"
+if [[ -f "$HOME/.pyenv/shims/pipenv" ]]; then
+  pipenv="$HOME/.pyenv/shims/pipenv"
+elif [[ -f "$HOME/.local/bin/pipenv" ]]; then
+  pipenv="$HOME/.local/bin/pipenv"
+elif [[ -f "/opt/homebrew/bin/pipenv" ]]; then
+  pipenv="/opt/homebrew/bin/pipenv"
+elif [[ -f "/usr/local/bin/pipenv" ]]; then
+  pipenv="/usr/local/bin/pipenv"
 else
-    pipenv="/home/`whoami`/.pyenv/shims/pipenv"
+  echo "pipenv application not found"
 fi
-
-$pipenv sync
 
 echo "Running $pf"
 PYTHONPATH=`pwd` $pipenv run python $pf >> $file_name_log 2>&1
