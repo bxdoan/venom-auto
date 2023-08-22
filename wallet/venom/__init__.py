@@ -29,9 +29,9 @@ def launchSeleniumWebdriver(with_meta=False, address : str = None) -> webdriver:
     else:
         options.add_argument(f"--load-extension={DEFAULT_EXTENSION}")
 
-    # user_data_dir = utils.user_data_dir(address=address)
-    # if user_data_dir:
-    #     options.add_argument(f"--user-data-dir={user_data_dir}")
+    user_data_dir = utils.user_data_dir(address=address)
+    if user_data_dir:
+        options.add_argument(f"--user-data-dir={user_data_dir}")
 
     options.add_argument("--disable-popup-blocking")
 
@@ -52,7 +52,7 @@ def launchSeleniumWebdriver(with_meta=False, address : str = None) -> webdriver:
         options.add_argument('--headless')
 
     global driver
-    driver = uc.Chrome(options=options)
+    driver = uc.Chrome(options=options, version_main=115)
 
     driver.set_window_size(WIDTH, HEIGHT)
     logger.info(f"Extension has been loaded successfully ")
