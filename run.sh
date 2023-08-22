@@ -1,7 +1,8 @@
 #!/bin/sh
 
-# pull latest code
-git pull
+doc_str="Usage: ./run.sh
+    example: ./run.sh app/venom_auto.py
+"
 
 mkdir -p log
 mkdir -p tmp
