@@ -46,7 +46,7 @@ class X(VenomAuto):
 
 if __name__ == '__main__':
     list_account = AccountLoader(fp=ACC_VENOM_PATH).parser_file()
-    account_index = MAIN_INDEX or 1
+    account_index = MAIN_INDEX
     swap_params = {
         "account": list_account[account_index],
     }
