@@ -3,7 +3,7 @@ import time
 from app.account import AccountLoader
 from app.base import VenomAuto
 from app.chatgpt import tweet
-from app.config import get_logger, ACC_VENOM_PATH, CODE_HOME
+from app.config import get_logger, ACC_VENOM_PATH, CODE_HOME, MAIN_INDEX
 
 logger = get_logger(__name__)
 
@@ -46,7 +46,7 @@ class X(VenomAuto):
 
 if __name__ == '__main__':
     list_account = AccountLoader(fp=ACC_VENOM_PATH).parser_file()
-    account_index = 1
+    account_index = MAIN_INDEX or 1
     swap_params = {
         "account": list_account[account_index],
     }
