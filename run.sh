@@ -32,5 +32,5 @@ else
 fi
 ptp=`pwd`
 echo "Running PYTHONPATH=$ptp $pipenv run python $pf"
-PYTHONPATH=`pwd` $pipenv run python $pf 2>&1 | tee $file_name_log
+PYTHONPATH=`pwd` $pipenv run python $pf 2>&1 | tee -a $file_name_log
 echo "check file $file_name_log"
