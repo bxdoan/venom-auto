@@ -60,8 +60,6 @@ class X(VenomAuto):
             count += 1
             logger.info(f"View {count} times")
 
-        logger.info(f"Incentive success")
-
 
 if __name__ == '__main__':
     list_account = AccountLoader(fp=ACC_VENOM_PATH).parser_file()
@@ -71,14 +69,12 @@ if __name__ == '__main__':
     }
     params = {
         "list_add": list_account,
-        # 'account_index': account_index,
     }
     try:
         vn = X(
             use_uc=True,
             params=params,
         )
-        # vn.process_all(method="view")
         vn.view(**swap_params)
     except Exception as e:
         logger.error(e)
