@@ -31,13 +31,32 @@ class X(VenomAuto):
     def view(self, account: dict = None):
         if not self.driver:
             self._try_start_driver(account)
-        url = "https://twitter.com/bxdoan/status/1693844113987395905"
-        self.driver.get(url)
+        base_url = "https://twitter.com/bxdoan/status/"
+        list_status = [
+            "1694173588264481198",
+            "1694174113156542638",
+            "1694174456024023334",
+            "1694174771012149425",
+            "1694174954429026487",
+        ]
+
+        self.driver.get(f"{base_url}{list_status[0]}")
+        for status_id in list_status[1:]:
+            url = f"{base_url}{status_id}"
+            self.driver.execute_script("window.open('');")
+            time.sleep(1)
+            self.auto.switch_to_window(-1)
+            self.driver.get(url)
+
         time.sleep(3)
         count = 0
+        number_tab = len(self.driver.window_handles)
         while True:
-            self.driver.refresh()
-            time.sleep(4)
+            for i in range(number_tab):
+                self.auto.switch_to_window(i)
+                time.sleep(0.7)
+                self.driver.refresh()
+
             count += 1
             logger.info(f"View {count} times")
 
