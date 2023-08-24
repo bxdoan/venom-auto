@@ -31,6 +31,7 @@ def launchSeleniumWebdriver(with_meta=False, address : str = None) -> webdriver:
 
     user_data_dir = utils.user_data_dir(address=address)
     if user_data_dir:
+        logger.info(f"User data dir: {user_data_dir}")
         options.add_argument(f"--user-data-dir={user_data_dir}")
 
     options.add_argument("--disable-popup-blocking")
@@ -47,7 +48,6 @@ def launchSeleniumWebdriver(with_meta=False, address : str = None) -> webdriver:
         logger.info('headless mode')
         options.add_argument('--disable-gpu')
         options.add_argument("--no-sandbox")
-        options.add_argument("--start-maximized")
         options.add_argument('--disable-gpu')
         options.add_argument('--headless')
 
